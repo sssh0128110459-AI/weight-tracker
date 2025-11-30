@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>體重紀錄</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Arial, sans-serif;
+      padding: 16px;
+      margin: 0;
+      background: #fdf3d5;          /* 米黃色背景 */
+      max-width: 480px;
+      margin-inline: auto;
+    }
+    h1 {
+      text-align: center;
+      font-size: 22px;
+      margin-bottom: 12px;
+      color: #4a3b1f;
+    }
+    .card {
+      background: #fffaf0;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .input-area {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #d9c9a5;
+      background: #fffdf5;
+    }
+    button {
+      cursor: pointer;
+      border: none;
+      background: #f0c96a;
+      color: #4a3510;
+      font-weight: 600;
+    }
+    button:active {
+      transform: scale(0.98);
+    }
+    #latest {
+      font-weight: 600;
+      font-size: 15px;
+      color: #4a3b1f;
+    }
+    #weeklyStats {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #6b5a30;
+      line-height: 1.4;
+    }
+
+    /* 圖表容器，可左右滑動 */
+    #chartWrapper {
+      background: #fffaf0;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      overflow-x: auto;
+      overflow-y: hidden;
+      border: 1px solid #e1d1ac;
+      padding: 8px 4px;
+    }
+    #weightChart {
+      display: block;
+    }
+
+    /* 紀錄列表 */
+    #records {
+      margin-top: 8px;
+    }
+    .record {
+      background: #fffaf0;
+      padding: 8px 10px;
+      margin-top: 8px;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .record-text {
+      font-size: 14px;
+      flex: 1;
+      white-space: nowrap;
+    }
+    .record-actions {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .edit-btn, .delete-btn {
+      padding: 3px 6px;
+      font-size: 11px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      min-width: 40px;
+    }
+    .edit-btn {
+      background: #f0c96a;
+      color: #4a3510;
+    }
+    .delete-btn {
+      background: #f47b7b;
+      color: white;
+    }
+
+    /* Modal 彈出視窗（iPhone 風） */
+    #modalOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    #modal {
+      background: #fffaf5;
+      padding: 16px 18px;
+      width: 90%;
+      max-width: 360px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      border: 1px solid #e4d4b2;
+    }
+    #modal h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      text-align: center;
+      color: #4a3b1f;
+    }
+    .modal-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #5a4a28;
+    }
+    .modal-row input {
+      padding: 8px;
+      font-size: 15px;
+      border-radius: 8px;
+      border: 1px solid #d8c7a3;
+      background: #fffdf5;
+    }
+    .modal-btns {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .modal-btns button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .btn-cancel {
+      background: #e3d6bf;
+      color: #4a3b1f;
+      border: none;
+    }
+    .btn-save {
+      background: #f0c96a;
+      color: #4a3510;
+      border: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>體重紀錄</h1>
+
+<!-- 上方輸入區 -->
+<div class="card">
+  <div class="input-area">
+    <input id="dateInput" type="date">
+    <input id="weightInput" type="number" step="0.1" placeholder="輸入體重 (kg)">
+    <input id="fatInput" type="number" step="0.1" placeholder="輸入體脂 (%)（可選填）">
+    <button onclick="addRecord()">新增紀錄</button>
+  </div>
+</div>
+
+<!-- 最新紀錄 & 週變化 -->
+<div class="card">
+  <div id="latest"></div>
+  <div id="weeklyStats"></div>
+</div>
+
+<!-- 圖表 -->
+<div id="chartWrapper" class="card">
+  <canvas id="weightChart"></canvas>
+</div>
+
+<!-- 紀錄列表 -->
+<div id="records" class="card"></div>
+
+<!-- Modal 編輯視窗 -->
+<div id="modalOverlay">
+  <div id="modal">
+    <h2>編輯紀錄</h2>
+
+    <div class="modal-row">
+      <label>日期：</label>
+      <input id="editDate" type="date">
+    </div>
+    <div class="modal-row">
+      <label>體重（kg）：</label>
+      <input id="editWeight" type="number" step="0.1">
+    </div>
+    <div class="modal-row">
+      <label>體脂（%）（可留空）：</label>
+      <input id="editFat" type="number" step="0.1">
+    </div>
+
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">取消</button>
+      <button class="btn-save" onclick="saveEdit()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const STORAGE_KEY = "weight_logs";
+  let chart = null;
+  let editIndex = null; // modal 用
+
+  function getLogs() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  }
+
+  function saveLogs(logs) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+  }
+
+  // 一開始：日期欄位預設今天
+  function setDefaultDate() {
+    const dateInput = document.getElementById("dateInput");
+    if (!dateInput.value) {
+      dateInput.value = new Date().toISOString().slice(0, 10);
+    }
+  }
+
+  // 新增紀錄（含體脂）
+  function addRecord() {
+    const dateInput = document.getElementById("dateInput");
+    const weightInput = document.getElementById("weightInput");
+    const fatInput = document.getElementById("fatInput");
+
+    let date = dateInput.value || new Date().toISOString().slice(0, 10);
+    const weight = weightInput.value;
+    const fat = fatInput.value;
+
+    if (!weight) {
+      alert("請輸入體重！");
+      return;
+    }
+
+    let logs = getLogs();
+    logs.push({ date, weight, fat }); // fat 可為空字串
+    saveLogs(logs);
+
+    weightInput.value = "";
+    fatInput.value = "";
+    render();
+  }
+
+  // 顯示最新一筆（依日期）
+  function showLatest() {
+    let logs = getLogs();
+    const latestDiv = document.getElementById("latest");
+
+    if (logs.length === 0) {
+      latestDiv.innerText = "目前尚無資料";
+      return;
+    }
+
+    const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
+    const latest = sorted[0];
+
+    let text = `最新體重：${latest.date} - ${latest.weight} kg`;
+    if (latest.fat && latest.fat !== "") {
+      text += `，體脂 ${latest.fat}%`;
+    }
+    latestDiv.innerText = text;
+  }
+
+  // 顯示最近 7 天 vs 前 7 天的變化（體重 & 體脂）
+  function showWeeklyStats() {
+    const logs = getLogs();
+    const statsDiv = document.getElementById("weeklyStats");
+    if (logs.length === 0) {
+      statsDiv.innerText = "";
+      return;
+    }
+
+    // 取得所有日期中的最大值（最新日期）
+    const dates = logs.map(l => l.date).filter(Boolean);
+    dates.sort();
+    const latestDateStr = dates[dates.length - 1];
+    const latestDate = new Date(latestDateStr);
+
+    function dateDiffInDays(d1, d2) {
+      return Math.floor((d1 - d2) / (1000 * 60 * 60 * 24));
+    }
+
+    const currentWeekWeights = [];
+    const prevWeekWeights = [];
+    const currentWeekFats = [];
+    const prevWeekFats = [];
+
+    logs.forEach(log => {
+      if (!log.date) return;
+      const d = new Date(log.date);
+      const diff = dateDiffInDays(latestDate, d); // 0 表示與最新同一天
+
+      const w = parseFloat(log.weight);
+      const f = log.fat !== undefined && log.fat !== "" ? parseFloat(log.fat) : NaN;
+
+      if (diff >= 0 && diff <= 6) { // 最近 7 天
+        if (!isNaN(w)) currentWeekWeights.push(w);
+        if (!isNaN(f)) currentWeekFats.push(f);
+      } else if (diff >= 7 && diff <= 13) { // 前一週
+        if (!isNaN(w)) prevWeekWeights.push(w);
+        if (!isNaN(f)) prevWeekFats.push(f);
+      }
+    });
+
+    function avg(arr) {
+      if (!arr.length) return null;
+      return arr.reduce((a, b) => a + b, 0) / arr.length;
+    }
+
+    const curW = avg(currentWeekWeights);
+    const prevW = avg(prevWeekWeights);
+    const curF = avg(currentWeekFats);
+    const prevF = avg(prevWeekFats);
+
+    let lines = [];
+
+    if (curW !== null) {
+      let line = `最近 7 天平均體重：約 ${curW.toFixed(1)} kg`;
+      if (prevW !== null) {
+        const diff = curW - prevW;
+        const sign = diff > 0 ? "+" : "";
+        line += `（較前 7 天 ${sign}${diff.toFixed(1)} kg）`;
+      }
+      lines.push(line);
+    }
+
+    if (curF !== null) {
+      let line = `最近 7 天平均體脂：約 ${curF.toFixed(1)} %`;
+      if (prevF !== null) {
+        const diff = curF - prevF;
+        const sign = diff > 0 ? "+" : "";
+        line += `（較前 7 天 ${sign}${diff.toFixed(1)} %）`;
+      }
+      lines.push(line);
+    }
+
+    statsDiv.innerText = lines.join("\n");
+  }
+
+  // 圖表：以日期為單位，使用當天平均體重＋平均體脂
+  function renderChart() {
+    let logs = getLogs();
+    if (logs.length === 0) {
+      if (chart) chart.destroy();
+      return;
+    }
+
+    if (typeof Chart === "undefined") {
+      console.warn("Chart.js 載入失敗，無法顯示折線圖");
+      return;
+    }
+
+    // 先按日期分組
+    const byDate = {};
+    logs.forEach(log => {
+      if (!log.date) return;
+      if (!byDate[log.date]) {
+        byDate[log.date] = { weightSum: 0, weightCount: 0, fatSum: 0, fatCount: 0 };
+      }
+      const w = parseFloat(log.weight);
+      if (!isNaN(w)) {
+        byDate[log.date].weightSum += w;
+        byDate[log.date].weightCount += 1;
+      }
+      if (log.fat !== undefined && log.fat !== "") {
+        const f = parseFloat(log.fat);
+        if (!isNaN(f)) {
+          byDate[log.date].fatSum += f;
+          byDate[log.date].fatCount += 1;
+        }
+      }
+    });
+
+    const dates = Object.keys(byDate).sort((a, b) => a.localeCompare(b));
+    if (!dates.length) return;
+
+    const labels = [];
+    const weightData = [];
+    const fatData = [];
+
+    dates.forEach(d => {
+      const group = byDate[d];
+      if (group.weightCount > 0) {
+        labels.push(d);
+        weightData.push(group.weightSum / group.weightCount);
+        if (group.fatCount > 0) {
+          fatData.push(group.fatSum / group.fatCount);
+        } else {
+          fatData.push(null); // 沒有體脂資料就留空
+        }
+      }
+    });
+
+    const canvas = document.getElementById("weightChart");
+    canvas.width = Math.max(labels.length * 70, 300);
+    canvas.height = 240;
+    const ctx = canvas.getContext("2d");
+
+    if (chart) chart.destroy();
+
+    chart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "體重 (kg)",
+            data: weightData,
+            borderWidth: 2,
+            tension: 0.25,
+            pointRadius: 4
+          },
+          {
+            label: "體脂 (%)",
+            data: fatData,
+            borderWidth: 2,
+            tension: 0.25,
+            pointRadius: 4,
+            borderColor: "rgba(245, 199, 26, 1)",   // 體脂線：黃色
+            backgroundColor: "rgba(245, 199, 26, 0.2)"
+          }
+        ]
+      },
+      options: {
+        responsive: false,
+        maintainAspectRatio: false,
+        spanGaps: true, // 沒體脂資料時中間跳過
+        scales: {
+          y: {
+            beginAtZero: false
+          }
+        }
+      }
+    });
+  }
+
+  // ======== Modal 編輯邏輯 ========
+  function openModal(index) {
+    editIndex = index;
+    const logs = getLogs();
+    const log = logs[index];
+
+    document.getElementById("editDate").value = log.date || "";
+    document.getElementById("editWeight").value = log.weight || "";
+    document.getElementById("editFat").value = log.fat || "";
+
+    document.getElementById("modalOverlay").style.display = "flex";
+  }
+
+  function closeModal() {
+    document.getElementById("modalOverlay").style.display = "none";
+  }
+
+  function saveEdit() {
+    let logs = getLogs();
+    const log = logs[editIndex];
+
+    const newDate = document.getElementById("editDate").value;
+    const newWeight = document.getElementById("editWeight").value;
+    const newFat = document.getElementById("editFat").value;
+
+    if (!newWeight || isNaN(parseFloat(newWeight))) {
+      alert("體重必須是數字！");
+      return;
+    }
+
+    log.date = newDate || log.date;
+    log.weight = newWeight;
+    if (newFat === "" || isNaN(parseFloat(newFat))) {
+      log.fat = "";
+    } else {
+      log.fat = newFat;
+    }
+
+    saveLogs(logs);
+    closeModal();
+    render();
+  }
+
+  // 刪除紀錄（含確認視窗）
+  function deleteRecord(index) {
+    if (!confirm("確定要刪除這筆紀錄嗎？")) return;
+    let logs = getLogs();
+    logs.splice(index, 1);
+    saveLogs(logs);
+    render();
+  }
+
+  // ======== 主渲染：列表 + 圖表 + 最新 + 週變化 ========
+  function render() {
+    let logs = getLogs();
+    const container = document.getElementById("records");
+    container.innerHTML = "";
+
+    if (logs.length === 0) {
+      container.innerText = "目前尚無紀錄，請先新增體重。";
+    } else {
+      // 依日期排序（最新在最上）
+      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
+
+      sorted.forEach(log => {
+        // 真實 index：用物件 reference 找回原陣列位置
+        const trueIndex = logs.indexOf(log);
+
+        const div = document.createElement("div");
+        div.className = "record";
+
+        const text = document.createElement("div");
+        text.className = "record-text";
+        let t = `${log.date} - 體重 ${log.weight} kg`;
+        if (log.fat && log.fat !== "") {
+          t += `，體脂 ${log.fat}%`;
+        }
+        text.innerText = t;
+
+        const actions = document.createElement("div");
+        actions.className = "record-actions";
+
+        const editBtn = document.createElement("button");
+        editBtn.className = "edit-btn";
+        editBtn.innerText = "編輯";
+        editBtn.onclick = () => openModal(trueIndex);
+
+        const delBtn = document.createElement("button");
+        delBtn.className = "delete-btn";
+        delBtn.innerText = "刪除";
+        delBtn.onclick = () => deleteRecord(trueIndex);
+
+        actions.appendChild(editBtn);
+        actions.appendChild(delBtn);
+
+        div.appendChild(text);
+        div.appendChild(actions);
+        container.appendChild(div);
+      });
+    }
+
+    renderChart();
+    showLatest();
+    showWeeklyStats();
+  }
+
+  setDefaultDate();
+  render();
+</script>
+
+</body>
+</html>
