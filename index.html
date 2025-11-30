@@ -184,36 +184,76 @@
       color: #4a3510;
       border: none;
     }
+
+    /* ===== 啟動畫面（Splash） ===== */
+    #splash {
+      position: fixed;
+      inset: 0;
+      background: #f5e6b5; /* 比本體再亮一點的米黃 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 0.8s ease;
+    }
+    #splash-logo {
+      font-size: 32px;
+      font-weight: bold;
+      color: #4a3b1f;
+      opacity: 0;
+      animation: splashFadeIn 1s forwards;
+    }
+    @keyframes splashFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 主頁面一開始是透明，之後淡入 */
+    #main {
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
   </style>
 </head>
 
 <body>
 
-<h1>體重紀錄</h1>
+<!-- 啟動畫面 -->
+<div id="splash">
+  <div id="splash-logo">體重紀錄</div>
+</div>
 
-<!-- 上方輸入區 -->
-<div class="card">
-  <div class="input-area">
-    <input id="dateInput" type="date">
-    <input id="weightInput" type="number" step="0.1" placeholder="輸入體重 (kg)">
-    <input id="fatInput" type="number" step="0.1" placeholder="輸入體脂 (%)（可選填）">
-    <button onclick="addRecord()">新增紀錄</button>
+<!-- 主頁面內容包在 #main 裡，方便一起淡入 -->
+<div id="main">
+
+  <h1>體重紀錄</h1>
+
+  <!-- 上方輸入區 -->
+  <div class="card">
+    <div class="input-area">
+      <input id="dateInput" type="date">
+      <input id="weightInput" type="number" step="0.1" placeholder="輸入體重 (kg)">
+      <input id="fatInput" type="number" step="0.1" placeholder="輸入體脂 (%)（可選填）">
+      <button onclick="addRecord()">新增紀錄</button>
+    </div>
   </div>
-</div>
 
-<!-- 最新紀錄 & 週變化 -->
-<div class="card">
-  <div id="latest"></div>
-  <div id="weeklyStats"></div>
-</div>
+  <!-- 最新紀錄 & 週變化 -->
+  <div class="card">
+    <div id="latest"></div>
+    <div id="weeklyStats"></div>
+  </div>
 
-<!-- 圖表 -->
-<div id="chartWrapper" class="card">
-  <canvas id="weightChart"></canvas>
-</div>
+  <!-- 圖表 -->
+  <div id="chartWrapper" class="card">
+    <canvas id="weightChart"></canvas>
+  </div>
 
-<!-- 紀錄列表 -->
-<div id="records" class="card"></div>
+  <!-- 紀錄列表 -->
+  <div id="records" class="card"></div>
+
+</div> <!-- end of #main -->
 
 <!-- Modal 編輯視窗 -->
 <div id="modalOverlay">
@@ -244,6 +284,23 @@
   const STORAGE_KEY = "weight_logs";
   let chart = null;
   let editIndex = null; // modal 用
+
+  // 啟動畫面：文字淡入 → 停留 → Splash 淡出，同時主頁面淡入
+  window.addEventListener("load", () => {
+    const splash = document.getElementById("splash");
+    const main = document.getElementById("main");
+
+    setTimeout(() => {
+      // 主頁面開始淡入
+      main.style.opacity = "1";
+      // Splash 開始淡出
+      splash.style.opacity = "0";
+      // 淡出後把 Splash 移除
+      setTimeout(() => {
+        splash.style.display = "none";
+      }, 1000);
+    }, 1200); // Splash 停留 1.2 秒再切換
+  });
 
   function getLogs() {
     return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -314,7 +371,6 @@
       return;
     }
 
-    // 取得所有日期中的最大值（最新日期）
     const dates = logs.map(l => l.date).filter(Boolean);
     dates.sort();
     const latestDateStr = dates[dates.length - 1];
@@ -332,15 +388,15 @@
     logs.forEach(log => {
       if (!log.date) return;
       const d = new Date(log.date);
-      const diff = dateDiffInDays(latestDate, d); // 0 表示與最新同一天
+      const diff = dateDiffInDays(latestDate, d);
 
       const w = parseFloat(log.weight);
       const f = log.fat !== undefined && log.fat !== "" ? parseFloat(log.fat) : NaN;
 
-      if (diff >= 0 && diff <= 6) { // 最近 7 天
+      if (diff >= 0 && diff <= 6) {
         if (!isNaN(w)) currentWeekWeights.push(w);
         if (!isNaN(f)) currentWeekFats.push(f);
-      } else if (diff >= 7 && diff <= 13) { // 前一週
+      } else if (diff >= 7 && diff <= 13) {
         if (!isNaN(w)) prevWeekWeights.push(w);
         if (!isNaN(f)) prevWeekFats.push(f);
       }
@@ -381,7 +437,7 @@
     statsDiv.innerText = lines.join("\n");
   }
 
-  // 圖表：以日期為單位，使用當天平均體重＋平均體脂
+  // 圖表：以日期為單位，當天平均體重＋體脂
   function renderChart() {
     let logs = getLogs();
     if (logs.length === 0) {
@@ -394,7 +450,6 @@
       return;
     }
 
-    // 先按日期分組
     const byDate = {};
     logs.forEach(log => {
       if (!log.date) return;
@@ -430,7 +485,7 @@
         if (group.fatCount > 0) {
           fatData.push(group.fatSum / group.fatCount);
         } else {
-          fatData.push(null); // 沒有體脂資料就留空
+          fatData.push(null);
         }
       }
     });
@@ -460,7 +515,7 @@
             borderWidth: 2,
             tension: 0.25,
             pointRadius: 4,
-            borderColor: "rgba(245, 199, 26, 1)",   // 體脂線：黃色
+            borderColor: "rgba(245, 199, 26, 1)",
             backgroundColor: "rgba(245, 199, 26, 0.2)"
           }
         ]
@@ -468,7 +523,7 @@
       options: {
         responsive: false,
         maintainAspectRatio: false,
-        spanGaps: true, // 沒體脂資料時中間跳過
+        spanGaps: true,
         scales: {
           y: {
             beginAtZero: false
@@ -478,7 +533,7 @@
     });
   }
 
-  // ======== Modal 編輯邏輯 ========
+  // Modal 編輯
   function openModal(index) {
     editIndex = index;
     const logs = getLogs();
@@ -521,7 +576,6 @@
     render();
   }
 
-  // 刪除紀錄（含確認視窗）
   function deleteRecord(index) {
     if (!confirm("確定要刪除這筆紀錄嗎？")) return;
     let logs = getLogs();
@@ -530,7 +584,6 @@
     render();
   }
 
-  // ======== 主渲染：列表 + 圖表 + 最新 + 週變化 ========
   function render() {
     let logs = getLogs();
     const container = document.getElementById("records");
@@ -539,11 +592,9 @@
     if (logs.length === 0) {
       container.innerText = "目前尚無紀錄，請先新增體重。";
     } else {
-      // 依日期排序（最新在最上）
       const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
 
       sorted.forEach(log => {
-        // 真實 index：用物件 reference 找回原陣列位置
         const trueIndex = logs.indexOf(log);
 
         const div = document.createElement("div");
