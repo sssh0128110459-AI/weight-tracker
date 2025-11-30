@@ -1,91 +1,167 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>體重紀錄</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- PWA / iOS 樣式用 -->
+  <meta name="theme-color" content="#f7f4ec" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="manifest" href="manifest.json" />
+  <!-- 之後你可以自己放 apple-touch-icon.png -->
+  <!-- <link rel="apple-touch-icon" href="icon-192.png" /> -->
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    /* ===== iOS Font ===== */
+    :root {
+      /* 淺色主題 */
+      --bg-color: #f7f4ec;
+      --text-main: #3b3025;
+      --card-bg: #ffffff;
+      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --border-subtle: #d7d1c7;
+      --input-bg: #fafafa;
+      --accent: #f0c96a;
+      --accent-dark: #e7ba4c;
+      --danger: #ef7b7b;
+      --muted: #5a4d38;
+    }
+
+    body.dark-mode {
+      /* 深色主題覆寫 */
+      --bg-color: #151515;
+      --text-main: #f5f1e6;
+      --card-bg: #222222;
+      --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      --border-subtle: #444444;
+      --input-bg: #333333;
+      --accent: #e7ba4c;
+      --accent-dark: #d3a63b;
+      --danger: #f07171;
+      --muted: #c4b8a3;
+    }
+
+    /* ===== Global ===== */
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+        Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background: #f7f4ec; /* 淡淡的米黃色，比較像 iOS 背景 */
+      background: var(--bg-color);
+      color: var(--text-main);
       overflow-x: hidden;
     }
 
-    /* ===== Center Body Wrapper ===== */
     #main {
       opacity: 0;
       transition: opacity 1.2s ease;
       max-width: 520px;
       margin: auto;
-      padding: 20px;
+      padding: 16px 16px 24px;
     }
 
-    /* ===== Header Title ===== */
+    /* ===== Header ===== */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 8px 0 16px;
+    }
+
     h1 {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 700;
-      color: #3b3025;
-      text-align: center;
-      margin: 10px 0 20px;
+      margin: 0;
     }
 
-    /* ===== iOS Card Style ===== */
+    .theme-toggle {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--card-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    /* ===== Card ===== */
     .card {
-      background: #ffffff;
+      background: var(--card-bg);
       border-radius: 18px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      padding: 18px 20px;
-      margin-bottom: 20px;
+      box-shadow: var(--card-shadow);
+      padding: 16px 16px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.03);
     }
 
-    /* ===== Input Field ===== */
+    /* ===== Inputs ===== */
     .input-area {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
+
     input {
-      padding: 12px;
-      font-size: 17px;
+      padding: 10px 12px;
+      font-size: 16px;
       border-radius: 12px;
-      border: 1px solid #d7d1c7;
-      background: #fafafa;
+      border: 1px solid var(--border-subtle);
+      background: var(--input-bg);
       outline: none;
+      color: var(--text-main);
     }
 
     input:focus {
-      border-color: #c2a86d;
-      box-shadow: 0 0 0 3px rgba(248,206,126,0.35);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(248, 206, 126, 0.35);
     }
 
-    /* ===== iOS Button ===== */
+    /* ===== Buttons ===== */
     button {
-      padding: 12px;
-      font-size: 17px;
+      padding: 10px 12px;
+      font-size: 16px;
       font-weight: 600;
       border-radius: 12px;
       border: none;
-      background: #f0c96a;
+      background: var(--accent);
       color: #4a3510;
       cursor: pointer;
       transition: 0.15s;
     }
+
     button:active {
       transform: scale(0.97);
-      background: #e7ba4c;
+      background: var(--accent-dark);
     }
 
-    /* ===== Latest Info Auto Scale ===== */
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      color: var(--muted);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .btn-secondary:active {
+      background: var(--input-bg);
+    }
+
+    /* ===== Latest Info & Weekly ===== */
     #latest {
       font-weight: 700;
       font-size: 19px;
-      color: #3b3025;
       white-space: nowrap;
       transform-origin: left;
       display: inline-block;
@@ -97,110 +173,134 @@
     }
 
     #weeklyStats {
-      font-size: 14px;
-      margin-top: 8px;
-      color: #5a4d38;
-      line-height: 1.45;
+      font-size: 13px;
+      margin-top: 6px;
+      color: var(--muted);
+      line-height: 1.5;
+      white-space: pre-line;
     }
 
-    /* ===== Chart Wrapper ===== */
+    /* ===== Chart ===== */
     #chartWrapper {
-      background: #ffffff;
       border-radius: 18px;
       padding: 10px;
       overflow-x: auto;
+      background: var(--card-bg);
+      box-shadow: var(--card-shadow);
     }
 
-    /* ===== Record List ===== */
+    #weightChart {
+      display: block;
+    }
+
+    /* ===== Records ===== */
+    #records {
+      margin-top: 6px;
+    }
+
     .record {
-      background: #ffffff;
+      background: var(--card-bg);
       border-radius: 14px;
-      padding: 14px 16px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-      margin-bottom: 10px;
+      padding: 10px 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.02);
     }
+
     .record-text {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 500;
-      color: #4f4436;
+      color: var(--text-main);
       white-space: nowrap;
     }
 
     .record-actions {
       display: flex;
-      gap: 6px;
+      gap: 4px;
+      flex-shrink: 0;
     }
-    .edit-btn {
-      padding: 4px 8px;
-      font-size: 12px;
-      border-radius: 8px;
-      background: #f0c96a;
+
+    .edit-btn,
+    .delete-btn {
+      padding: 3px 6px;
+      font-size: 11px;
+      border-radius: 999px;
       border: none;
+      cursor: pointer;
+      min-width: 40px;
+    }
+
+    .edit-btn {
+      background: var(--accent);
       color: #4a3510;
     }
+
     .delete-btn {
-      padding: 4px 8px;
-      font-size: 12px;
-      border-radius: 8px;
-      background: #ef7b7b;
-      border: none;
+      background: var(--danger);
       color: white;
     }
 
-    /* ===== Modal (iOS Style) ===== */
+    /* ===== Modal ===== */
     #modalOverlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.45);
+      background: rgba(0, 0, 0, 0.45);
       display: none;
       justify-content: center;
       align-items: center;
       z-index: 10000;
-      backdrop-filter: blur(2px);
+      backdrop-filter: blur(3px);
     }
 
     #modal {
       width: 90%;
       max-width: 360px;
-      background: #fff;
+      background: var(--card-bg);
       border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      padding: 18px 18px 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(0, 0, 0, 0.08);
     }
 
     #modal h2 {
-      margin: 0 0 14px;
+      margin: 0 0 10px;
       text-align: center;
-      font-size: 20px;
+      font-size: 18px;
     }
 
     .modal-row {
-      margin-bottom: 14px;
+      margin-bottom: 10px;
       display: flex;
       flex-direction: column;
       gap: 4px;
+      font-size: 14px;
     }
 
     .modal-btns {
       display: flex;
-      gap: 12px;
-      margin-top: 12px;
+      gap: 10px;
+      margin-top: 10px;
     }
+
     .btn-cancel {
       flex: 1;
-      background: #e5ded0;
+      background: var(--card-bg);
+      color: var(--muted);
       border-radius: 12px;
-      padding: 12px;
-      border: none;
+      padding: 10px;
+      border: 1px solid var(--border-subtle);
     }
+
     .btn-save {
       flex: 1;
-      background: #f0c96a;
+      background: var(--accent);
+      color: #4a3510;
       border-radius: 12px;
-      padding: 12px;
+      padding: 10px;
       border: none;
     }
 
@@ -216,6 +316,7 @@
       opacity: 1;
       transition: opacity 0.8s ease;
     }
+
     #splash-logo {
       font-size: 32px;
       font-weight: 700;
@@ -223,306 +324,550 @@
       opacity: 0;
       animation: splashIn 1s forwards;
     }
+
     @keyframes splashIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ===== Export / Import TextArea 彈出區（可選） ===== */
+    #exportAreaWrapper {
+      margin-top: 10px;
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+    }
+    #exportArea {
+      width: 100%;
+      min-height: 80px;
+      font-size: 12px;
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      background: var(--input-bg);
+      color: var(--text-main);
+      resize: vertical;
+    }
+    .export-tip {
+      font-size: 11px;
+      color: var(--muted);
     }
   </style>
 </head>
 
 <body>
+  <!-- Splash -->
+  <div id="splash">
+    <div id="splash-logo">體重紀錄</div>
+  </div>
 
-<!-- ===== Splash ===== -->
-<div id="splash">
-  <div id="splash-logo">體重紀錄</div>
-</div>
+  <!-- Main -->
+  <div id="main">
+    <div class="top-bar">
+      <h1>體重紀錄</h1>
+      <button class="theme-toggle" id="themeToggle" title="切換主題">
+        🌙
+      </button>
+    </div>
 
-<!-- ===== MAIN ===== -->
-<div id="main">
+    <!-- 輸入區 -->
+    <div class="card">
+      <div class="input-area">
+        <input id="dateInput" type="date" />
+        <input
+          id="weightInput"
+          type="number"
+          step="0.1"
+          placeholder="體重 (kg)"
+        />
+        <input
+          id="fatInput"
+          type="number"
+          step="0.1"
+          placeholder="體脂 (%)（可選填）"
+        />
+        <button onclick="addRecord()">新增紀錄</button>
+      </div>
+    </div>
 
-  <h1>體重紀錄</h1>
+    <!-- 最新紀錄 + 週變化 -->
+    <div class="card">
+      <div id="latest"></div>
+      <div id="weeklyStats"></div>
+    </div>
 
-  <div class="card">
-    <div class="input-area">
-      <input id="dateInput" type="date">
-      <input id="weightInput" type="number" step="0.1" placeholder="體重 (kg)">
-      <input id="fatInput" type="number" step="0.1" placeholder="體脂 (%)（可選填）">
-      <button onclick="addRecord()">新增紀錄</button>
+    <!-- 圖表 -->
+    <div id="chartWrapper" class="card">
+      <canvas id="weightChart"></canvas>
+    </div>
+
+    <!-- 匯出 / 匯入 -->
+    <div class="card">
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="toggleExportArea()">
+          匯出 / 匯入資料
+        </button>
+        <button class="btn-secondary" onclick="clearAll()">
+          清除全部
+        </button>
+      </div>
+      <div id="exportAreaWrapper">
+        <textarea id="exportArea" readonly></textarea>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="copyExport()">
+            複製匯出內容
+          </button>
+          <button class="btn-secondary" onclick="importFromText()">
+            匯入貼上的資料
+          </button>
+        </div>
+        <div class="export-tip">
+          匯出：按「複製匯出內容」，貼到雲端記事 / Line 自己。<br />
+          匯入：在上方貼上 JSON，再按「匯入貼上的資料」。<br />
+          ※ 每台裝置資料是獨立的，匯入會覆蓋目前資料。
+        </div>
+      </div>
+    </div>
+
+    <!-- 紀錄列表 -->
+    <div id="records"></div>
+  </div>
+
+  <!-- Modal 編輯 -->
+  <div id="modalOverlay">
+    <div id="modal">
+      <h2>編輯紀錄</h2>
+
+      <div class="modal-row">
+        <label>日期：</label>
+        <input id="editDate" type="date" />
+      </div>
+      <div class="modal-row">
+        <label>體重 (kg)：</label>
+        <input id="editWeight" type="number" step="0.1" />
+      </div>
+      <div class="modal-row">
+        <label>體脂 (%)：</label>
+        <input id="editFat" type="number" step="0.1" />
+      </div>
+
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closeModal()">取消</button>
+        <button class="btn-save" onclick="saveEdit()">儲存</button>
+      </div>
     </div>
   </div>
 
-  <div class="card">
-    <div id="latest"></div>
-    <div id="weeklyStats"></div>
-  </div>
+  <script>
+    const STORAGE_KEY = "weight_logs";
+    const THEME_KEY = "weight_theme";
+    let editIndex = null;
+    let chart = null;
 
-  <div id="chartWrapper" class="card">
-    <canvas id="weightChart"></canvas>
-  </div>
-
-  <div id="records"></div>
-
-</div>
-
-<!-- ===== MODAL ===== -->
-<div id="modalOverlay">
-  <div id="modal">
-    <h2>編輯紀錄</h2>
-
-    <div class="modal-row">
-      <label>日期：</label>
-      <input id="editDate" type="date">
-    </div>
-    <div class="modal-row">
-      <label>體重 (kg)：</label>
-      <input id="editWeight" type="number" step="0.1">
-    </div>
-    <div class="modal-row">
-      <label>體脂 (%)：</label>
-      <input id="editFat" type="number" step="0.1">
-    </div>
-
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeModal()">取消</button>
-      <button class="btn-save" onclick="saveEdit()">儲存</button>
-    </div>
-  </div>
-</div>
-
-<script>
-/* ===== Storage ===== */
-const STORAGE_KEY = "weight_logs";
-let editIndex = null;
-let chart = null;
-
-function getLogs() {
-  return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-}
-function saveLogs(logs) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
-}
-
-/* ===== Splash Animation ===== */
-window.addEventListener("load", () => {
-  const splash = document.getElementById("splash");
-  const main = document.getElementById("main");
-
-  setTimeout(() => {
-    main.style.opacity = 1;
-    splash.style.opacity = 0;
-
-    setTimeout(() => {
-      splash.style.display = "none";
-    }, 900);
-  }, 1200);
-});
-
-/* ===== Auto Today ===== */
-function setDefaultDate() {
-  const d = document.getElementById("dateInput");
-  if (!d.value) {
-    d.value = new Date().toISOString().slice(0, 10);
-  }
-}
-
-/* ===== Add Record ===== */
-function addRecord() {
-  const date = dateInput.value || new Date().toISOString().slice(0, 10);
-  const w = weightInput.value;
-  const f = fatInput.value;
-
-  if (!w) {
-    alert("請輸入體重！");
-    return;
-  }
-
-  const logs = getLogs();
-  logs.push({ date, weight: w, fat: f });
-  saveLogs(logs);
-
-  weightInput.value = "";
-  fatInput.value = "";
-
-  render();
-}
-
-/* ===== Auto Scale Latest ===== */
-function autoScaleLatest() {
-  const el = document.getElementById("latest");
-  const parentWidth = el.parentElement.clientWidth;
-
-  el.style.setProperty("--scale", 1);
-  el.classList.add("auto-scale");
-
-  const scale = parentWidth / el.scrollWidth;
-  el.style.setProperty("--scale", Math.min(scale, 1));
-}
-
-/* ===== Latest & Weekly ===== */
-function showLatest() {
-  const logs = getLogs();
-  const latestDiv = document.getElementById("latest");
-
-  if (logs.length === 0) {
-    latestDiv.innerText = "尚無紀錄";
-    return;
-  }
-
-  const sorted = logs.slice().sort((a,b)=>b.date.localeCompare(a.date));
-  const last = sorted[0];
-
-  let text = `${last.date}：${last.weight} kg`;
-  if (last.fat) text += `，體脂 ${last.fat}%`;
-
-  latestDiv.innerText = text;
-  autoScaleLatest();
-}
-
-/* ===== Chart ===== */
-function renderChart() {
-  const logs = getLogs();
-  if (!logs.length) return;
-
-  const byDate = {};
-
-  logs.forEach(l=>{
-    if (!byDate[l.date]) {
-      byDate[l.date] = { w: [], f: [] };
+    // ===== 工具函式 =====
+    function getLogs() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     }
-    byDate[l.date].w.push(parseFloat(l.weight));
-    if (l.fat) byDate[l.date].f.push(parseFloat(l.fat));
-  });
+    function saveLogs(logs) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+    }
 
-  const dates = Object.keys(byDate).sort();
-  const weights = dates.map(d => 
-    byDate[d].w.reduce((a,b)=>a+b)/byDate[d].w.length
-  );
-  const fats = dates.map(d =>
-    byDate[d].f.length ? byDate[d].f.reduce((a,b)=>a+b)/byDate[d].f.length : null
-  );
+    // ===== Splash + 主畫面淡入 =====
+    window.addEventListener("load", () => {
+      initTheme();
+      setDefaultDate();
 
-  const canvas = document.getElementById("weightChart");
-  canvas.width = Math.max(300, dates.length * 70);
+      const splash = document.getElementById("splash");
+      const main = document.getElementById("main");
 
-  const ctx = canvas.getContext("2d");
+      setTimeout(() => {
+        main.style.opacity = 1;
+        splash.style.opacity = 0;
+        setTimeout(() => {
+          splash.style.display = "none";
+        }, 900);
+      }, 1200);
 
-  if (chart) chart.destroy();
+      render();
+    });
 
-  chart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: dates,
-      datasets: [
-        {
-          label: "體重",
-          data: weights,
-          borderWidth: 2,
-          tension: 0.25,
-          pointRadius: 4
-        },
-        {
-          label: "體脂",
-          data: fats,
-          borderWidth: 2,
-          borderColor: "#f3c23a",
-          backgroundColor: "rgba(243,194,58,0.2)",
-          tension: 0.25,
-          pointRadius: 4
+    // ===== 主題切換（淺色 / 深色） =====
+    function initTheme() {
+      const saved = localStorage.getItem(THEME_KEY);
+      if (saved === "dark") {
+        document.body.classList.add("dark-mode");
+        document.getElementById("themeToggle").innerText = "☀️";
+      } else {
+        document.body.classList.remove("dark-mode");
+        document.getElementById("themeToggle").innerText = "🌙";
+      }
+    }
+
+    document.getElementById("themeToggle").addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      const isDark = document.body.classList.contains("dark-mode");
+      localStorage.setItem(THEME_KEY, isDark ? "dark" : "light");
+      document.getElementById("themeToggle").innerText = isDark ? "☀️" : "🌙";
+    });
+
+    // ===== 日期預設今天 =====
+    function setDefaultDate() {
+      const d = document.getElementById("dateInput");
+      if (!d.value) d.value = new Date().toISOString().slice(0, 10);
+    }
+
+    // ===== 新增紀錄 =====
+    function addRecord() {
+      const dateInput = document.getElementById("dateInput");
+      const weightInput = document.getElementById("weightInput");
+      const fatInput = document.getElementById("fatInput");
+
+      const date = dateInput.value || new Date().toISOString().slice(0, 10);
+      const weight = weightInput.value;
+      const fat = fatInput.value;
+
+      if (!weight) {
+        alert("請輸入體重！");
+        return;
+      }
+
+      const logs = getLogs();
+      logs.push({ date, weight, fat });
+      saveLogs(logs);
+
+      weightInput.value = "";
+      fatInput.value = "";
+      render();
+    }
+
+    // ===== 最新紀錄自動縮放 =====
+    function autoScaleLatest() {
+      const el = document.getElementById("latest");
+      if (!el.textContent) return;
+
+      el.style.setProperty("--scale", 1);
+      el.classList.add("auto-scale");
+
+      const parentWidth = el.parentElement.clientWidth;
+      const scale = parentWidth / el.scrollWidth;
+      const finalScale = Math.min(scale, 1);
+      el.style.setProperty("--scale", finalScale);
+    }
+
+    // ===== 顯示最新紀錄 =====
+    function showLatest() {
+      const logs = getLogs();
+      const latestDiv = document.getElementById("latest");
+
+      if (!logs.length) {
+        latestDiv.textContent = "尚無紀錄";
+        autoScaleLatest();
+        return;
+      }
+
+      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
+      const last = sorted[0];
+      let text = `${last.date}：${last.weight} kg`;
+      if (last.fat) text += `，體脂 ${last.fat}%`;
+
+      latestDiv.textContent = text;
+      autoScaleLatest();
+    }
+
+    // ===== 週變化 =====
+    function showWeeklyStats() {
+      const logs = getLogs();
+      const box = document.getElementById("weeklyStats");
+      if (!logs.length) {
+        box.textContent = "";
+        return;
+      }
+
+      const dates = logs.map((l) => l.date).filter(Boolean).sort();
+      const latestDateStr = dates[dates.length - 1];
+      const latestDate = new Date(latestDateStr);
+
+      function dayDiff(a, b) {
+        return Math.floor((a - b) / (1000 * 60 * 60 * 24));
+      }
+
+      const curW = [];
+      const prevW = [];
+      const curF = [];
+      const prevF = [];
+
+      logs.forEach((l) => {
+        if (!l.date) return;
+        const d = new Date(l.date);
+        const diff = dayDiff(latestDate, d);
+        const w = parseFloat(l.weight);
+        const f = l.fat ? parseFloat(l.fat) : NaN;
+
+        if (diff >= 0 && diff <= 6) {
+          if (!isNaN(w)) curW.push(w);
+          if (!isNaN(f)) curF.push(f);
+        } else if (diff >= 7 && diff <= 13) {
+          if (!isNaN(w)) prevW.push(w);
+          if (!isNaN(f)) prevF.push(f);
         }
-      ]
+      });
+
+      function avg(arr) {
+        if (!arr.length) return null;
+        return arr.reduce((a, b) => a + b, 0) / arr.length;
+      }
+
+      const curWA = avg(curW);
+      const prevWA = avg(prevW);
+      const curFA = avg(curF);
+      const prevFA = avg(prevF);
+
+      let lines = [];
+      if (curWA !== null) {
+        let line = `最近 7 天平均體重：約 ${curWA.toFixed(1)} kg`;
+        if (prevWA !== null) {
+          const diff = curWA - prevWA;
+          const sign = diff > 0 ? "+" : "";
+          line += `（較前 7 天 ${sign}${diff.toFixed(1)} kg）`;
+        }
+        lines.push(line);
+      }
+      if (curFA !== null) {
+        let line = `最近 7 天平均體脂：約 ${curFA.toFixed(1)} %`;
+        if (prevFA !== null) {
+          const diff = curFA - prevFA;
+          const sign = diff > 0 ? "+" : "";
+          line += `（較前 7 天 ${sign}${diff.toFixed(1)} %）`;
+        }
+        lines.push(line);
+      }
+
+      box.textContent = lines.join("\n");
     }
-  });
-}
 
-/* ===== Render Records ===== */
-function renderRecords() {
-  const logs = getLogs();
-  const box = document.getElementById("records");
-  box.innerHTML = "";
+    // ===== 圖表 =====
+    function renderChart() {
+      const logs = getLogs();
+      if (!logs.length) {
+        if (chart) {
+          chart.destroy();
+          chart = null;
+        }
+        return;
+      }
 
-  const sorted = logs.slice().sort((a,b)=>b.date.localeCompare(a.date));
+      const byDate = {};
+      logs.forEach((l) => {
+        if (!l.date) return;
+        if (!byDate[l.date]) byDate[l.date] = { w: [], f: [] };
+        const w = parseFloat(l.weight);
+        if (!isNaN(w)) byDate[l.date].w.push(w);
+        if (l.fat) {
+          const f = parseFloat(l.fat);
+          if (!isNaN(f)) byDate[l.date].f.push(f);
+        }
+      });
 
-  sorted.forEach(l=>{
-    const idx = logs.indexOf(l);
+      const dates = Object.keys(byDate).sort();
+      if (!dates.length) return;
 
-    const div = document.createElement("div");
-    div.className = "record";
+      const weights = dates.map(
+        (d) =>
+          byDate[d].w.reduce((a, b) => a + b, 0) / byDate[d].w.length
+      );
+      const fats = dates.map((d) =>
+        byDate[d].f.length
+          ? byDate[d].f.reduce((a, b) => a + b, 0) / byDate[d].f.length
+          : null
+      );
 
-    const text = document.createElement("div");
-    text.className = "record-text";
-    text.innerText = `${l.date}  |  ${l.weight}kg ${l.fat?` | 體脂${l.fat}%`:""}`;
+      const canvas = document.getElementById("weightChart");
+      canvas.width = Math.max(320, dates.length * 70);
+      canvas.height = 240;
 
-    const actions = document.createElement("div");
-    actions.className = "record-actions";
+      const ctx = canvas.getContext("2d");
+      if (chart) chart.destroy();
 
-    const eBtn = document.createElement("button");
-    eBtn.className = "edit-btn";
-    eBtn.innerText = "編輯";
-    eBtn.onclick = ()=>openModal(idx);
+      chart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: dates,
+          datasets: [
+            {
+              label: "體重 (kg)",
+              data: weights,
+              borderWidth: 2,
+              tension: 0.25,
+              pointRadius: 4,
+            },
+            {
+              label: "體脂 (%)",
+              data: fats,
+              borderWidth: 2,
+              tension: 0.25,
+              pointRadius: 4,
+              borderColor: "#f3c23a",
+              backgroundColor: "rgba(243,194,58,0.2)",
+            },
+          ],
+        },
+        options: {
+          responsive: false,
+          maintainAspectRatio: false,
+          spanGaps: true,
+        },
+      });
+    }
 
-    const dBtn = document.createElement("button");
-    dBtn.className = "delete-btn";
-    dBtn.innerText = "刪除";
-    dBtn.onclick = ()=>deleteRecord(idx);
+    // ===== 紀錄列表 =====
+    function renderRecords() {
+      const logs = getLogs();
+      const box = document.getElementById("records");
+      box.innerHTML = "";
 
-    actions.append(eBtn,dBtn);
+      if (!logs.length) {
+        const empty = document.createElement("div");
+        empty.className = "card";
+        empty.textContent = "目前尚無紀錄，請先新增一筆。";
+        box.appendChild(empty);
+        return;
+      }
 
-    div.append(text,actions);
-    box.append(div);
-  });
-}
+      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
 
-/* ===== Modal ===== */
-function openModal(index) {
-  editIndex = index;
-  const logs = getLogs();
-  const l = logs[index];
+      sorted.forEach((l) => {
+        const all = getLogs(); // 重新抓，避免引用問題
+        const idx = all.indexOf(l);
 
-  editDate.value = l.date;
-  editWeight.value = l.weight;
-  editFat.value = l.fat;
+        const div = document.createElement("div");
+        div.className = "record";
 
-  modalOverlay.style.display = "flex";
-}
+        const t = document.createElement("div");
+        t.className = "record-text";
+        t.textContent = `${l.date}  |  ${l.weight} kg ${
+          l.fat ? `| 體脂 ${l.fat}%` : ""
+        }`;
 
-function closeModal() {
-  modalOverlay.style.display = "none";
-}
+        const actions = document.createElement("div");
+        actions.className = "record-actions";
 
-function saveEdit() {
-  const logs = getLogs();
-  const l = logs[editIndex];
+        const eBtn = document.createElement("button");
+        eBtn.className = "edit-btn";
+        eBtn.textContent = "編輯";
+        eBtn.onclick = () => openModal(idx);
 
-  l.date = editDate.value;
-  l.weight = editWeight.value;
-  l.fat = editFat.value;
+        const dBtn = document.createElement("button");
+        dBtn.className = "delete-btn";
+        dBtn.textContent = "刪除";
+        dBtn.onclick = () => deleteRecord(idx);
 
-  saveLogs(logs);
-  closeModal();
-  render();
-}
+        actions.appendChild(eBtn);
+        actions.appendChild(dBtn);
 
-function deleteRecord(index) {
-  if (!confirm("確定刪除？")) return;
-  const logs = getLogs();
-  logs.splice(index,1);
-  saveLogs(logs);
-  render();
-}
+        div.appendChild(t);
+        div.appendChild(actions);
+        box.appendChild(div);
+      });
+    }
 
-/* ===== Render Root ===== */
-function render() {
-  renderRecords();
-  renderChart();
-  showLatest();
-  weeklyStats.innerText = "";
-}
+    // ===== Modal 編輯 =====
+    function openModal(index) {
+      editIndex = index;
+      const logs = getLogs();
+      const l = logs[index];
+      document.getElementById("editDate").value = l.date;
+      document.getElementById("editWeight").value = l.weight;
+      document.getElementById("editFat").value = l.fat || "";
+      document.getElementById("modalOverlay").style.display = "flex";
+    }
 
-/* ===== Start ===== */
-setDefaultDate();
-render();
+    function closeModal() {
+      document.getElementById("modalOverlay").style.display = "none";
+    }
 
-</script>
+    function saveEdit() {
+      const logs = getLogs();
+      const l = logs[editIndex];
+      l.date = document.getElementById("editDate").value;
+      l.weight = document.getElementById("editWeight").value;
+      l.fat = document.getElementById("editFat").value;
+      if (!l.weight) {
+        alert("體重不可為空！");
+        return;
+      }
+      saveLogs(logs);
+      closeModal();
+      render();
+    }
 
+    function deleteRecord(index) {
+      if (!confirm("確定要刪除這筆紀錄嗎？")) return;
+      const logs = getLogs();
+      logs.splice(index, 1);
+      saveLogs(logs);
+      render();
+    }
+
+    // ===== 匯出 / 匯入 / 清除 =====
+    function toggleExportArea() {
+      const wrapper = document.getElementById("exportAreaWrapper");
+      const area = document.getElementById("exportArea");
+      if (wrapper.style.display === "flex") {
+        wrapper.style.display = "none";
+      } else {
+        wrapper.style.display = "flex";
+        const logs = getLogs();
+        area.value = JSON.stringify(logs, null, 2);
+      }
+    }
+
+    function copyExport() {
+      const area = document.getElementById("exportArea");
+      area.select();
+      document.execCommand("copy");
+      alert("已複製，貼到雲端記事或傳給自己就算『雲端備份』了！");
+    }
+
+    function importFromText() {
+      const area = document.getElementById("exportArea");
+      const text = area.value.trim();
+      if (!text) {
+        alert("請先在上方貼上匯出內容！");
+        return;
+      }
+      try {
+        const data = JSON.parse(text);
+        if (!Array.isArray(data)) throw new Error("格式錯誤");
+        saveLogs(data);
+        alert("匯入成功，已覆蓋目前資料。");
+        render();
+      } catch (e) {
+        alert("匯入失敗：格式不是有效的 JSON。");
+      }
+    }
+
+    function clearAll() {
+      if (
+        !confirm("確定要清除全部紀錄嗎？這個動作無法復原。")
+      )
+        return;
+      saveLogs([]);
+      render();
+    }
+
+    // ===== 整體渲染 =====
+    function render() {
+      renderRecords();
+      renderChart();
+      showLatest();
+      showWeeklyStats();
+    }
+  </script>
 </body>
 </html>
