@@ -2,17 +2,14 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>體重紀錄</title>
+  <title>Weight Record</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- PWA / iOS 樣式用 -->
+  <!-- PWA / iOS 樣式用（manifest 之後可加） -->
   <meta name="theme-color" content="#f7f4ec" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <link rel="manifest" href="manifest.json" />
-  <!-- 之後你可以自己放 apple-touch-icon.png -->
-  <!-- <link rel="apple-touch-icon" href="icon-192.png" /> -->
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -304,7 +301,7 @@
       border: none;
     }
 
-    /* ===== Splash ===== */
+    /* ===== Splash（新版 Weight Record 動畫） ===== */
     #splash {
       position: fixed;
       inset: 0;
@@ -315,28 +312,43 @@
       z-index: 999999;
       opacity: 1;
       transition: opacity 0.8s ease;
+      backdrop-filter: blur(0px);
     }
 
     #splash-logo {
-      font-size: 32px;
+      font-size: 34px;
       font-weight: 700;
       color: #3b3025;
       opacity: 0;
-      animation: splashIn 1s forwards;
+      transform: scale(0.85) translateY(24px);
+      filter: blur(8px);
+      animation: splashFancy 1.2s ease forwards;
     }
 
-    @keyframes splashIn {
-      from {
+    @keyframes splashFancy {
+      0% {
         opacity: 0;
-        transform: translateY(20px);
+        transform: scale(0.85) translateY(24px);
+        filter: blur(8px);
       }
-      to {
+      45% {
         opacity: 1;
-        transform: translateY(0);
+        transform: scale(1.04) translateY(-4px);
+        filter: blur(0px);
+      }
+      80% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0px);
       }
     }
 
-    /* ===== Export / Import TextArea 彈出區（可選） ===== */
+    /* ===== 匯出 / 匯入區 ===== */
     #exportAreaWrapper {
       margin-top: 10px;
       display: none;
@@ -364,13 +376,13 @@
 <body>
   <!-- Splash -->
   <div id="splash">
-    <div id="splash-logo">體重紀錄</div>
+    <div id="splash-logo">Weight Record</div>
   </div>
 
   <!-- Main -->
   <div id="main">
     <div class="top-bar">
-      <h1>體重紀錄</h1>
+      <h1>Weight Record</h1>
       <button class="theme-toggle" id="themeToggle" title="切換主題">
         🌙
       </button>
@@ -500,12 +512,13 @@
     // ===== 主題切換（淺色 / 深色） =====
     function initTheme() {
       const saved = localStorage.getItem(THEME_KEY);
+      const btn = document.getElementById("themeToggle");
       if (saved === "dark") {
         document.body.classList.add("dark-mode");
-        document.getElementById("themeToggle").innerText = "☀️";
+        btn.innerText = "☀️";
       } else {
         document.body.classList.remove("dark-mode");
-        document.getElementById("themeToggle").innerText = "🌙";
+        btn.innerText = "🌙";
       }
     }
 
@@ -678,8 +691,7 @@
       if (!dates.length) return;
 
       const weights = dates.map(
-        (d) =>
-          byDate[d].w.reduce((a, b) => a + b, 0) / byDate[d].w.length
+        (d) => byDate[d].w.reduce((a, b) => a + b, 0) / byDate[d].w.length
       );
       const fats = dates.map((d) =>
         byDate[d].f.length
@@ -853,10 +865,7 @@
     }
 
     function clearAll() {
-      if (
-        !confirm("確定要清除全部紀錄嗎？這個動作無法復原。")
-      )
-        return;
+      if (!confirm("確定要清除全部紀錄嗎？這個動作無法復原。")) return;
       saveLogs([]);
       render();
     }
