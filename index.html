@@ -6,7 +6,6 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- PWA / iOS 樣式用（manifest 之後可加） -->
   <meta name="theme-color" content="#f7f4ec" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -15,7 +14,6 @@
 
   <style>
     :root {
-      /* 淺色主題 */
       --bg-color: #f7f4ec;
       --text-main: #3b3025;
       --card-bg: #ffffff;
@@ -29,7 +27,6 @@
     }
 
     body.dark-mode {
-      /* 深色主題覆寫 */
       --bg-color: #151515;
       --text-main: #f5f1e6;
       --card-bg: #222222;
@@ -42,7 +39,6 @@
       --muted: #c4b8a3;
     }
 
-    /* ===== Global ===== */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
         Arial, sans-serif;
@@ -61,7 +57,6 @@
       padding: 16px 16px 24px;
     }
 
-    /* ===== Header ===== */
     .top-bar {
       display: flex;
       align-items: center;
@@ -75,7 +70,13 @@
       margin: 0;
     }
 
-    .theme-toggle {
+    .top-right {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .icon-btn {
       width: 34px;
       height: 34px;
       border-radius: 999px;
@@ -87,9 +88,9 @@
       font-size: 18px;
       cursor: pointer;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      padding: 0;
     }
 
-    /* ===== Card ===== */
     .card {
       background: var(--card-bg);
       border-radius: 18px;
@@ -99,7 +100,6 @@
       border: 1px solid rgba(0, 0, 0, 0.03);
     }
 
-    /* ===== Inputs ===== */
     .input-area {
       display: flex;
       flex-direction: column;
@@ -121,7 +121,6 @@
       box-shadow: 0 0 0 3px rgba(248, 206, 126, 0.35);
     }
 
-    /* ===== Buttons ===== */
     button {
       padding: 10px 12px;
       font-size: 16px;
@@ -155,7 +154,6 @@
       background: var(--input-bg);
     }
 
-    /* ===== Latest Info & Weekly ===== */
     #latest {
       font-weight: 700;
       font-size: 19px;
@@ -177,7 +175,6 @@
       white-space: pre-line;
     }
 
-    /* ===== Chart ===== */
     #chartWrapper {
       border-radius: 18px;
       padding: 10px;
@@ -190,7 +187,6 @@
       display: block;
     }
 
-    /* ===== Records ===== */
     #records {
       margin-top: 6px;
     }
@@ -241,7 +237,6 @@
       color: white;
     }
 
-    /* ===== Modal ===== */
     #modalOverlay {
       position: fixed;
       inset: 0;
@@ -301,7 +296,56 @@
       border: none;
     }
 
-    /* ===== Splash（新版 Weight Record 動畫） ===== */
+    /* Profile Modal */
+    #profileOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10001;
+      backdrop-filter: blur(3px);
+    }
+
+    #profileModal {
+      width: 90%;
+      max-width: 360px;
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 18px 18px 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    #profileModal h2 {
+      margin: 0 0 10px;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .gender-row {
+      display: flex;
+      gap: 12px;
+      font-size: 14px;
+      align-items: center;
+    }
+
+    .gender-row label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    #profileBMI {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* Splash */
     #splash {
       position: fixed;
       inset: 0;
@@ -348,7 +392,6 @@
       }
     }
 
-    /* ===== 匯出 / 匯入區 ===== */
     #exportAreaWrapper {
       margin-top: 10px;
       display: none;
@@ -383,9 +426,14 @@
   <div id="main">
     <div class="top-bar">
       <h1>Weight Record</h1>
-      <button class="theme-toggle" id="themeToggle" title="切換主題">
-        🌙
-      </button>
+      <div class="top-right">
+        <button class="icon-btn" id="profileBtn" title="個人資料">
+          👤
+        </button>
+        <button class="icon-btn" id="themeToggle" title="切換主題">
+          🌙
+        </button>
+      </div>
     </div>
 
     <!-- 輸入區 -->
@@ -451,7 +499,7 @@
     <div id="records"></div>
   </div>
 
-  <!-- Modal 編輯 -->
+  <!-- 編輯紀錄 Modal -->
   <div id="modalOverlay">
     <div id="modal">
       <h2>編輯紀錄</h2>
@@ -476,13 +524,44 @@
     </div>
   </div>
 
+  <!-- 個人資料（性別＋身高＋BMI） Modal -->
+  <div id="profileOverlay">
+    <div id="profileModal">
+      <h2>個人資料</h2>
+
+      <div class="modal-row">
+        <label>身高（cm）：</label>
+        <input id="profileHeight" type="number" step="0.1" placeholder="例如 170" />
+      </div>
+
+      <div class="modal-row">
+        <label>性別：</label>
+        <div class="gender-row">
+          <label>
+            <input type="radio" name="profileGender" value="male" /> 男
+          </label>
+          <label>
+            <input type="radio" name="profileGender" value="female" /> 女
+          </label>
+        </div>
+      </div>
+
+      <div id="profileBMI"></div>
+
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closeProfile()">取消</button>
+        <button class="btn-save" onclick="saveProfileData()">儲存</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const STORAGE_KEY = "weight_logs";
     const THEME_KEY = "weight_theme";
+    const PROFILE_KEY = "weight_profile";
     let editIndex = null;
     let chart = null;
 
-    // ===== 工具函式 =====
     function getLogs() {
       return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     }
@@ -490,7 +569,13 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
     }
 
-    // ===== Splash + 主畫面淡入 =====
+    function getProfile() {
+      return JSON.parse(localStorage.getItem(PROFILE_KEY) || "{}");
+    }
+    function saveProfile(profile) {
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+    }
+
     window.addEventListener("load", () => {
       initTheme();
       setDefaultDate();
@@ -509,7 +594,6 @@
       render();
     });
 
-    // ===== 主題切換（淺色 / 深色） =====
     function initTheme() {
       const saved = localStorage.getItem(THEME_KEY);
       const btn = document.getElementById("themeToggle");
@@ -529,13 +613,13 @@
       document.getElementById("themeToggle").innerText = isDark ? "☀️" : "🌙";
     });
 
-    // ===== 日期預設今天 =====
+    document.getElementById("profileBtn").addEventListener("click", openProfile);
+
     function setDefaultDate() {
       const d = document.getElementById("dateInput");
       if (!d.value) d.value = new Date().toISOString().slice(0, 10);
     }
 
-    // ===== 新增紀錄 =====
     function addRecord() {
       const dateInput = document.getElementById("dateInput");
       const weightInput = document.getElementById("weightInput");
@@ -559,7 +643,6 @@
       render();
     }
 
-    // ===== 最新紀錄自動縮放 =====
     function autoScaleLatest() {
       const el = document.getElementById("latest");
       if (!el.textContent) return;
@@ -573,7 +656,6 @@
       el.style.setProperty("--scale", finalScale);
     }
 
-    // ===== 顯示最新紀錄 =====
     function showLatest() {
       const logs = getLogs();
       const latestDiv = document.getElementById("latest");
@@ -593,7 +675,6 @@
       autoScaleLatest();
     }
 
-    // ===== 週變化 =====
     function showWeeklyStats() {
       const logs = getLogs();
       const box = document.getElementById("weeklyStats");
@@ -664,7 +745,6 @@
       box.textContent = lines.join("\n");
     }
 
-    // ===== 圖表 =====
     function renderChart() {
       const logs = getLogs();
       if (!logs.length) {
@@ -737,7 +817,6 @@
       });
     }
 
-    // ===== 紀錄列表 =====
     function renderRecords() {
       const logs = getLogs();
       const box = document.getElementById("records");
@@ -754,7 +833,7 @@
       const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
 
       sorted.forEach((l) => {
-        const all = getLogs(); // 重新抓，避免引用問題
+        const all = getLogs();
         const idx = all.indexOf(l);
 
         const div = document.createElement("div");
@@ -788,7 +867,6 @@
       });
     }
 
-    // ===== Modal 編輯 =====
     function openModal(index) {
       editIndex = index;
       const logs = getLogs();
@@ -826,7 +904,6 @@
       render();
     }
 
-    // ===== 匯出 / 匯入 / 清除 =====
     function toggleExportArea() {
       const wrapper = document.getElementById("exportAreaWrapper");
       const area = document.getElementById("exportArea");
@@ -870,7 +947,92 @@
       render();
     }
 
-    // ===== 整體渲染 =====
+    /* ===== Profile / BMI ===== */
+    function openProfile() {
+      const profile = getProfile();
+      document.getElementById("profileHeight").value =
+        profile.height != null ? profile.height : "";
+
+      const genderRadios = document.querySelectorAll(
+        'input[name="profileGender"]'
+      );
+      genderRadios.forEach((r) => {
+        r.checked = r.value === profile.gender;
+      });
+
+      updateProfileBMIText();
+      document.getElementById("profileOverlay").style.display = "flex";
+    }
+
+    function closeProfile() {
+      document.getElementById("profileOverlay").style.display = "none";
+    }
+
+    function computeBMI(weightKg, heightCm) {
+      if (!weightKg || !heightCm || heightCm <= 0) return null;
+      const hM = heightCm / 100;
+      return weightKg / (hM * hM);
+    }
+
+    function updateProfileBMIText() {
+      const profile = getProfile();
+      const bmiDiv = document.getElementById("profileBMI");
+      const logs = getLogs();
+
+      if (!profile.height || !profile.gender) {
+        bmiDiv.textContent = "請先填寫身高與性別，儲存後會使用最新體重計算 BMI。";
+        return;
+      }
+
+      if (!logs.length) {
+        bmiDiv.textContent = "目前尚無體重紀錄，無法計算 BMI。";
+        return;
+      }
+
+      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
+      const last = sorted[0];
+      const weight = parseFloat(last.weight);
+      const bmi = computeBMI(weight, parseFloat(profile.height));
+
+      if (!bmi) {
+        bmiDiv.textContent = "資料不足，無法計算 BMI。";
+        return;
+      }
+
+      const genderText = profile.gender === "male" ? "男" : "女";
+      bmiDiv.textContent = `性別：${genderText}｜身高：${profile.height} cm\n依照最新體重 ${weight} kg，BMI 約為 ${bmi.toFixed(
+        1
+      )}`;
+    }
+
+    function saveProfileData() {
+      const heightVal = parseFloat(
+        document.getElementById("profileHeight").value
+      );
+      const genderInput = document.querySelector(
+        'input[name="profileGender"]:checked'
+      );
+
+      if (!heightVal || isNaN(heightVal) || heightVal <= 0) {
+        alert("請輸入正確的身高（cm）");
+        return;
+      }
+      if (!genderInput) {
+        alert("請選擇性別（男 / 女）");
+        return;
+      }
+
+      const profile = {
+        height: heightVal,
+        gender: genderInput.value,
+      };
+
+      saveProfile(profile);
+      updateProfileBMIText();
+      alert("已儲存個人資料與 BMI 設定");
+      closeProfile();
+    }
+
     function render() {
       renderRecords();
       renderChart();
