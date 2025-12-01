@@ -615,10 +615,11 @@
 
     document.getElementById("profileBtn").addEventListener("click", openProfile);
 
-    function setDefaultDate() {
-      const d = document.getElementById("dateInput");
-      if (!d.value) d.value = new Date().toISOString().slice(0, 10);
-    }
+   function setDefaultDate() {
+  const d = document.getElementById("dateInput");
+  const today = new Date().toISOString().slice(0, 10);
+  d.value = today;  // 不管之前是什麼，打開頁面就設成今天
+}
 
     function addRecord() {
       const dateInput = document.getElementById("dateInput");
