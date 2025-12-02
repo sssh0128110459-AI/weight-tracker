@@ -39,18 +39,46 @@
       --muted: #c4b8a3;
     }
 
-    /* 冰島苔原：黑綠配色 */
+    /* 冰島苔原：綠色為主，黑色點綴 */
     body.theme-iceland {
-      --bg-color: #020706;
-      --text-main: #e4f7ed;
-      --card-bg: #071512;
-      --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.75);
-      --border-subtle: #1f302a;
-      --input-bg: #0b221b;
-      --accent: #54c79f;
-      --accent-dark: #36a47e;
-      --danger: #f07171;
-      --muted: #9fb9aa;
+      --bg-color: #071910;          /* 深苔綠 */
+      --text-main: #e4f7ed;         /* 淺綠偏白字 */
+      --card-bg: #0f2719;           /* 卡片較深綠 */
+      --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.85);
+      --border-subtle: #163324;     /* 邊框更接近黑綠 */
+      --input-bg: #0a1e15;
+      --accent: #67e0a3;            /* 明亮草綠 */
+      --accent-dark: #32a96d;       /* 深一點的綠 */
+      --danger: #ff7f7f;
+      --muted: #9fc9b0;             /* 軟綠灰 */
+    }
+
+    /* 櫻花：粉色為主，棕色點綴 */
+    body.theme-sakura {
+      --bg-color: #ffeef4;          /* 大面積淡粉 */
+      --text-main: #5a3b32;         /* 溫暖棕色字 */
+      --card-bg: #ffffff;
+      --card-shadow: 0 4px 14px rgba(180, 120, 140, 0.25);
+      --border-subtle: #f3c9d8;
+      --input-bg: #fff7fb;
+      --accent: #f58fb3;            /* 櫻花粉 */
+      --accent-dark: #e06b94;       /* 深粉 */
+      --danger: #e85b72;
+      --muted: #8c5b63;             /* 暗粉棕 */
+    }
+
+    /* 都市霓虹：亮藍為主，黑色點綴 */
+    body.theme-neon {
+      --bg-color: #081626;          /* 深藍夜空 */
+      --text-main: #e5f5ff;         /* 冷白偏藍 */
+      --card-bg: #050b12;           /* 接近黑的卡片 */
+      --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.9);
+      --border-subtle: #133047;
+      --input-bg: #07121f;
+      --accent: #23b3ff;            /* 亮藍霓虹 */
+      --accent-dark: #0a82d0;
+      --danger: #ff647c;
+      --muted: #8fb1d1;             /* 霧藍灰 */
     }
 
     body {
@@ -146,6 +174,15 @@
       color: #4a3510;
       cursor: pointer;
       transition: 0.15s;
+    }
+
+    body.theme-iceland button,
+    body.theme-neon button {
+      color: #031209;
+    }
+
+    body.theme-sakura button {
+      color: #5a3b32;
     }
 
     button:active {
@@ -277,6 +314,16 @@
     #chartScroll::-webkit-scrollbar-thumb {
       background: #d8d2c8;
       border-radius: 10px;
+    }
+
+    body.theme-iceland #chartScroll::-webkit-scrollbar-thumb {
+      background: #264533;
+    }
+    body.theme-neon #chartScroll::-webkit-scrollbar-thumb {
+      background: #264c6b;
+    }
+    body.theme-sakura #chartScroll::-webkit-scrollbar-thumb {
+      background: #f1b5cb;
     }
 
     #weightChart {
@@ -822,6 +869,12 @@
           <button id="themeIcelandBtn" class="settings-toggle" type="button" onclick="applyTheme('iceland')">
             冰島苔原
           </button>
+          <button id="themeSakuraBtn" class="settings-toggle" type="button" onclick="applyTheme('sakura')">
+            櫻花
+          </button>
+          <button id="themeNeonBtn" class="settings-toggle" type="button" onclick="applyTheme('neon')">
+            都市霓虹
+          </button>
         </div>
       </div>
 
@@ -863,7 +916,7 @@
 
   <script>
     const STORAGE_KEY = "weight_logs";
-    const THEME_KEY = "weight_theme"; // light | dark | iceland
+    const THEME_KEY = "weight_theme"; // light | dark | iceland | sakura | neon
     const PROFILE_KEY = "weight_profile";
     const TARGET_KEY = "weight_target";
 
@@ -901,11 +954,16 @@
     /* 主題切換 */
     function applyTheme(mode) {
       const body = document.body;
-      body.classList.remove("dark-mode", "theme-iceland");
+      body.classList.remove("dark-mode", "theme-iceland", "theme-sakura", "theme-neon");
+
       if (mode === "dark") {
         body.classList.add("dark-mode");
       } else if (mode === "iceland") {
         body.classList.add("theme-iceland");
+      } else if (mode === "sakura") {
+        body.classList.add("theme-sakura");
+      } else if (mode === "neon") {
+        body.classList.add("theme-neon");
       }
       localStorage.setItem(THEME_KEY, mode);
       updateThemeButtons(mode);
@@ -922,6 +980,8 @@
         light: document.getElementById("themeLightBtn"),
         dark: document.getElementById("themeDarkBtn"),
         iceland: document.getElementById("themeIcelandBtn"),
+        sakura: document.getElementById("themeSakuraBtn"),
+        neon: document.getElementById("themeNeonBtn"),
       };
       Object.keys(map).forEach(key => {
         const btn = map[key];
@@ -1473,7 +1533,7 @@
     }
 
     function clearAll() {
-      if (!confirm("確定要清除全部紀錄嗎？這個動作無法復原。")) return;
+      if (!confirm("確定要清除全部紀錄嗎？")) return;
       saveLogs([]);
       render();
     }
