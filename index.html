@@ -25,71 +25,62 @@
       --muted: #5a4d38;
     }
 
-    /* 深色模式 */
-  /* 深色模式 */
-body.dark-mode {
-  --bg-color: #151515;
-  --text-main: #fff9df;        /* 主文字：偏暖的亮奶油色，更顯眼 */
-  --card-bg: #222222;
-  --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
-  --border-subtle: #555555;
-  --input-bg: #333333;
-  --accent: #ffd35c;           /* 提亮一點的金黃 */
-  --accent-dark: #e4b842;
-  --danger: #ff8080;
-  --muted: #f1ddaa;            /* 次要文字也變亮一點 */
-}
+    /* 深色主題 */
+    body.dark-mode {
+      --bg-color: #111111;
+      --text-main: #f7f9ff;
+      --card-bg: #1b1b1b;
+      --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
+      --border-subtle: #3e3e3e;
+      --input-bg: #262626;
+      --accent: #ffd35c;
+      --accent-dark: #e0b84a;
+      --danger: #ff6b81;
+      --muted: #c4cad5;
+    }
 
     /* 冰島苔原：綠色為主，黑色點綴 */
-/* 冰島苔原：綠色為主，黑色點綴 */
-body.theme-iceland {
-  --bg-color: #071910;          /* 深苔綠 */
-  --text-main: #ecfff7;         /* 比較亮、帶一點薄荷感的白綠 */
-  --card-bg: #0f2719;
-  --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.85);
-  --border-subtle: #1b3c29;
-  --input-bg: #0a1e15;
-  --accent: #7ff0b4;            /* 更亮的綠色按鈕 */
-  --accent-dark: #37b176;
-  --danger: #ff9a9a;
-  --muted: #c3f0d3;             /* 次要字也提亮 */
-}
+    body.theme-iceland {
+      --bg-color: #04140d;
+      --text-main: #ecfff7;
+      --card-bg: #0c2216;
+      --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.85);
+      --border-subtle: #1f3a29;
+      --input-bg: #071910;
+      --accent: #6ee6ae;
+      --accent-dark: #35b275;
+      --danger: #ff9a9a;
+      --muted: #bedfd0;
+    }
 
     /* 櫻花：粉色為主，棕色點綴 */
     body.theme-sakura {
-      --bg-color: #ffeef4;          /* 大面積淡粉 */
-      --text-main: #5a3b32;         /* 溫暖棕色字 */
+      --bg-color: #ffeef4;
+      --text-main: #5a3b32;
       --card-bg: #ffffff;
       --card-shadow: 0 4px 14px rgba(180, 120, 140, 0.25);
       --border-subtle: #f3c9d8;
       --input-bg: #fff7fb;
-      --accent: #f58fb3;            /* 櫻花粉 */
-      --accent-dark: #e06b94;       /* 深粉 */
+      --accent: #f58fb3;
+      --accent-dark: #e06b94;
       --danger: #e85b72;
-      --muted: #8c5b63;             /* 暗粉棕 */
+      --muted: #8c5b63;
     }
 
-    /* 都市霓虹：亮藍為主，黑色點綴 */
-    /* 都市霓虹：亮藍為主，黑色點綴 */
-/* 深色模式（修正版） */
-/* 都市霓虹：亮藍為主，黑色點綴 */
-/* 都市霓虹：亮藍為主，黑色點綴（高對比版本） */
-body.theme-neon {
-  --bg-color: #050b14;          /* 深夜藍底 */
-  --text-main: #eaf5ff;         /* 主文字：亮冷白藍 */
-  --card-bg: #050910;           /* 卡片幾乎黑 */
-  --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.9);
-  --border-subtle: #264a70;     /* 邊框藍灰 */
-  --input-bg: #07121f;
-  --accent: #23b3ff;            /* 亮藍霓虹 */
-  --accent-dark: #0f8edb;
-  --danger: #ff6f8c;
-  --muted: #b7d9ff;             /* 次要文字也偏亮藍 */
-}
-/* 都市霓虹：讓各種按鈕上的文字都變亮，避免看不到 */
-body.theme-neon .metric-tab,
-body.theme-neon .metric-tab.active,
-body
+    /* 都市霓虹：亮藍為主，黑色點綴（修正版） */
+    body.theme-neon {
+      --bg-color: #020512;
+      --text-main: #e9f3ff;
+      --card-bg: #050910;
+      --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.9);
+      --border-subtle: #243f63;
+      --input-bg: #07121f;
+      --accent: #23b3ff;
+      --accent-dark: #0f8edb;
+      --danger: #ff6f8c;
+      --muted: #a9c3e6;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
         Arial, sans-serif;
@@ -180,18 +171,9 @@ body
       border-radius: 12px;
       border: none;
       background: var(--accent);
-      color: #4a3510;
+      color: #111111;
       cursor: pointer;
       transition: 0.15s;
-    }
-
-    body.theme-iceland button,
-    body.theme-neon button {
-      color: #031209;
-    }
-
-    body.theme-sakura button {
-      color: #5a3b32;
     }
 
     button:active {
@@ -277,7 +259,7 @@ body
 
     .metric-tab.active {
       background: var(--accent);
-      color: #4a3510;
+      color: #111111;
       border-color: var(--accent-dark);
     }
 
@@ -325,12 +307,12 @@ body
       border-radius: 10px;
     }
 
-    body.theme-iceland #chartScroll::-webkit-scrollbar-thumb {
-      background: #264533;
-    }
+    body.dark-mode #chartScroll::-webkit-scrollbar-thumb,
+    body.theme-iceland #chartScroll::-webkit-scrollbar-thumb,
     body.theme-neon #chartScroll::-webkit-scrollbar-thumb {
-      background: #264c6b;
+      background: var(--border-subtle);
     }
+
     body.theme-sakura #chartScroll::-webkit-scrollbar-thumb {
       background: #f1b5cb;
     }
@@ -381,12 +363,12 @@ body
 
     .edit-btn {
       background: var(--accent);
-      color: #4a3510;
+      color: #111111;
     }
 
     .delete-btn {
       background: var(--danger);
-      color: white;
+      color: #ffffff;
     }
 
     .month-header {
@@ -465,7 +447,7 @@ body
     .btn-save {
       flex: 1;
       background: var(--accent);
-      color: #4a3510;
+      color: #111111;
       border-radius: 12px;
       padding: 10px;
       border: none;
@@ -627,7 +609,7 @@ body
 
     .settings-toggle.active {
       background: var(--accent);
-      color: #4a3510;
+      color: #111111;
       border-color: var(--accent-dark);
     }
 
@@ -1249,7 +1231,7 @@ body
       else rangeLabel.textContent = "";
 
       const canvas = document.getElementById("weightChart");
-      canvas.width = dates.length * 70;  // 每天固定寬度 → 內容可左右滑動
+      canvas.width = dates.length * 70;
       canvas.height = 240;
 
       const ctx = canvas.getContext("2d");
@@ -1257,20 +1239,35 @@ body
 
       const datasets = [];
       if (metricMode === "all" || metricMode === "weight") {
-        datasets.push({ label:"體重 (kg)", data:weights, borderWidth:2,
-          tension:0.25, pointRadius:4 });
+        datasets.push({
+          label:"體重 (kg)",
+          data:weights,
+          borderWidth:2,
+          tension:0.25,
+          pointRadius:4,
+          borderColor:"#4b7bff",
+          backgroundColor:"rgba(75,123,255,0.18)"
+        });
       }
       if (metricMode === "all" || metricMode === "fat") {
         datasets.push({
-          label:"體脂 (%)", data:fats, borderWidth:2, tension:0.25,
-          pointRadius:4, borderColor:"#f3c23a",
+          label:"體脂 (%)",
+          data:fats,
+          borderWidth:2,
+          tension:0.25,
+          pointRadius:4,
+          borderColor:"#f3c23a",
           backgroundColor:"rgba(243,194,58,0.2)"
         });
       }
       if (metricMode === "all" || metricMode === "muscle") {
         datasets.push({
-          label:"骨骼肌 (%)", data:muscles, borderWidth:2, tension:0.25,
-          pointRadius:4, borderColor:"#ff4b4b",
+          label:"骨骼肌 (%)",
+          data:muscles,
+          borderWidth:2,
+          tension:0.25,
+          pointRadius:4,
+          borderColor:"#ff4b4b",
           backgroundColor:"rgba(255,75,75,0.2)"
         });
       }
@@ -1284,14 +1281,38 @@ body
           borderWidth:1.5,
           borderDash:[6,4],
           pointRadius:0,
-          borderColor:"#888888",
+          borderColor:"#9b9b9b",
         });
       }
+
+      const cs = getComputedStyle(document.body);
+      const axisColor = cs.getPropertyValue("--muted") || "#666666";
+      const gridColor = cs.getPropertyValue("--border-subtle") || "#cccccc";
+      const legendColor = cs.getPropertyValue("--text-main") || "#000000";
 
       chart = new Chart(ctx, {
         type:"line",
         data:{ labels:dates, datasets },
-        options:{ responsive:false, maintainAspectRatio:false, spanGaps:true },
+        options:{
+          responsive:false,
+          maintainAspectRatio:false,
+          spanGaps:true,
+          scales:{
+            x:{
+              ticks:{ color: axisColor.trim() },
+              grid:{ color: gridColor.trim() }
+            },
+            y:{
+              ticks:{ color: axisColor.trim() },
+              grid:{ color: gridColor.trim() }
+            }
+          },
+          plugins:{
+            legend:{
+              labels:{ color: legendColor.trim() }
+            }
+          }
+        },
       });
     }
 
@@ -1471,7 +1492,6 @@ body
           ? `目前目標體重：${target} kg`
           : "尚未設定目標體重。";
 
-      // 收起資料備份區
       const backupBody = document.getElementById("backupBody");
       const toggleBtn = document.getElementById("backupToggleBtn");
       if (backupBody && toggleBtn) {
