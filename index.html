@@ -73,18 +73,23 @@ body.theme-iceland {
     /* 都市霓虹：亮藍為主，黑色點綴 */
 /* 深色模式（修正版） */
 /* 都市霓虹：亮藍為主，黑色點綴 */
+/* 都市霓虹：亮藍為主，黑色點綴（高對比版本） */
 body.theme-neon {
-  --bg-color: #050b14;          /* 稍微再暗一點的夜色 */
-  --text-main: #e7f5ff;         /* 很亮的冷白藍字 */
-  --card-bg: #050910;           /* 幾乎黑的卡片 */
+  --bg-color: #050b14;          /* 深夜藍底 */
+  --text-main: #eaf5ff;         /* 主文字：亮冷白藍 */
+  --card-bg: #050910;           /* 卡片幾乎黑 */
   --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.9);
-  --border-subtle: #1b3958;
+  --border-subtle: #264a70;     /* 邊框藍灰 */
   --input-bg: #07121f;
-  --accent: #3bd3ff;            /* 螢光藍 */
-  --accent-dark: #0f96e0;
+  --accent: #23b3ff;            /* 亮藍霓虹 */
+  --accent-dark: #0f8edb;
   --danger: #ff6f8c;
-  --muted: #a9d8ff;             /* 次要字改成淺霧藍，仍然清楚 */
+  --muted: #b7d9ff;             /* 次要文字也偏亮藍 */
 }
+/* 都市霓虹：讓各種按鈕上的文字都變亮，避免看不到 */
+body.theme-neon .metric-tab,
+body.theme-neon .metric-tab.active,
+body
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
         Arial, sans-serif;
