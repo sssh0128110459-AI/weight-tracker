@@ -343,7 +343,86 @@
       font-size: 13px;
       color: var(--muted);
       line-height: 1.5;
+      white-space: pre-line;
     }
+
+    /* BMI 圖表（區間條＋標記線） */
+    .bmi-chart-wrapper {
+      margin-top: 10px;
+      font-size: 12px;
+    }
+
+    .bmi-chart-bar {
+      position: relative;
+      height: 16px;
+      border-radius: 999px;
+      overflow: hidden;
+      display: flex;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+    }
+
+    .bmi-seg-under {
+      flex: 18.5;              /* 0–18.5 */
+      background: #3f8adf;     /* 藍色：過輕 */
+    }
+
+    .bmi-seg-normal {
+      flex: 5.5;               /* 18.5–24 */
+      background: #ffffff;     /* 白色：正常 */
+    }
+
+    .bmi-seg-over {
+      flex: 11;                /* 24–35 */
+      background: #e35a5a;     /* 紅色：過重 */
+    }
+
+    .bmi-marker {
+      position: absolute;
+      top: -4px;
+      width: 2px;
+      height: 24px;
+      background: #000000;
+      left: 0;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      box-shadow: 0 0 0 1px #ffffff80;
+      display: none;
+    }
+
+    body.dark-mode .bmi-marker {
+      background: #ffffff;
+      box-shadow: 0 0 0 1px #00000080;
+    }
+
+    .bmi-chart-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px;
+      color: var(--muted);
+    }
+
+    .bmi-chart-legend {
+      margin-top: 6px;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    .bmi-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-right: 8px;
+    }
+    .bmi-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      border: 1px solid rgba(0,0,0,0.3);
+    }
+    .bmi-dot-under { background:#3f8adf; }
+    .bmi-dot-normal { background:#ffffff; }
+    .bmi-dot-over { background:#e35a5a; }
 
     /* Splash */
     #splash {
@@ -427,7 +506,7 @@
     <div class="top-bar">
       <h1>Weight Record</h1>
       <div class="top-right">
-        <button class="icon-btn" id="profileBtn" title="個人資料">
+        <button class="icon-btn" id="profileBtn" title="個人資料 / BMI">
           👤
         </button>
         <button class="icon-btn" id="themeToggle" title="切換主題">
@@ -524,10 +603,10 @@
     </div>
   </div>
 
-  <!-- 個人資料（性別＋身高＋BMI） Modal -->
+  <!-- 個人資料（性別＋身高＋BMI＋圖表） Modal -->
   <div id="profileOverlay">
     <div id="profileModal">
-      <h2>個人資料</h2>
+      <h2>個人資料 / BMI</h2>
 
       <div class="modal-row">
         <label>身高（cm）：</label>
@@ -548,7 +627,34 @@
 
       <div id="profileBMI"></div>
 
-      <div class="modal-btns">
+      <!-- BMI 區間圖表 -->
+      <div class="bmi-chart-wrapper">
+        <div class="bmi-chart-bar">
+          <div class="bmi-seg-under"></div>
+          <div class="bmi-seg-normal"></div>
+          <div class="bmi-seg-over"></div>
+          <div class="bmi-marker" id="bmiMarker"></div>
+        </div>
+        <div class="bmi-chart-labels">
+          <span>0</span>
+          <span>18.5</span>
+          <span>24</span>
+          <span>35</span>
+        </div>
+        <div class="bmi-chart-legend">
+          <div class="bmi-chip">
+            <span class="bmi-dot bmi-dot-under"></span> 過輕：BMI &lt; 18.5
+          </div>
+          <div class="bmi-chip">
+            <span class="bmi-dot bmi-dot-normal"></span> 正常：18.5 ~ 24
+          </div>
+          <div class="bmi-chip">
+            <span class="bmi-dot bmi-dot-over"></span> 過重：BMI &gt; 24
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-btns" style="margin-top:12px;">
         <button class="btn-cancel" onclick="closeProfile()">取消</button>
         <button class="btn-save" onclick="saveProfileData()">儲存</button>
       </div>
@@ -578,7 +684,7 @@
 
     window.addEventListener("load", () => {
       initTheme();
-      setDefaultDate();
+      setDefaultDate();  // ✅ 每次打開都重設為今天
 
       const splash = document.getElementById("splash");
       const main = document.getElementById("main");
@@ -615,11 +721,12 @@
 
     document.getElementById("profileBtn").addEventListener("click", openProfile);
 
-   function setDefaultDate() {
-  const d = document.getElementById("dateInput");
-  const today = new Date().toISOString().slice(0, 10);
-  d.value = today;  // 不管之前是什麼，打開頁面就設成今天
-}
+    // ✅ 每次載入都設成今天，而不是只在欄位為空才設定
+    function setDefaultDate() {
+      const d = document.getElementById("dateInput");
+      const today = new Date().toISOString().slice(0, 10);
+      d.value = today;
+    }
 
     function addRecord() {
       const dateInput = document.getElementById("dateInput");
@@ -975,18 +1082,38 @@
       return weightKg / (hM * hM);
     }
 
+    function updateBMIMarker(bmi) {
+      const marker = document.getElementById("bmiMarker");
+      if (!marker) return;
+
+      if (!bmi || isNaN(bmi)) {
+        marker.style.display = "none";
+        return;
+      }
+
+      const min = 0;
+      const max = 35; // 上限，超過就鎖在最右邊
+      const clamped = Math.max(min, Math.min(bmi, max));
+      const percent = ((clamped - min) / (max - min)) * 100;
+      marker.style.left = percent + "%";
+      marker.style.display = "block";
+    }
+
     function updateProfileBMIText() {
       const profile = getProfile();
       const bmiDiv = document.getElementById("profileBMI");
       const logs = getLogs();
 
       if (!profile.height || !profile.gender) {
-        bmiDiv.textContent = "請先填寫身高與性別，儲存後會使用最新體重計算 BMI。";
+        bmiDiv.textContent =
+          "請先填寫身高與性別，並儲存。\n之後會使用『最新體重』自動計算 BMI。";
+        updateBMIMarker(null);
         return;
       }
 
       if (!logs.length) {
         bmiDiv.textContent = "目前尚無體重紀錄，無法計算 BMI。";
+        updateBMIMarker(null);
         return;
       }
 
@@ -997,13 +1124,26 @@
 
       if (!bmi) {
         bmiDiv.textContent = "資料不足，無法計算 BMI。";
+        updateBMIMarker(null);
         return;
       }
 
       const genderText = profile.gender === "male" ? "男" : "女";
-      bmiDiv.textContent = `性別：${genderText}｜身高：${profile.height} cm\n依照最新體重 ${weight} kg，BMI 約為 ${bmi.toFixed(
-        1
-      )}`;
+
+      // 分類區間：<18.5 過輕，18.5–24 正常，>24 過重
+      let category = "";
+      if (bmi < 18.5) category = "過輕";
+      else if (bmi <= 24) category = "正常";
+      else category = "過重";
+
+      bmiDiv.textContent =
+        `性別：${genderText}｜身高：${profile.height} cm` +
+        `\n依照最新體重 ${weight} kg，BMI 約為 ${bmi.toFixed(
+          1
+        )}（${category}）` +
+        `\n指標區間：過輕 < 18.5，正常 18.5 ~ 24，過重 > 24`;
+
+      updateBMIMarker(bmi);
     }
 
     function saveProfileData() {
