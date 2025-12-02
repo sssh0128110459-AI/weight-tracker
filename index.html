@@ -26,32 +26,34 @@
     }
 
     /* 深色模式 */
-    body.dark-mode {
-      --bg-color: #151515;
-      --text-main: #f5f1e6;
-      --card-bg: #222222;
-      --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
-      --border-subtle: #444444;
-      --input-bg: #333333;
-      --accent: #e7ba4c;
-      --accent-dark: #d3a63b;
-      --danger: #f07171;
-      --muted: #c4b8a3;
-    }
+  /* 深色模式 */
+body.dark-mode {
+  --bg-color: #151515;
+  --text-main: #fff9df;        /* 主文字：偏暖的亮奶油色，更顯眼 */
+  --card-bg: #222222;
+  --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  --border-subtle: #555555;
+  --input-bg: #333333;
+  --accent: #ffd35c;           /* 提亮一點的金黃 */
+  --accent-dark: #e4b842;
+  --danger: #ff8080;
+  --muted: #f1ddaa;            /* 次要文字也變亮一點 */
+}
 
     /* 冰島苔原：綠色為主，黑色點綴 */
-    body.theme-iceland {
-      --bg-color: #071910;          /* 深苔綠 */
-      --text-main: #e4f7ed;         /* 淺綠偏白字 */
-      --card-bg: #0f2719;           /* 卡片較深綠 */
-      --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.85);
-      --border-subtle: #163324;     /* 邊框更接近黑綠 */
-      --input-bg: #0a1e15;
-      --accent: #67e0a3;            /* 明亮草綠 */
-      --accent-dark: #32a96d;       /* 深一點的綠 */
-      --danger: #ff7f7f;
-      --muted: #9fc9b0;             /* 軟綠灰 */
-    }
+/* 冰島苔原：綠色為主，黑色點綴 */
+body.theme-iceland {
+  --bg-color: #071910;          /* 深苔綠 */
+  --text-main: #ecfff7;         /* 比較亮、帶一點薄荷感的白綠 */
+  --card-bg: #0f2719;
+  --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.85);
+  --border-subtle: #1b3c29;
+  --input-bg: #0a1e15;
+  --accent: #7ff0b4;            /* 更亮的綠色按鈕 */
+  --accent-dark: #37b176;
+  --danger: #ff9a9a;
+  --muted: #c3f0d3;             /* 次要字也提亮 */
+}
 
     /* 櫻花：粉色為主，棕色點綴 */
     body.theme-sakura {
@@ -68,19 +70,19 @@
     }
 
     /* 都市霓虹：亮藍為主，黑色點綴 */
-    body.theme-neon {
-      --bg-color: #081626;          /* 深藍夜空 */
-      --text-main: #e5f5ff;         /* 冷白偏藍 */
-      --card-bg: #050b12;           /* 接近黑的卡片 */
-      --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.9);
-      --border-subtle: #133047;
-      --input-bg: #07121f;
-      --accent: #23b3ff;            /* 亮藍霓虹 */
-      --accent-dark: #0a82d0;
-      --danger: #ff647c;
-      --muted: #8fb1d1;             /* 霧藍灰 */
-    }
-
+    /* 都市霓虹：亮藍為主，黑色點綴 */
+body.theme-neon {
+  --bg-color: #050b14;          /* 稍微再暗一點的夜色 */
+  --text-main: #e7f5ff;         /* 很亮的冷白藍字 */
+  --card-bg: #050910;           /* 幾乎黑的卡片 */
+  --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.9);
+  --border-subtle: #1b3958;
+  --input-bg: #07121f;
+  --accent: #3bd3ff;            /* 螢光藍 */
+  --accent-dark: #0f96e0;
+  --danger: #ff6f8c;
+  --muted: #a9d8ff;             /* 次要字改成淺霧藍，仍然清楚 */
+}
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
         Arial, sans-serif;
