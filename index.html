@@ -25,6 +25,7 @@
       --muted: #5a4d38;
     }
 
+    /* 深色模式 */
     body.dark-mode {
       --bg-color: #151515;
       --text-main: #f5f1e6;
@@ -36,6 +37,20 @@
       --accent-dark: #d3a63b;
       --danger: #f07171;
       --muted: #c4b8a3;
+    }
+
+    /* 冰島苔原：黑綠配色 */
+    body.theme-iceland {
+      --bg-color: #020706;
+      --text-main: #e4f7ed;
+      --card-bg: #071512;
+      --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.75);
+      --border-subtle: #1f302a;
+      --input-bg: #0b221b;
+      --accent: #54c79f;
+      --accent-dark: #36a47e;
+      --danger: #f07171;
+      --muted: #9fb9aa;
     }
 
     body {
@@ -248,7 +263,6 @@
       font-size: 11px;
     }
 
-    /* 可左右滑動的圖表容器 */
     #chartScroll {
       width: 100%;
       overflow-x: auto;
@@ -555,6 +569,18 @@
       cursor: pointer;
     }
 
+    .settings-toggle.active {
+      background: var(--accent);
+      color: #4a3510;
+      border-color: var(--accent-dark);
+    }
+
+    .theme-choice-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
     .settings-row {
       display: flex;
       gap: 6px;
@@ -783,13 +809,23 @@
         <button class="settings-close" onclick="closeSettings()">✕</button>
       </div>
 
+      <!-- 外觀：主題選擇 -->
       <div class="settings-section">
         <div class="settings-section-title">外觀</div>
-        <button class="settings-toggle" id="themeBtnInSettings" onclick="toggleThemeFromSettings()">
-          深色模式：關
-        </button>
+        <div class="theme-choice-row">
+          <button id="themeLightBtn" class="settings-toggle" type="button" onclick="applyTheme('light')">
+            米色
+          </button>
+          <button id="themeDarkBtn" class="settings-toggle" type="button" onclick="applyTheme('dark')">
+            深色
+          </button>
+          <button id="themeIcelandBtn" class="settings-toggle" type="button" onclick="applyTheme('iceland')">
+            冰島苔原
+          </button>
+        </div>
       </div>
 
+      <!-- 目標體重 -->
       <div class="settings-section">
         <div class="settings-section-title">目標體重</div>
         <div class="settings-row">
@@ -799,6 +835,7 @@
         <div id="targetHint" class="settings-hint"></div>
       </div>
 
+      <!-- 資料備份（可展開區） -->
       <div class="settings-section">
         <div class="settings-section-header">
           <div class="settings-section-title">資料備份</div>
@@ -826,7 +863,7 @@
 
   <script>
     const STORAGE_KEY = "weight_logs";
-    const THEME_KEY = "weight_theme";
+    const THEME_KEY = "weight_theme"; // light | dark | iceland
     const PROFILE_KEY = "weight_profile";
     const TARGET_KEY = "weight_target";
 
@@ -861,6 +898,38 @@
       else localStorage.setItem(TARGET_KEY, String(val));
     }
 
+    /* 主題切換 */
+    function applyTheme(mode) {
+      const body = document.body;
+      body.classList.remove("dark-mode", "theme-iceland");
+      if (mode === "dark") {
+        body.classList.add("dark-mode");
+      } else if (mode === "iceland") {
+        body.classList.add("theme-iceland");
+      }
+      localStorage.setItem(THEME_KEY, mode);
+      updateThemeButtons(mode);
+    }
+
+    function initTheme() {
+      const saved = localStorage.getItem(THEME_KEY) || "light";
+      applyTheme(saved);
+    }
+
+    function updateThemeButtons(mode) {
+      const current = mode || localStorage.getItem(THEME_KEY) || "light";
+      const map = {
+        light: document.getElementById("themeLightBtn"),
+        dark: document.getElementById("themeDarkBtn"),
+        iceland: document.getElementById("themeIcelandBtn"),
+      };
+      Object.keys(map).forEach(key => {
+        const btn = map[key];
+        if (!btn) return;
+        btn.classList.toggle("active", key === current);
+      });
+    }
+
     window.addEventListener("load", () => {
       initTheme();
       setDefaultDate();
@@ -892,25 +961,6 @@
 
       render();
     });
-
-    /* Theme */
-    function initTheme() {
-      const saved = localStorage.getItem(THEME_KEY);
-      const isDark = saved === "dark";
-      if (isDark) document.body.classList.add("dark-mode");
-      else document.body.classList.remove("dark-mode");
-    }
-    function toggleThemeFromSettings() {
-      const isDark = document.body.classList.toggle("dark-mode");
-      localStorage.setItem(THEME_KEY, isDark ? "dark" : "light");
-      updateThemeButtonText();
-    }
-    function updateThemeButtonText() {
-      const btn = document.getElementById("themeBtnInSettings");
-      if (!btn) return;
-      const isDark = document.body.classList.contains("dark-mode");
-      btn.textContent = "深色模式：" + (isDark ? "開" : "關");
-    }
 
     /* Date & Add */
     function setDefaultDate() {
@@ -1130,7 +1180,7 @@
       else rangeLabel.textContent = "";
 
       const canvas = document.getElementById("weightChart");
-      canvas.width = dates.length * 70;  // 每天固定寬度 → 內容可以左右滑
+      canvas.width = dates.length * 70;  // 每天固定寬度 → 內容可左右滑動
       canvas.height = 240;
 
       const ctx = canvas.getContext("2d");
@@ -1336,7 +1386,7 @@
       render();
     }
 
-    /* 設定面板：開關 / 匯出匯入 / 目標 */
+    /* 設定面板 */
     function openSettings() {
       const overlay = document.getElementById("settingsOverlay");
       const area = document.getElementById("exportArea");
@@ -1360,7 +1410,7 @@
         toggleBtn.textContent = "展開";
       }
 
-      updateThemeButtonText();
+      updateThemeButtons();
       overlay.style.display = "flex";
     }
     function closeSettings() {
