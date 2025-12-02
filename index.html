@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
@@ -138,29 +138,99 @@
     }
 
     /* ========= 愛馬仕橘 ========= */
-    body.theme-hermes {
-      --bg-color: #fff6ee;
-      --text-main: #4c2814;
-      --text-sub: #9b6543;
-      --card-bg: #ffffff;
-      --card-shadow: 0 4px 16px rgba(190, 124, 63, 0.22);
-      --border-subtle: #f0d0b2;
-      --input-bg: #fff3e4;
-      --accent: #ff8c3a;       /* 愛馬仕橘調 */
-      --accent-dark: #e56f1b;
-      --danger: #e85b5b;
-      --muted: #9b6a47;
-      --chart-axis: #a36b43;
-      --chart-grid: #f3d6bd;
+    /* ===============================
+   愛馬仕橘主題（皮革感精品橘）
+   =============================== */
+body.theme-hermes {
+  /* 全域色彩變數 */
+  --bg-color: #f6e1cc;            /* 奶茶色背景 */
+  --text-main: #4b2614;           /* 深棕標題 */
+  --text-sub: #9a6440;            /* 次要文字：暖棕 */
+  --card-bg: #fff5e9;             /* 奶油皮革色卡片 */
+  --card-shadow: 0 6px 18px rgba(157, 92, 42, 0.35);
 
-      --chart-weight: #ff8c3a;
-      --chart-fat: #ffcf5e;
-      --chart-muscle: #ff6d6d;
-      --chart-target: #c99a7a;
+  --border-subtle: #e8b993;       /* 淡皮革棕色邊框 */
+  --input-bg: #ffeeda;            /* 帶奶色的輸入框背景 */
 
-      --tooltip-bg: rgba(103, 54, 24, 0.94);
-      --tooltip-text: #fff7f0;
-    }
+  --accent: #ff7f2a;              /* 精品焦糖橘 */
+  --accent-dark: #e06610;         /* 深焦糖橘 */
+  --danger: #e2584f;              /* 暖紅（刪除鍵） */
+  --muted: #a16c47;               /* 文字弱化色 */
+
+  /* 圖表用色 */
+  --chart-axis: #a2683b;          /* 座標軸（深暖棕） */
+  --chart-grid: #f0cda7;          /* 網格線（淡皮革） */
+
+  --chart-weight: #ff7f2a;        /* 體重線 → 精品焦糖橘 */
+  --chart-fat: #ffc857;           /* 體脂線 → 時尚金黃 */
+  --chart-muscle: #ff6b6b;        /* 骨骼肌線 → 溫暖珊瑚紅 */
+  --chart-target: #c48c66;        /* 目標體重 → 深皮革棕 */
+
+  /* Tooltip：濃厚皮革棕＋奶油白字 */
+  --tooltip-bg: rgba(104, 55, 26, 0.96);
+  --tooltip-text: #fff7ef;
+}
+
+/* ===============================
+   卡片皮革感效果
+   =============================== */
+body.theme-hermes .card {
+  background: radial-gradient(
+    circle at top left,
+    #fffaf3 0%,
+    #fff0de 45%,
+    #ffe3c2 100%
+  );
+  box-shadow:
+    0 8px 18px rgba(140, 80, 36, 0.45),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+/* ===============================
+   橘色主按鈕：亮焦糖橘漸層
+   =============================== */
+body.theme-hermes button:not(.btn-secondary):not(.btn-danger-ghost) {
+  background: linear-gradient(135deg, #ff9036, #ff7f2a);
+  color: #2b1306; /* 深棕字 → 精品感強 */
+  border: none;
+}
+body.theme-hermes button:not(.btn-secondary):not(.btn-danger-ghost):active {
+  background: linear-gradient(135deg, #f5741a, #e06610);
+}
+
+/* ===============================
+   資料備份／展開按鈕：皮革淺棕
+   =============================== */
+body.theme-hermes .btn-secondary {
+  background: #f2d3b5;
+  color: #4b2a15;
+  border: 1px solid #d6a67a;
+}
+
+/* ===============================
+   刪除鍵：暖紅皮革風
+   =============================== */
+body.theme-hermes .btn-danger-ghost {
+  background: #ffe4de;
+  color: #a62820;
+  border: 1px solid #e07b73;
+}
+
+/* ===============================
+   Legend（圖例） → 實心精品色塊
+   =============================== */
+body.theme-hermes .legend-box.weight {
+  background: #ff7f2a;
+}
+body.theme-hermes .legend-box.fat {
+  background: #ffc857;
+}
+body.theme-hermes .legend-box.muscle {
+  background: #ff6b6b;
+}
+body.theme-hermes .legend-box.target {
+  background: #c48c66;
+}
 
     /* ========= 全域版面 ========= */
     body {
