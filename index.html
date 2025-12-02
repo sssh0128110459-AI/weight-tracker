@@ -193,9 +193,9 @@
     .record {
       background: var(--card-bg);
       border-radius: 14px;
-      padding: 10px 12px;
+      padding: 8px 10px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -204,7 +204,7 @@
     }
 
     .record-text {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       color: var(--text-main);
       white-space: nowrap;
@@ -236,6 +236,30 @@
       color: white;
     }
 
+    /* 月份群組 header */
+    .month-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .month-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .month-toggle {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--card-bg);
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    /* 編輯紀錄 Modal */
     #modalOverlay {
       position: fixed;
       inset: 0;
@@ -354,7 +378,7 @@
     .bmi-bar-wrapper {
       position: relative;
       width: 100%;
-      height: 26px; /* 包含三角形的高度 */
+      height: 26px;
     }
 
     .bmi-bar {
@@ -363,23 +387,23 @@
       right: 0;
       top: 5px;
       height: 12px;
-      border-radius: 999px;      /* 長橢圓 */
+      border-radius: 999px;
       overflow: hidden;
       display: flex;
       border: 1px solid rgba(0,0,0,0.08);
     }
 
     .bmi-seg {
-      flex: 1;                   /* 三段平均分配 */
+      flex: 1;
     }
     .bmi-low {
-      background: #6ca8ff;       /* 藍 */
+      background: #6ca8ff;
     }
     .bmi-mid {
-      background: #fdfdfd;       /* 白 */
+      background: #fdfdfd;
     }
     .bmi-high {
-      background: #ff7b7b;       /* 紅 */
+      background: #ff7b7b;
     }
 
     .bmi-pointer {
@@ -389,9 +413,9 @@
       height: 0;
       border-left: 6px solid transparent;
       border-right: 6px solid transparent;
-      border-top: 8px solid #3b3025; /* 小三角形顏色 */
+      border-top: 8px solid #3b3025;
       transform: translateX(-50%);
-      display: none;             /* 沒有 BMI 時先隱藏 */
+      display: none;
     }
 
     /* Splash */
@@ -544,7 +568,7 @@
       </div>
     </div>
 
-    <!-- 紀錄列表 -->
+    <!-- 紀錄列表（依月份群組） -->
     <div id="records"></div>
   </div>
 
@@ -877,6 +901,7 @@
       });
     }
 
+    // ===== 月份群組的歷史紀錄 =====
     function renderRecords() {
       const logs = getLogs();
       const box = document.getElementById("records");
@@ -890,40 +915,104 @@
         return;
       }
 
+      // 依日期排序（新→舊）
       const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
 
-      sorted.forEach((l) => {
-        const all = getLogs();
-        const idx = all.indexOf(l);
+      // 依月份分組：key = "YYYY-MM"
+      const groups = {};
+      sorted.forEach((log) => {
+        const dateStr = log.date || "";
+        const monthKey = dateStr.length >= 7 ? dateStr.slice(0, 7) : "未知";
+        if (!groups[monthKey]) groups[monthKey] = [];
+        groups[monthKey].push(log);
+      });
 
-        const div = document.createElement("div");
-        div.className = "record";
+      // 月份排序：新→舊
+      const monthKeys = Object.keys(groups).sort((a, b) => b.localeCompare(a));
 
-        const t = document.createElement("div");
-        t.className = "record-text";
-        t.textContent = `${l.date}  |  ${l.weight} kg ${
-          l.fat ? `| 體脂 ${l.fat}%` : ""
-        }`;
+      monthKeys.forEach((monthKey, idx) => {
+        const monthLogs = groups[monthKey];
 
-        const actions = document.createElement("div");
-        actions.className = "record-actions";
+        const monthCard = document.createElement("div");
+        monthCard.className = "card";
 
-        const eBtn = document.createElement("button");
-        eBtn.className = "edit-btn";
-        eBtn.textContent = "編輯";
-        eBtn.onclick = () => openModal(idx);
+        const header = document.createElement("div");
+        header.className = "month-header";
 
-        const dBtn = document.createElement("button");
-        dBtn.className = "delete-btn";
-        dBtn.textContent = "刪除";
-        dBtn.onclick = () => deleteRecord(idx);
+        const title = document.createElement("div");
+        title.className = "month-title";
+        if (monthKey === "未知") {
+          title.textContent = "未設定日期";
+        } else {
+          const [y, m] = monthKey.split("-");
+          title.textContent = `${y} 年 ${m} 月`;
+        }
 
-        actions.appendChild(eBtn);
-        actions.appendChild(dBtn);
+        const toggleBtn = document.createElement("button");
+        toggleBtn.className = "month-toggle";
 
-        div.appendChild(t);
-        div.appendChild(actions);
-        box.appendChild(div);
+        const body = document.createElement("div");
+
+        // 預設：第一個月份展開，其餘收合
+        if (idx === 0) {
+          body.style.display = "block";
+          toggleBtn.textContent = "收合";
+        } else {
+          body.style.display = "none";
+          toggleBtn.textContent = "展開";
+        }
+
+        toggleBtn.onclick = () => {
+          if (body.style.display === "none") {
+            body.style.display = "block";
+            toggleBtn.textContent = "收合";
+          } else {
+            body.style.display = "none";
+            toggleBtn.textContent = "展開";
+          }
+        };
+
+        header.appendChild(title);
+        header.appendChild(toggleBtn);
+        monthCard.appendChild(header);
+
+        // 每一筆紀錄
+        monthLogs.forEach((l) => {
+          const all = getLogs();
+          const idxInAll = all.indexOf(l);
+
+          const div = document.createElement("div");
+          div.className = "record";
+
+          const t = document.createElement("div");
+          t.className = "record-text";
+          t.textContent = `${l.date}｜${l.weight} kg ${
+            l.fat ? `｜體脂 ${l.fat}%` : ""
+          }`;
+
+          const actions = document.createElement("div");
+          actions.className = "record-actions";
+
+          const eBtn = document.createElement("button");
+          eBtn.className = "edit-btn";
+          eBtn.textContent = "編輯";
+          eBtn.onclick = () => openModal(idxInAll);
+
+          const dBtn = document.createElement("button");
+          dBtn.className = "delete-btn";
+          dBtn.textContent = "刪除";
+          dBtn.onclick = () => deleteRecord(idxInAll);
+
+          actions.appendChild(eBtn);
+          actions.appendChild(dBtn);
+
+          div.appendChild(t);
+          div.appendChild(actions);
+          body.appendChild(div);
+        });
+
+        monthCard.appendChild(body);
+        box.appendChild(monthCard);
       });
     }
 
@@ -1042,7 +1131,6 @@
 
       if (!pointer) return;
 
-      // 預設隱藏指標
       pointer.style.display = "none";
 
       if (!profile.height || !profile.gender) {
@@ -1071,12 +1159,11 @@
         profile.height
       } cm\n依照最新體重 ${weight} kg，BMI 約為 ${bmi.toFixed(1)}`;
 
-      // ---- 設定三角形指標位置 ----
-      // 假設 BMI 15 ~ 40 範圍對應整條（超出就壓在兩端）
+      // BMI 15~40 對應整條
       const min = 15;
       const max = 40;
       let ratio = (bmi - min) / (max - min);
-      ratio = Math.max(0, Math.min(1, ratio)); // 限制在 0~1
+      ratio = Math.max(0, Math.min(1, ratio));
 
       pointer.style.left = ratio * 100 + "%";
       pointer.style.display = "block";
