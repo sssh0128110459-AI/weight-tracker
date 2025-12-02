@@ -181,12 +181,19 @@
       white-space: pre-line;
     }
 
+    #targetInfo {
+      font-size: 12px;
+      margin-top: 6px;
+      color: var(--muted);
+      white-space: pre-line;
+    }
+
     #chartWrapper {
       border-radius: 18px;
       padding: 10px;
-      overflow-x: auto;
       background: var(--card-bg);
       box-shadow: var(--card-shadow);
+      position: relative;
     }
 
     #weightChart {
@@ -218,6 +225,35 @@
       border-color: var(--accent-dark);
     }
 
+    /* 圖表區域：7天視窗 + 左右切換 + Range Label */
+    .chart-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .chart-nav-btn {
+      padding: 4px 8px;
+      font-size: 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--card-bg);
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .chart-nav-btn:active {
+      background: var(--input-bg);
+    }
+
+    #chartRangeLabel {
+      font-size: 11px;
+    }
+
     #records {
       margin-top: 6px;
     }
@@ -226,4 +262,1361 @@
       background: var(--card-bg);
       border-radius: 14px;
       padding: 8px 10px;
-      box-shadow: 0
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.02);
+    }
+
+    .record-text {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-main);
+      white-space: nowrap;
+    }
+
+    .record-actions {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .edit-btn,
+    .delete-btn {
+      padding: 3px 6px;
+      font-size: 11px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      min-width: 40px;
+    }
+
+    .edit-btn {
+      background: var(--accent);
+      color: #4a3510;
+    }
+
+    .delete-btn {
+      background: var(--danger);
+      color: white;
+    }
+
+    /* 月份群組 header */
+    .month-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .month-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .month-toggle {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--card-bg);
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    /* 編輯紀錄 Modal */
+    #modalOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      backdrop-filter: blur(3px);
+    }
+
+    #modal {
+      width: 90%;
+      max-width: 360px;
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 18px 18px 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    #modal h2 {
+      margin: 0 0 10px;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .modal-row {
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 14px;
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-cancel {
+      flex: 1;
+      background: var(--card-bg);
+      color: var(--muted);
+      border-radius: 12px;
+      padding: 10px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .btn-save {
+      flex: 1;
+      background: var(--accent);
+      color: #4a3510;
+      border-radius: 12px;
+      padding: 10px;
+      border: none;
+    }
+
+    /* Profile Modal */
+    #profileOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10001;
+      backdrop-filter: blur(3px);
+    }
+
+    #profileModal {
+      width: 90%;
+      max-width: 360px;
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 18px 18px 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    #profileModal h2 {
+      margin: 0 0 10px;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .gender-row {
+      display: flex;
+      gap: 12px;
+      font-size: 14px;
+      align-items: center;
+    }
+
+    .gender-row label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    #profileBMI {
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      white-space: pre-line;
+    }
+
+    /* BMI 長橢圓條 + 三角形指標 */
+    .bmi-bar-container {
+      margin-top: 6px;
+      margin-bottom: 2px;
+    }
+
+    .bmi-bar-wrapper {
+      position: relative;
+      width: 100%;
+      height: 26px;
+    }
+
+    .bmi-bar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 5px;
+      height: 12px;
+      border-radius: 999px;
+      overflow: hidden;
+      display: flex;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .bmi-seg {
+      flex: 1;
+    }
+    .bmi-low {
+      background: #6ca8ff;
+    }
+    .bmi-mid {
+      background: #fdfdfd;
+    }
+    .bmi-high {
+      background: #ff7b7b;
+    }
+
+    .bmi-pointer {
+      position: absolute;
+      bottom: 0;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 8px solid #3b3025;
+      transform: translateX(-50%);
+      display: none;
+    }
+
+    /* 設定側欄（齒輪） */
+    #settingsOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      display: none;
+      justify-content: flex-end;
+      align-items: stretch;
+      z-index: 10002;
+      backdrop-filter: blur(2px);
+    }
+
+    #settingsPanel {
+      width: 85%;
+      max-width: 360px;
+      background: var(--card-bg);
+      border-left: 1px solid var(--border-subtle);
+      box-shadow: -4px 0 18px rgba(0,0,0,0.25);
+      padding: 16px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+
+    .settings-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .settings-close {
+      border: none;
+      background: transparent;
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--muted);
+      padding: 4px;
+    }
+
+    .settings-section {
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    .settings-section-title {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .settings-toggle {
+      padding: 8px 10px;
+      font-size: 13px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--card-bg);
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .settings-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .settings-row input {
+      flex: 1;
+    }
+
+    .settings-hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    #exportArea {
+      width: 100%;
+      min-height: 120px;
+      font-size: 12px;
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      background: var(--input-bg);
+      color: var(--text-main);
+      resize: vertical;
+      box-sizing: border-box;
+    }
+
+    .export-tip {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+
+    /* Splash */
+    #splash {
+      position: fixed;
+      inset: 0;
+      background: #f2e7c7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999999;
+      opacity: 1;
+      transition: opacity 0.8s ease;
+      backdrop-filter: blur(0px);
+    }
+
+    #splash-logo {
+      font-size: 34px;
+      font-weight: 700;
+      color: #3b3025;
+      opacity: 0;
+      transform: scale(0.85) translateY(24px);
+      filter: blur(8px);
+      animation: splashFancy 1.2s ease forwards;
+    }
+
+    @keyframes splashFancy {
+      0% {
+        opacity: 0;
+        transform: scale(0.85) translateY(24px);
+        filter: blur(8px);
+      }
+      45% {
+        opacity: 1;
+        transform: scale(1.04) translateY(-4px);
+        filter: blur(0px);
+      }
+      80% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Splash -->
+  <div id="splash">
+    <div id="splash-logo">Weight Record</div>
+  </div>
+
+  <!-- Main -->
+  <div id="main">
+    <div class="top-bar">
+      <h1>Weight Record</h1>
+      <div class="top-right">
+        <button class="icon-btn" id="profileBtn" title="個人資料">
+          👤
+        </button>
+        <button class="icon-btn" id="settingsBtn" title="設定">
+          ⚙️
+        </button>
+      </div>
+    </div>
+
+    <!-- 輸入區 -->
+    <div class="card">
+      <div class="input-area">
+        <input id="dateInput" type="date" />
+        <input
+          id="weightInput"
+          type="number"
+          step="0.1"
+          placeholder="體重 (kg)"
+        />
+        <input
+          id="fatInput"
+          type="number"
+          step="0.1"
+          placeholder="體脂 (%)（可選填）"
+        />
+        <input
+          id="muscleInput"
+          type="number"
+          step="0.1"
+          placeholder="骨骼肌 (%)（可選填）"
+        />
+        <button onclick="addRecord()">新增紀錄</button>
+      </div>
+    </div>
+
+    <!-- 最新紀錄 + 週變化 + 目標體重 -->
+    <div class="card">
+      <div id="latest"></div>
+      <div id="weeklyStats"></div>
+      <div id="targetInfo"></div>
+    </div>
+
+    <!-- 圖表 -->
+    <div id="chartWrapper" class="card">
+      <div class="metric-tabs">
+        <button class="metric-tab active" id="tabAll" onclick="setMetricMode('all')">全部</button>
+        <button class="metric-tab" id="tabWeight" onclick="setMetricMode('weight')">體重</button>
+        <button class="metric-tab" id="tabFat" onclick="setMetricMode('fat')">體脂</button>
+        <button class="metric-tab" id="tabMuscle" onclick="setMetricMode('muscle')">骨骼肌</button>
+      </div>
+      <div class="chart-nav">
+        <button class="chart-nav-btn" onclick="shiftChartWindow(-1)">←</button>
+        <span id="chartRangeLabel"></span>
+        <button class="chart-nav-btn" onclick="shiftChartWindow(1)">→</button>
+      </div>
+      <canvas id="weightChart"></canvas>
+    </div>
+
+    <!-- 紀錄列表（依月份群組） -->
+    <div id="records"></div>
+  </div>
+
+  <!-- 編輯紀錄 Modal -->
+  <div id="modalOverlay">
+    <div id="modal">
+      <h2>編輯紀錄</h2>
+
+      <div class="modal-row">
+        <label>日期：</label>
+        <input id="editDate" type="date" />
+      </div>
+      <div class="modal-row">
+        <label>體重 (kg)：</label>
+        <input id="editWeight" type="number" step="0.1" />
+      </div>
+      <div class="modal-row">
+        <label>體脂 (%)：</label>
+        <input id="editFat" type="number" step="0.1" />
+      </div>
+      <div class="modal-row">
+        <label>骨骼肌 (%)：</label>
+        <input id="editMuscle" type="number" step="0.1" />
+      </div>
+
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closeModal()">取消</button>
+        <button class="btn-save" onclick="saveEdit()">儲存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 個人資料（性別＋身高＋BMI） Modal -->
+  <div id="profileOverlay">
+    <div id="profileModal">
+      <h2>個人資料</h2>
+
+      <div class="modal-row">
+        <label>身高（cm）：</label>
+        <input id="profileHeight" type="number" step="0.1" placeholder="例如 170" />
+      </div>
+
+      <div class="modal-row">
+        <label>性別：</label>
+        <div class="gender-row">
+          <label>
+            <input type="radio" name="profileGender" value="male" /> 男
+          </label>
+          <label>
+            <input type="radio" name="profileGender" value="female" /> 女
+          </label>
+        </div>
+      </div>
+
+      <div class="modal-row bmi-bar-container">
+        <label>BMI 指標：</label>
+        <div class="bmi-bar-wrapper">
+          <div class="bmi-bar">
+            <div class="bmi-seg bmi-low"></div>
+            <div class="bmi-seg bmi-mid"></div>
+            <div class="bmi-seg bmi-high"></div>
+          </div>
+          <div id="bmiPointer" class="bmi-pointer"></div>
+        </div>
+        <div id="profileBMI"></div>
+      </div>
+
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closeProfile()">取消</button>
+        <button class="btn-save" onclick="saveProfileData()">儲存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 設定側欄（齒輪：深色模式 + 目標體重 + 匯出匯入） -->
+  <div id="settingsOverlay" onclick="if(event.target === this) closeSettings();">
+    <div id="settingsPanel">
+      <div class="settings-header">
+        <span>設定</span>
+        <button class="settings-close" onclick="closeSettings()">✕</button>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">外觀</div>
+        <button class="settings-toggle" id="themeBtnInSettings" onclick="toggleThemeFromSettings()">
+          深色模式：關
+        </button>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">目標體重</div>
+        <div class="settings-row">
+          <input id="targetInput" type="number" step="0.1" placeholder="例如 70" />
+          <button class="btn-secondary" onclick="saveTargetFromSettings()">儲存</button>
+        </div>
+        <div id="targetHint" class="settings-hint"></div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">匯出 / 匯入資料</div>
+        <textarea id="exportArea"></textarea>
+        <div class="btn-row" style="margin-top: 8px;">
+          <button class="btn-secondary" onclick="copyExport()">複製匯出內容</button>
+          <button class="btn-secondary" onclick="importFromText()">匯入貼上的資料</button>
+        </div>
+        <div class="btn-row" style="margin-top: 4px;">
+          <button class="btn-danger-ghost" onclick="clearAll()">清除全部紀錄</button>
+        </div>
+        <div class="export-tip">
+          匯出：按「複製匯出內容」，貼到雲端記事 / Line 自己。<br />
+          匯入：在上方貼上 JSON，再按「匯入貼上的資料」。<br />
+          ※ 每台裝置資料是獨立的，匯入會覆蓋目前資料。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "weight_logs";
+    const THEME_KEY = "weight_theme";
+    const PROFILE_KEY = "weight_profile";
+    const TARGET_KEY = "weight_target";
+
+    let editIndex = null;
+    let chart = null;
+    let metricMode = "all"; // all | weight | fat | muscle
+    let chartWindowStart = null; // 7天視窗用
+    let touchStartX = null;
+
+    function getLogs() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    }
+    function saveLogs(logs) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+    }
+
+    function getProfile() {
+      return JSON.parse(localStorage.getItem(PROFILE_KEY) || "{}");
+    }
+    function saveProfile(profile) {
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+    }
+
+    function getTarget() {
+      const v = localStorage.getItem(TARGET_KEY);
+      if (!v) return null;
+      const n = parseFloat(v);
+      return isNaN(n) ? null : n;
+    }
+    function setTarget(val) {
+      if (val == null || isNaN(val)) {
+        localStorage.removeItem(TARGET_KEY);
+      } else {
+        localStorage.setItem(TARGET_KEY, String(val));
+      }
+    }
+
+    window.addEventListener("load", () => {
+      initTheme();
+      setDefaultDate();
+
+      const splash = document.getElementById("splash");
+      const main = document.getElementById("main");
+
+      setTimeout(() => {
+        main.style.opacity = 1;
+        splash.style.opacity = 0;
+        setTimeout(() => {
+          splash.style.display = "none";
+        }, 900);
+      }, 1200);
+
+      document.getElementById("profileBtn").addEventListener("click", openProfile);
+      document.getElementById("settingsBtn").addEventListener("click", openSettings);
+
+      // 圖表左右滑動（手機手勢）
+      const wrapper = document.getElementById("chartWrapper");
+      wrapper.addEventListener("touchstart", (e) => {
+        if (!e.touches.length) return;
+        touchStartX = e.touches[0].clientX;
+      });
+      wrapper.addEventListener("touchend", (e) => {
+        if (touchStartX == null || !e.changedTouches.length) return;
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (dx > 50) {
+          // 手指往右滑 → 看更早的日期
+          shiftChartWindow(-1);
+        } else if (dx < -50) {
+          // 手指往左滑 → 看更後面的日期
+          shiftChartWindow(1);
+        }
+        touchStartX = null;
+      });
+
+      render();
+    });
+
+    /* ===== Theme ===== */
+    function initTheme() {
+      const saved = localStorage.getItem(THEME_KEY);
+      const isDark = saved === "dark";
+      if (isDark) document.body.classList.add("dark-mode");
+      else document.body.classList.remove("dark-mode");
+    }
+
+    function toggleThemeFromSettings() {
+      const isDark = document.body.classList.toggle("dark-mode");
+      localStorage.setItem(THEME_KEY, isDark ? "dark" : "light");
+      updateThemeButtonText();
+    }
+
+    function updateThemeButtonText() {
+      const btn = document.getElementById("themeBtnInSettings");
+      if (!btn) return;
+      const isDark = document.body.classList.contains("dark-mode");
+      btn.textContent = "深色模式：" + (isDark ? "開" : "關");
+    }
+
+    /* ===== Date / 新增紀錄 ===== */
+    function setDefaultDate() {
+      const d = document.getElementById("dateInput");
+      if (!d.value) d.value = new Date().toISOString().slice(0, 10);
+    }
+
+    function addRecord() {
+      const dateInput = document.getElementById("dateInput");
+      const weightInput = document.getElementById("weightInput");
+      const fatInput = document.getElementById("fatInput");
+      const muscleInput = document.getElementById("muscleInput");
+
+      const date = dateInput.value || new Date().toISOString().slice(0, 10);
+      const weight = weightInput.value;
+      const fat = fatInput.value;
+      const muscle = muscleInput.value;
+
+      if (!weight) {
+        alert("請輸入體重！");
+        return;
+      }
+
+      const logs = getLogs();
+      logs.push({ date, weight, fat, muscle });
+      saveLogs(logs);
+
+      weightInput.value = "";
+      fatInput.value = "";
+      if (muscleInput) muscleInput.value = "";
+      render();
+    }
+
+    /* ===== 最新紀錄 & 週統計 & 目標體重 ===== */
+    function autoScaleLatest() {
+      const el = document.getElementById("latest");
+      if (!el.textContent) return;
+
+      el.style.setProperty("--scale", 1);
+      el.classList.add("auto-scale");
+
+      const parentWidth = el.parentElement.clientWidth;
+      const scale = parentWidth / el.scrollWidth;
+      const finalScale = Math.min(scale, 1);
+      el.style.setProperty("--scale", finalScale);
+    }
+
+    function showLatest() {
+      const logs = getLogs();
+      const latestDiv = document.getElementById("latest");
+
+      if (!logs.length) {
+        latestDiv.textContent = "尚無紀錄";
+        autoScaleLatest();
+        return;
+      }
+
+      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
+      const last = sorted[0];
+      let text = `${last.date}：${last.weight} kg`;
+      if (last.fat) text += `，體脂 ${last.fat}%`;
+      if (last.muscle) text += `，骨骼肌 ${last.muscle}%`;
+
+      latestDiv.textContent = text;
+      autoScaleLatest();
+    }
+
+    function showWeeklyStats() {
+      const logs = getLogs();
+      const box = document.getElementById("weeklyStats");
+      if (!logs.length) {
+        box.textContent = "";
+        return;
+      }
+
+      const dates = logs.map((l) => l.date).filter(Boolean).sort();
+      const latestDateStr = dates[dates.length - 1];
+      const latestDate = new Date(latestDateStr);
+
+      function dayDiff(a, b) {
+        return Math.floor((a - b) / (1000 * 60 * 60 * 24));
+      }
+
+      const curW = [];
+      const prevW = [];
+      const curF = [];
+      const prevF = [];
+      const curM = [];
+      const prevM = [];
+
+      logs.forEach((l) => {
+        if (!l.date) return;
+        const d = new Date(l.date);
+        const diff = dayDiff(latestDate, d);
+        const w = parseFloat(l.weight);
+        const f = l.fat ? parseFloat(l.fat) : NaN;
+        const m = l.muscle ? parseFloat(l.muscle) : NaN;
+
+        if (diff >= 0 && diff <= 6) {
+          if (!isNaN(w)) curW.push(w);
+          if (!isNaN(f)) curF.push(f);
+          if (!isNaN(m)) curM.push(m);
+        } else if (diff >= 7 && diff <= 13) {
+          if (!isNaN(w)) prevW.push(w);
+          if (!isNaN(f)) prevF.push(f);
+          if (!isNaN(m)) prevM.push(m);
+        }
+      });
+
+      function avg(arr) {
+        if (!arr.length) return null;
+        return arr.reduce((a, b) => a + b, 0) / arr.length;
+      }
+
+      const curWA = avg(curW);
+      const prevWA = avg(prevW);
+      const curFA = avg(curF);
+      const prevFA = avg(prevF);
+      const curMA = avg(curM);
+      const prevMA = avg(prevM);
+
+      let lines = [];
+      if (curWA !== null) {
+        let line = `最近 7 天平均體重：約 ${curWA.toFixed(1)} kg`;
+        if (prevWA !== null) {
+          const diff = curWA - prevWA;
+          const sign = diff > 0 ? "+" : "";
+          line += `（較前 7 天 ${sign}${diff.toFixed(1)} kg）`;
+        }
+        lines.push(line);
+      }
+      if (curFA !== null) {
+        let line = `最近 7 天平均體脂：約 ${curFA.toFixed(1)} %`;
+        if (prevFA !== null) {
+          const diff = curFA - prevFA;
+          const sign = diff > 0 ? "+" : "";
+          line += `（較前 7 天 ${sign}${diff.toFixed(1)} %）`;
+        }
+        lines.push(line);
+      }
+      if (curMA !== null) {
+        let line = `最近 7 天平均骨骼肌：約 ${curMA.toFixed(1)} %`;
+        if (prevMA !== null) {
+          const diff = curMA - prevMA;
+          const sign = diff > 0 ? "+" : "";
+          line += `（較前 7 天 ${sign}${diff.toFixed(1)} %）`;
+        }
+        lines.push(line);
+      }
+
+      box.textContent = lines.join("\n");
+    }
+
+    function showTargetInfo() {
+      const info = document.getElementById("targetInfo");
+      const target = getTarget();
+      if (!info) return;
+
+      if (target == null) {
+        info.textContent = "";
+        return;
+      }
+
+      const logs = getLogs();
+      if (!logs.length) {
+        info.textContent = `目標體重：${target} kg`;
+        return;
+      }
+
+      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
+      const last = sorted[0];
+      const w = parseFloat(last.weight);
+      if (isNaN(w)) {
+        info.textContent = `目標體重：${target} kg`;
+        return;
+      }
+
+      const diff = w - target;
+      let diffText;
+      if (Math.abs(diff) < 0.05) {
+        diffText = "已達成目標！";
+      } else if (diff > 0) {
+        diffText = `距離目標還需減少 ${diff.toFixed(1)} kg`;
+      } else {
+        diffText = `距離目標還差增加 ${Math.abs(diff).toFixed(1)} kg`;
+      }
+
+      info.textContent = `目標體重：${target} kg（${diffText}）`;
+    }
+
+    /* ===== 圖表 (7天視窗 + 指標切換 + 目標線) ===== */
+    function renderChart() {
+      const logs = getLogs();
+      if (!logs.length) {
+        if (chart) {
+          chart.destroy();
+          chart = null;
+        }
+        document.getElementById("chartRangeLabel").textContent = "";
+        return;
+      }
+
+      const byDate = {};
+      logs.forEach((l) => {
+        if (!l.date) return;
+        if (!byDate[l.date]) byDate[l.date] = { w: [], f: [], m: [] };
+
+        const w = parseFloat(l.weight);
+        if (!isNaN(w)) byDate[l.date].w.push(w);
+
+        if (l.fat) {
+          const f = parseFloat(l.fat);
+          if (!isNaN(f)) byDate[l.date].f.push(f);
+        }
+
+        if (l.muscle) {
+          const m = parseFloat(l.muscle);
+          if (!isNaN(m)) byDate[l.date].m.push(m);
+        }
+      });
+
+      const allDates = Object.keys(byDate).sort();
+      if (!allDates.length) {
+        if (chart) {
+          chart.destroy();
+          chart = null;
+        }
+        document.getElementById("chartRangeLabel").textContent = "";
+        return;
+      }
+
+      const windowSize = 7;
+      if (chartWindowStart === null) {
+        chartWindowStart = Math.max(0, allDates.length - windowSize);
+      }
+      chartWindowStart = Math.max(0, Math.min(chartWindowStart, Math.max(0, allDates.length - windowSize)));
+      const end = chartWindowStart + windowSize;
+      const dates = allDates.slice(chartWindowStart, end);
+
+      const weights = dates.map(
+        (d) => byDate[d].w.reduce((a, b) => a + b, 0) / byDate[d].w.length
+      );
+      const fats = dates.map((d) =>
+        byDate[d].f.length
+          ? byDate[d].f.reduce((a, b) => a + b, 0) / byDate[d].f.length
+          : null
+      );
+      const muscles = dates.map((d) =>
+        byDate[d].m.length
+          ? byDate[d].m.reduce((a, b) => a + b, 0) / byDate[d].m.length
+          : null
+      );
+
+      const rangeLabel = document.getElementById("chartRangeLabel");
+      if (dates.length) {
+        rangeLabel.textContent = `${dates[0]} ~ ${dates[dates.length - 1]}`;
+      } else {
+        rangeLabel.textContent = "";
+      }
+
+      const canvas = document.getElementById("weightChart");
+      canvas.width = Math.max(320, dates.length * 60);
+      canvas.height = 240;
+
+      const ctx = canvas.getContext("2d");
+      if (chart) chart.destroy();
+
+      const datasets = [];
+
+      if (metricMode === "all" || metricMode === "weight") {
+        datasets.push({
+          label: "體重 (kg)",
+          data: weights,
+          borderWidth: 2,
+          tension: 0.25,
+          pointRadius: 4,
+        });
+      }
+
+      if (metricMode === "all" || metricMode === "fat") {
+        datasets.push({
+          label: "體脂 (%)",
+          data: fats,
+          borderWidth: 2,
+          tension: 0.25,
+          pointRadius: 4,
+          borderColor: "#f3c23a",
+          backgroundColor: "rgba(243,194,58,0.2)",
+        });
+      }
+
+      if (metricMode === "all" || metricMode === "muscle") {
+        datasets.push({
+          label: "骨骼肌 (%)",
+          data: muscles,
+          borderWidth: 2,
+          tension: 0.25,
+          pointRadius: 4,
+          borderColor: "#ff4b4b",
+          backgroundColor: "rgba(255,75,75,0.2)",
+        });
+      }
+
+      // 目標體重虛線（只在「全部」或「體重」模式顯示）
+      const target = getTarget();
+      if ((metricMode === "all" || metricMode === "weight") && target != null && dates.length) {
+        datasets.push({
+          label: "目標體重",
+          data: dates.map(() => target),
+          borderWidth: 1.5,
+          borderDash: [6, 4],
+          pointRadius: 0,
+          borderColor: "#888888",
+        });
+      }
+
+      chart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: dates,
+          datasets,
+        },
+        options: {
+          responsive: false,
+          maintainAspectRatio: false,
+          spanGaps: true,
+        },
+      });
+    }
+
+    function setMetricMode(mode) {
+      metricMode = mode;
+      const tabs = {
+        all: document.getElementById("tabAll"),
+        weight: document.getElementById("tabWeight"),
+        fat: document.getElementById("tabFat"),
+        muscle: document.getElementById("tabMuscle"),
+      };
+      Object.keys(tabs).forEach((k) => {
+        if (!tabs[k]) return;
+        if (k === mode) tabs[k].classList.add("active");
+        else tabs[k].classList.remove("active");
+      });
+      renderChart();
+    }
+
+    function shiftChartWindow(direction) {
+      const logs = getLogs();
+      if (!logs.length) return;
+
+      const dates = [...new Set(logs.map(l => l.date).filter(Boolean))].sort();
+      if (!dates.length) return;
+
+      const windowSize = 7;
+      if (chartWindowStart === null) {
+        chartWindowStart = Math.max(0, dates.length - windowSize);
+      }
+
+      chartWindowStart += direction;
+      chartWindowStart = Math.max(0, Math.min(chartWindowStart, Math.max(0, dates.length - windowSize)));
+      renderChart();
+    }
+
+    /* ===== 月份群組的歷史紀錄 ===== */
+    function renderRecords() {
+      const logs = getLogs();
+      const box = document.getElementById("records");
+      box.innerHTML = "";
+
+      if (!logs.length) {
+        const empty = document.createElement("div");
+        empty.className = "card";
+        empty.textContent = "目前尚無紀錄，請先新增一筆。";
+        box.appendChild(empty);
+        return;
+      }
+
+      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
+
+      const groups = {};
+      sorted.forEach((log) => {
+        const dateStr = log.date || "";
+        const monthKey = dateStr.length >= 7 ? dateStr.slice(0, 7) : "未知";
+        if (!groups[monthKey]) groups[monthKey] = [];
+        groups[monthKey].push(log);
+      });
+
+      const monthKeys = Object.keys(groups).sort((a, b) => b.localeCompare(a));
+
+      monthKeys.forEach((monthKey, idx) => {
+        const monthLogs = groups[monthKey];
+        const monthCard = document.createElement("div");
+        monthCard.className = "card";
+
+        const header = document.createElement("div");
+        header.className = "month-header";
+
+        const title = document.createElement("div");
+        title.className = "month-title";
+        if (monthKey === "未知") {
+          title.textContent = "未設定日期";
+        } else {
+          const [y, m] = monthKey.split("-");
+          title.textContent = `${y} 年 ${m} 月`;
+        }
+
+        const toggleBtn = document.createElement("button");
+        toggleBtn.className = "month-toggle";
+
+        const body = document.createElement("div");
+
+        if (idx === 0) {
+          body.style.display = "block";
+          toggleBtn.textContent = "收合";
+        } else {
+          body.style.display = "none";
+          toggleBtn.textContent = "展開";
+        }
+
+        toggleBtn.onclick = () => {
+          if (body.style.display === "none") {
+            body.style.display = "block";
+            toggleBtn.textContent = "收合";
+          } else {
+            body.style.display = "none";
+            toggleBtn.textContent = "展開";
+          }
+        };
+
+        header.appendChild(title);
+        header.appendChild(toggleBtn);
+        monthCard.appendChild(header);
+
+        monthLogs.forEach((l) => {
+          const all = getLogs();
+          const idxInAll = all.indexOf(l);
+
+          const div = document.createElement("div");
+          div.className = "record";
+
+          const t = document.createElement("div");
+          t.className = "record-text";
+          let text = `${l.date}｜${l.weight} kg`;
+          if (l.fat) text += `｜體脂 ${l.fat}%`;
+          if (l.muscle) text += `｜骨骼肌 ${l.muscle}%`;
+          t.textContent = text;
+
+          const actions = document.createElement("div");
+          actions.className = "record-actions";
+
+          const eBtn = document.createElement("button");
+          eBtn.className = "edit-btn";
+          eBtn.textContent = "編輯";
+          eBtn.onclick = () => openModal(idxInAll);
+
+          const dBtn = document.createElement("button");
+          dBtn.className = "delete-btn";
+          dBtn.textContent = "刪除";
+          dBtn.onclick = () => deleteRecord(idxInAll);
+
+          actions.appendChild(eBtn);
+          actions.appendChild(dBtn);
+
+          div.appendChild(t);
+          div.appendChild(actions);
+          body.appendChild(div);
+        });
+
+        monthCard.appendChild(body);
+        box.appendChild(monthCard);
+      });
+    }
+
+    /* ===== 編輯紀錄 Modal ===== */
+    function openModal(index) {
+      editIndex = index;
+      const logs = getLogs();
+      const l = logs[index];
+      document.getElementById("editDate").value = l.date;
+      document.getElementById("editWeight").value = l.weight;
+      document.getElementById("editFat").value = l.fat || "";
+      document.getElementById("editMuscle").value = l.muscle || "";
+      document.getElementById("modalOverlay").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("modalOverlay").style.display = "none";
+    }
+
+    function saveEdit() {
+      const logs = getLogs();
+      const l = logs[editIndex];
+      l.date = document.getElementById("editDate").value;
+      l.weight = document.getElementById("editWeight").value;
+      l.fat = document.getElementById("editFat").value;
+      l.muscle = document.getElementById("editMuscle").value;
+      if (!l.weight) {
+        alert("體重不可為空！");
+        return;
+      }
+      saveLogs(logs);
+      closeModal();
+      render();
+    }
+
+    function deleteRecord(index) {
+      if (!confirm("確定要刪除這筆紀錄嗎？")) return;
+      const logs = getLogs();
+      logs.splice(index, 1);
+      saveLogs(logs);
+      render();
+    }
+
+    /* ===== 設定側欄：開關 / 匯出匯入 / 目標體重 ===== */
+    function openSettings() {
+      const overlay = document.getElementById("settingsOverlay");
+      const area = document.getElementById("exportArea");
+      const logs = getLogs();
+      area.value = JSON.stringify(logs, null, 2);
+
+      const target = getTarget();
+      const targetInput = document.getElementById("targetInput");
+      const targetHint = document.getElementById("targetHint");
+      if (targetInput) targetInput.value = target != null ? target : "";
+      if (targetHint) {
+        targetHint.textContent =
+          target != null ? `目前目標體重：${target} kg` : "尚未設定目標體重。";
+      }
+
+      updateThemeButtonText();
+      overlay.style.display = "flex";
+    }
+
+    function closeSettings() {
+      document.getElementById("settingsOverlay").style.display = "none";
+    }
+
+    function saveTargetFromSettings() {
+      const input = document.getElementById("targetInput");
+      const val = parseFloat(input.value);
+      if (!val || isNaN(val)) {
+        if (!confirm("清除目標體重設定？")) return;
+        setTarget(null);
+      } else {
+        setTarget(val);
+      }
+      const targetHint = document.getElementById("targetHint");
+      const target = getTarget();
+      if (targetHint) {
+        targetHint.textContent =
+          target != null ? `目前目標體重：${target} kg` : "尚未設定目標體重。";
+      }
+      showTargetInfo();
+      renderChart();
+      alert("目標體重已更新");
+    }
+
+    function copyExport() {
+      const area = document.getElementById("exportArea");
+      area.select();
+      document.execCommand("copy");
+      alert("已複製，貼到雲端記事或傳給自己就算『雲端備份』了！");
+    }
+
+    function importFromText() {
+      const area = document.getElementById("exportArea");
+      const text = area.value.trim();
+      if (!text) {
+        alert("請先在上方貼上匯出內容！");
+        return;
+      }
+      try {
+        const data = JSON.parse(text);
+        if (!Array.isArray(data)) throw new Error("格式錯誤");
+        saveLogs(data);
+        alert("匯入成功，已覆蓋目前資料。");
+        render();
+      } catch (e) {
+        alert("匯入失敗：格式不是有效的 JSON。");
+      }
+    }
+
+    function clearAll() {
+      if (!confirm("確定要清除全部紀錄嗎？這個動作無法復原。")) return;
+      saveLogs([]);
+      render();
+    }
+
+    /* ===== Profile / BMI ===== */
+    function openProfile() {
+      const profile = getProfile();
+      document.getElementById("profileHeight").value =
+        profile.height != null ? profile.height : "";
+
+      const genderRadios = document.querySelectorAll(
+        'input[name="profileGender"]'
+      );
+      genderRadios.forEach((r) => {
+        r.checked = r.value === profile.gender;
+      });
+
+      updateProfileBMIText();
+      document.getElementById("profileOverlay").style.display = "flex";
+    }
+
+    function closeProfile() {
+      document.getElementById("profileOverlay").style.display = "none";
+    }
+
+    function computeBMI(weightKg, heightCm) {
+      if (!weightKg || !heightCm || heightCm <= 0) return null;
+      const hM = heightCm / 100;
+      return weightKg / (hM * hM);
+    }
+
+    function updateProfileBMIText() {
+      const profile = getProfile();
+      const bmiDiv = document.getElementById("profileBMI");
+      const logs = getLogs();
+      const pointer = document.getElementById("bmiPointer");
+
+      if (!pointer) return;
+
+      pointer.style.display = "none";
+
+      if (!profile.height || !profile.gender) {
+        bmiDiv.textContent =
+          "請先填寫身高與性別，儲存後會使用最新體重計算 BMI。";
+        return;
+      }
+
+      if (!logs.length) {
+        bmiDiv.textContent = "目前尚無體重紀錄，無法計算 BMI。";
+        return;
+      }
+
+      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
+      const last = sorted[0];
+      const weight = parseFloat(last.weight);
+      const bmi = computeBMI(weight, parseFloat(profile.height));
+
+      if (!bmi) {
+        bmiDiv.textContent = "資料不足，無法計算 BMI。";
+        return;
+      }
+
+      const genderText = profile.gender === "male" ? "男" : "女";
+      bmiDiv.textContent = `性別：${genderText}｜身高：${
+        profile.height
+      } cm\n依照最新體重 ${weight} kg，BMI 約為 ${bmi.toFixed(1)}`;
+
+      const min = 15;
+      const max = 40;
+      let ratio = (bmi - min) / (max - min);
+      ratio = Math.max(0, Math.min(1, ratio));
+
+      pointer.style.left = ratio * 100 + "%";
+      pointer.style.display = "block";
+    }
+
+    function saveProfileData() {
+      const heightVal = parseFloat(
+        document.getElementById("profileHeight").value
+      );
+      const genderInput = document.querySelector(
+        'input[name="profileGender"]:checked'
+      );
+
+      if (!heightVal || isNaN(heightVal) || heightVal <= 0) {
+        alert("請輸入正確的身高（cm）");
+        return;
+      }
+      if (!genderInput) {
+        alert("請選擇性別（男 / 女）");
+        return;
+      }
+
+      const profile = {
+        height: heightVal,
+        gender: genderInput.value,
+      };
+
+      saveProfile(profile);
+      updateProfileBMIText();
+      alert("已儲存個人資料與 BMI 設定");
+      closeProfile();
+    }
+
+    /* ===== render() ===== */
+    function render() {
+      renderRecords();
+      chartWindowStart = null; // 每次重算時預設顯示最近7天
+      renderChart();
+      showLatest();
+      showWeeklyStats();
+      showTargetInfo();
+    }
+  </script>
+</body>
+</html>
