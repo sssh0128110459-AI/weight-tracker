@@ -196,11 +196,6 @@
       position: relative;
     }
 
-    #weightChart {
-      display: block;
-    }
-
-    /* 指標切換 tab */
     .metric-tabs {
       display: flex;
       gap: 6px;
@@ -225,7 +220,6 @@
       border-color: var(--accent-dark);
     }
 
-    /* 圖表區域：7天視窗 + 左右切換 + Range Label */
     .chart-nav {
       display: flex;
       align-items: center;
@@ -252,6 +246,27 @@
 
     #chartRangeLabel {
       font-size: 11px;
+    }
+
+    /* 可左右滑動的圖表容器 */
+    #chartScroll {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding-bottom: 4px;
+    }
+
+    #chartScroll::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    #chartScroll::-webkit-scrollbar-thumb {
+      background: #d8d2c8;
+      border-radius: 10px;
+    }
+
+    #weightChart {
+      display: block;
     }
 
     #records {
@@ -304,7 +319,6 @@
       color: white;
     }
 
-    /* 月份群組 header */
     .month-header {
       display: flex;
       justify-content: space-between;
@@ -437,7 +451,6 @@
       white-space: pre-line;
     }
 
-    /* BMI 長橢圓條 + 三角形指標 */
     .bmi-bar-container {
       margin-top: 6px;
       margin-bottom: 2px;
@@ -461,18 +474,10 @@
       border: 1px solid rgba(0,0,0,0.08);
     }
 
-    .bmi-seg {
-      flex: 1;
-    }
-    .bmi-low {
-      background: #6ca8ff;
-    }
-    .bmi-mid {
-      background: #fdfdfd;
-    }
-    .bmi-high {
-      background: #ff7b7b;
-    }
+    .bmi-seg { flex: 1; }
+    .bmi-low  { background: #6ca8ff; }
+    .bmi-mid  { background: #fdfdfd; }
+    .bmi-high { background: #ff7b7b; }
 
     .bmi-pointer {
       position: absolute;
@@ -486,7 +491,7 @@
       display: none;
     }
 
-    /* 設定側欄（齒輪） */
+    /* 設定側欄 */
     #settingsOverlay {
       position: fixed;
       inset: 0;
@@ -504,10 +509,12 @@
       background: var(--card-bg);
       border-left: 1px solid var(--border-subtle);
       box-shadow: -4px 0 18px rgba(0,0,0,0.25);
-      padding: 16px 14px 14px;
+      padding: 16px 14px 20px;
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
+      max-height: 100vh;
+      overflow-y: auto;
     }
 
     .settings-header {
@@ -554,9 +561,7 @@
       align-items: center;
     }
 
-    .settings-row input {
-      flex: 1;
-    }
+    .settings-row input { flex: 1; }
 
     .settings-hint {
       font-size: 11px;
@@ -566,8 +571,8 @@
 
     #exportArea {
       width: 100%;
-      min-height: 120px;
-      font-size: 12px;
+      min-height: 80px;
+      font-size: 11px;
       padding: 6px 8px;
       border-radius: 10px;
       border: 1px solid var(--border-subtle);
@@ -578,10 +583,26 @@
     }
 
     .export-tip {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--muted);
-      margin-top: 8px;
+      margin-top: 6px;
       line-height: 1.4;
+    }
+
+    .settings-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .section-toggle-btn {
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      padding: 4px 10px;
+      font-size: 11px;
+      background: var(--card-bg);
+      color: var(--muted);
+      cursor: pointer;
     }
 
     /* Splash */
@@ -595,7 +616,6 @@
       z-index: 999999;
       opacity: 1;
       transition: opacity 0.8s ease;
-      backdrop-filter: blur(0px);
     }
 
     #splash-logo {
@@ -634,22 +654,17 @@
 </head>
 
 <body>
-  <!-- Splash -->
+  <!-- 開場動畫 -->
   <div id="splash">
     <div id="splash-logo">Weight Record</div>
   </div>
 
-  <!-- Main -->
   <div id="main">
     <div class="top-bar">
       <h1>Weight Record</h1>
       <div class="top-right">
-        <button class="icon-btn" id="profileBtn" title="個人資料">
-          👤
-        </button>
-        <button class="icon-btn" id="settingsBtn" title="設定">
-          ⚙️
-        </button>
+        <button class="icon-btn" id="profileBtn" title="個人資料">👤</button>
+        <button class="icon-btn" id="settingsBtn" title="設定">⚙️</button>
       </div>
     </div>
 
@@ -657,29 +672,14 @@
     <div class="card">
       <div class="input-area">
         <input id="dateInput" type="date" />
-        <input
-          id="weightInput"
-          type="number"
-          step="0.1"
-          placeholder="體重 (kg)"
-        />
-        <input
-          id="fatInput"
-          type="number"
-          step="0.1"
-          placeholder="體脂 (%)（可選填）"
-        />
-        <input
-          id="muscleInput"
-          type="number"
-          step="0.1"
-          placeholder="骨骼肌 (%)（可選填）"
-        />
+        <input id="weightInput" type="number" step="0.1" placeholder="體重 (kg)" />
+        <input id="fatInput" type="number" step="0.1" placeholder="體脂 (%)（可選填）" />
+        <input id="muscleInput" type="number" step="0.1" placeholder="骨骼肌 (%)（可選填）" />
         <button onclick="addRecord()">新增紀錄</button>
       </div>
     </div>
 
-    <!-- 最新紀錄 + 週變化 + 目標體重 -->
+    <!-- 最新紀錄 / 週變化 / 目標體重 -->
     <div class="card">
       <div id="latest"></div>
       <div id="weeklyStats"></div>
@@ -699,10 +699,12 @@
         <span id="chartRangeLabel"></span>
         <button class="chart-nav-btn" onclick="shiftChartWindow(1)">→</button>
       </div>
-      <canvas id="weightChart"></canvas>
+      <div id="chartScroll">
+        <canvas id="weightChart"></canvas>
+      </div>
     </div>
 
-    <!-- 紀錄列表（依月份群組） -->
+    <!-- 歷史紀錄 -->
     <div id="records"></div>
   </div>
 
@@ -735,7 +737,7 @@
     </div>
   </div>
 
-  <!-- 個人資料（性別＋身高＋BMI） Modal -->
+  <!-- 個人資料 / BMI Modal -->
   <div id="profileOverlay">
     <div id="profileModal">
       <h2>個人資料</h2>
@@ -748,12 +750,8 @@
       <div class="modal-row">
         <label>性別：</label>
         <div class="gender-row">
-          <label>
-            <input type="radio" name="profileGender" value="male" /> 男
-          </label>
-          <label>
-            <input type="radio" name="profileGender" value="female" /> 女
-          </label>
+          <label><input type="radio" name="profileGender" value="male" /> 男</label>
+          <label><input type="radio" name="profileGender" value="female" /> 女</label>
         </div>
       </div>
 
@@ -777,7 +775,7 @@
     </div>
   </div>
 
-  <!-- 設定側欄（齒輪：深色模式 + 目標體重 + 匯出匯入） -->
+  <!-- 設定側欄 -->
   <div id="settingsOverlay" onclick="if(event.target === this) closeSettings();">
     <div id="settingsPanel">
       <div class="settings-header">
@@ -802,19 +800,25 @@
       </div>
 
       <div class="settings-section">
-        <div class="settings-section-title">匯出 / 匯入資料</div>
-        <textarea id="exportArea"></textarea>
-        <div class="btn-row" style="margin-top: 8px;">
-          <button class="btn-secondary" onclick="copyExport()">複製匯出內容</button>
-          <button class="btn-secondary" onclick="importFromText()">匯入貼上的資料</button>
+        <div class="settings-section-header">
+          <div class="settings-section-title">資料備份</div>
+          <button id="backupToggleBtn" class="section-toggle-btn" type="button" onclick="toggleBackupSection()">
+            展開
+          </button>
         </div>
-        <div class="btn-row" style="margin-top: 4px;">
-          <button class="btn-danger-ghost" onclick="clearAll()">清除全部紀錄</button>
-        </div>
-        <div class="export-tip">
-          匯出：按「複製匯出內容」，貼到雲端記事 / Line 自己。<br />
-          匯入：在上方貼上 JSON，再按「匯入貼上的資料」。<br />
-          ※ 每台裝置資料是獨立的，匯入會覆蓋目前資料。
+        <div id="backupBody" style="display:none; margin-top:6px;">
+          <textarea id="exportArea"></textarea>
+          <div class="btn-row" style="margin-top: 8px;">
+            <button class="btn-secondary" onclick="copyExport()">複製匯出內容</button>
+            <button class="btn-secondary" onclick="importFromText()">匯入貼上的資料</button>
+          </div>
+          <div class="btn-row" style="margin-top: 4px;">
+            <button class="btn-danger-ghost" onclick="clearAll()">清除全部紀錄</button>
+          </div>
+          <div class="export-tip">
+            匯出：按「複製匯出內容」，貼到雲端記事 / Line 自己。<br />
+            匯入：貼上 JSON 後按「匯入貼上的資料」即可。
+          </div>
         </div>
       </div>
     </div>
@@ -829,7 +833,7 @@
     let editIndex = null;
     let chart = null;
     let metricMode = "all"; // all | weight | fat | muscle
-    let chartWindowStart = null; // 7天視窗用
+    let chartWindowStart = null;
     let touchStartX = null;
 
     function getLogs() {
@@ -853,11 +857,8 @@
       return isNaN(n) ? null : n;
     }
     function setTarget(val) {
-      if (val == null || isNaN(val)) {
-        localStorage.removeItem(TARGET_KEY);
-      } else {
-        localStorage.setItem(TARGET_KEY, String(val));
-      }
+      if (val == null || isNaN(val)) localStorage.removeItem(TARGET_KEY);
+      else localStorage.setItem(TARGET_KEY, String(val));
     }
 
     window.addEventListener("load", () => {
@@ -870,15 +871,12 @@
       setTimeout(() => {
         main.style.opacity = 1;
         splash.style.opacity = 0;
-        setTimeout(() => {
-          splash.style.display = "none";
-        }, 900);
+        setTimeout(() => { splash.style.display = "none"; }, 900);
       }, 1200);
 
       document.getElementById("profileBtn").addEventListener("click", openProfile);
       document.getElementById("settingsBtn").addEventListener("click", openSettings);
 
-      // 圖表左右滑動（手機手勢）
       const wrapper = document.getElementById("chartWrapper");
       wrapper.addEventListener("touchstart", (e) => {
         if (!e.touches.length) return;
@@ -887,33 +885,26 @@
       wrapper.addEventListener("touchend", (e) => {
         if (touchStartX == null || !e.changedTouches.length) return;
         const dx = e.changedTouches[0].clientX - touchStartX;
-        if (dx > 50) {
-          // 手指往右滑 → 看更早的日期
-          shiftChartWindow(-1);
-        } else if (dx < -50) {
-          // 手指往左滑 → 看更後面的日期
-          shiftChartWindow(1);
-        }
+        if (dx > 50) shiftChartWindow(-1);
+        else if (dx < -50) shiftChartWindow(1);
         touchStartX = null;
       });
 
       render();
     });
 
-    /* ===== Theme ===== */
+    /* Theme */
     function initTheme() {
       const saved = localStorage.getItem(THEME_KEY);
       const isDark = saved === "dark";
       if (isDark) document.body.classList.add("dark-mode");
       else document.body.classList.remove("dark-mode");
     }
-
     function toggleThemeFromSettings() {
       const isDark = document.body.classList.toggle("dark-mode");
       localStorage.setItem(THEME_KEY, isDark ? "dark" : "light");
       updateThemeButtonText();
     }
-
     function updateThemeButtonText() {
       const btn = document.getElementById("themeBtnInSettings");
       if (!btn) return;
@@ -921,7 +912,7 @@
       btn.textContent = "深色模式：" + (isDark ? "開" : "關");
     }
 
-    /* ===== Date / 新增紀錄 ===== */
+    /* Date & Add */
     function setDefaultDate() {
       const d = document.getElementById("dateInput");
       if (!d.value) d.value = new Date().toISOString().slice(0, 10);
@@ -949,40 +940,34 @@
 
       weightInput.value = "";
       fatInput.value = "";
-      if (muscleInput) muscleInput.value = "";
+      muscleInput.value = "";
       render();
     }
 
-    /* ===== 最新紀錄 & 週統計 & 目標體重 ===== */
+    /* 最新紀錄 / 週統計 / 目標 */
     function autoScaleLatest() {
       const el = document.getElementById("latest");
       if (!el.textContent) return;
-
       el.style.setProperty("--scale", 1);
       el.classList.add("auto-scale");
-
       const parentWidth = el.parentElement.clientWidth;
       const scale = parentWidth / el.scrollWidth;
-      const finalScale = Math.min(scale, 1);
-      el.style.setProperty("--scale", finalScale);
+      el.style.setProperty("--scale", Math.min(scale, 1));
     }
 
     function showLatest() {
       const logs = getLogs();
       const latestDiv = document.getElementById("latest");
-
       if (!logs.length) {
         latestDiv.textContent = "尚無紀錄";
         autoScaleLatest();
         return;
       }
-
       const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
       const last = sorted[0];
       let text = `${last.date}：${last.weight} kg`;
       if (last.fat) text += `，體脂 ${last.fat}%`;
       if (last.muscle) text += `，骨骼肌 ${last.muscle}%`;
-
       latestDiv.textContent = text;
       autoScaleLatest();
     }
@@ -990,12 +975,9 @@
     function showWeeklyStats() {
       const logs = getLogs();
       const box = document.getElementById("weeklyStats");
-      if (!logs.length) {
-        box.textContent = "";
-        return;
-      }
+      if (!logs.length) { box.textContent = ""; return; }
 
-      const dates = logs.map((l) => l.date).filter(Boolean).sort();
+      const dates = logs.map(l => l.date).filter(Boolean).sort();
       const latestDateStr = dates[dates.length - 1];
       const latestDate = new Date(latestDateStr);
 
@@ -1003,21 +985,14 @@
         return Math.floor((a - b) / (1000 * 60 * 60 * 24));
       }
 
-      const curW = [];
-      const prevW = [];
-      const curF = [];
-      const prevF = [];
-      const curM = [];
-      const prevM = [];
-
-      logs.forEach((l) => {
+      const curW = [], prevW = [], curF = [], prevF = [], curM = [], prevM = [];
+      logs.forEach(l => {
         if (!l.date) return;
         const d = new Date(l.date);
         const diff = dayDiff(latestDate, d);
         const w = parseFloat(l.weight);
         const f = l.fat ? parseFloat(l.fat) : NaN;
         const m = l.muscle ? parseFloat(l.muscle) : NaN;
-
         if (diff >= 0 && diff <= 6) {
           if (!isNaN(w)) curW.push(w);
           if (!isNaN(f)) curF.push(f);
@@ -1034,12 +1009,9 @@
         return arr.reduce((a, b) => a + b, 0) / arr.length;
       }
 
-      const curWA = avg(curW);
-      const prevWA = avg(prevW);
-      const curFA = avg(curF);
-      const prevFA = avg(prevF);
-      const curMA = avg(curM);
-      const prevMA = avg(prevM);
+      const curWA = avg(curW), prevWA = avg(prevW);
+      const curFA = avg(curF), prevFA = avg(prevF);
+      const curMA = avg(curM), prevMA = avg(prevM);
 
       let lines = [];
       if (curWA !== null) {
@@ -1069,7 +1041,6 @@
         }
         lines.push(line);
       }
-
       box.textContent = lines.join("\n");
     }
 
@@ -1077,64 +1048,47 @@
       const info = document.getElementById("targetInfo");
       const target = getTarget();
       if (!info) return;
-
-      if (target == null) {
-        info.textContent = "";
-        return;
-      }
+      if (target == null) { info.textContent = ""; return; }
 
       const logs = getLogs();
       if (!logs.length) {
         info.textContent = `目標體重：${target} kg`;
         return;
       }
-
-      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
+      const sorted = logs.slice().sort((a,b)=>b.date.localeCompare(a.date));
       const last = sorted[0];
       const w = parseFloat(last.weight);
-      if (isNaN(w)) {
-        info.textContent = `目標體重：${target} kg`;
-        return;
-      }
+      if (isNaN(w)) { info.textContent = `目標體重：${target} kg`; return; }
 
       const diff = w - target;
       let diffText;
-      if (Math.abs(diff) < 0.05) {
-        diffText = "已達成目標！";
-      } else if (diff > 0) {
-        diffText = `距離目標還需減少 ${diff.toFixed(1)} kg`;
-      } else {
-        diffText = `距離目標還差增加 ${Math.abs(diff).toFixed(1)} kg`;
-      }
+      if (Math.abs(diff) < 0.05) diffText = "已達成目標！";
+      else if (diff > 0) diffText = `距離目標還需減少 ${diff.toFixed(1)} kg`;
+      else diffText = `距離目標還差增加 ${Math.abs(diff).toFixed(1)} kg`;
 
       info.textContent = `目標體重：${target} kg（${diffText}）`;
     }
 
-    /* ===== 圖表 (7天視窗 + 指標切換 + 目標線) ===== */
+    /* 圖表 */
     function renderChart() {
       const logs = getLogs();
+      const rangeLabel = document.getElementById("chartRangeLabel");
       if (!logs.length) {
-        if (chart) {
-          chart.destroy();
-          chart = null;
-        }
-        document.getElementById("chartRangeLabel").textContent = "";
+        if (chart) { chart.destroy(); chart = null; }
+        rangeLabel.textContent = "";
         return;
       }
 
       const byDate = {};
-      logs.forEach((l) => {
+      logs.forEach(l => {
         if (!l.date) return;
         if (!byDate[l.date]) byDate[l.date] = { w: [], f: [], m: [] };
-
         const w = parseFloat(l.weight);
         if (!isNaN(w)) byDate[l.date].w.push(w);
-
         if (l.fat) {
           const f = parseFloat(l.fat);
           if (!isNaN(f)) byDate[l.date].f.push(f);
         }
-
         if (l.muscle) {
           const m = parseFloat(l.muscle);
           if (!isNaN(m)) byDate[l.date].m.push(m);
@@ -1143,110 +1097,82 @@
 
       const allDates = Object.keys(byDate).sort();
       if (!allDates.length) {
-        if (chart) {
-          chart.destroy();
-          chart = null;
-        }
-        document.getElementById("chartRangeLabel").textContent = "";
+        if (chart) { chart.destroy(); chart = null; }
+        rangeLabel.textContent = "";
         return;
       }
 
       const windowSize = 7;
-      if (chartWindowStart === null) {
+      if (chartWindowStart === null)
         chartWindowStart = Math.max(0, allDates.length - windowSize);
-      }
-      chartWindowStart = Math.max(0, Math.min(chartWindowStart, Math.max(0, allDates.length - windowSize)));
+
+      chartWindowStart = Math.max(0,
+        Math.min(chartWindowStart, Math.max(0, allDates.length - windowSize)));
       const end = chartWindowStart + windowSize;
       const dates = allDates.slice(chartWindowStart, end);
 
       const weights = dates.map(
-        (d) => byDate[d].w.reduce((a, b) => a + b, 0) / byDate[d].w.length
+        d => byDate[d].w.reduce((a,b)=>a+b,0)/byDate[d].w.length
       );
-      const fats = dates.map((d) =>
+      const fats = dates.map(d =>
         byDate[d].f.length
-          ? byDate[d].f.reduce((a, b) => a + b, 0) / byDate[d].f.length
+          ? byDate[d].f.reduce((a,b)=>a+b,0)/byDate[d].f.length
           : null
       );
-      const muscles = dates.map((d) =>
+      const muscles = dates.map(d =>
         byDate[d].m.length
-          ? byDate[d].m.reduce((a, b) => a + b, 0) / byDate[d].m.length
+          ? byDate[d].m.reduce((a,b)=>a+b,0)/byDate[d].m.length
           : null
       );
 
-      const rangeLabel = document.getElementById("chartRangeLabel");
-      if (dates.length) {
-        rangeLabel.textContent = `${dates[0]} ~ ${dates[dates.length - 1]}`;
-      } else {
-        rangeLabel.textContent = "";
-      }
+      if (dates.length)
+        rangeLabel.textContent = `${dates[0]} ~ ${dates[dates.length-1]}`;
+      else rangeLabel.textContent = "";
 
       const canvas = document.getElementById("weightChart");
-      canvas.width = Math.max(320, dates.length * 60);
+      canvas.width = dates.length * 70;  // 每天固定寬度 → 內容可以左右滑
       canvas.height = 240;
 
       const ctx = canvas.getContext("2d");
       if (chart) chart.destroy();
 
       const datasets = [];
-
       if (metricMode === "all" || metricMode === "weight") {
-        datasets.push({
-          label: "體重 (kg)",
-          data: weights,
-          borderWidth: 2,
-          tension: 0.25,
-          pointRadius: 4,
-        });
+        datasets.push({ label:"體重 (kg)", data:weights, borderWidth:2,
+          tension:0.25, pointRadius:4 });
       }
-
       if (metricMode === "all" || metricMode === "fat") {
         datasets.push({
-          label: "體脂 (%)",
-          data: fats,
-          borderWidth: 2,
-          tension: 0.25,
-          pointRadius: 4,
-          borderColor: "#f3c23a",
-          backgroundColor: "rgba(243,194,58,0.2)",
+          label:"體脂 (%)", data:fats, borderWidth:2, tension:0.25,
+          pointRadius:4, borderColor:"#f3c23a",
+          backgroundColor:"rgba(243,194,58,0.2)"
         });
       }
-
       if (metricMode === "all" || metricMode === "muscle") {
         datasets.push({
-          label: "骨骼肌 (%)",
-          data: muscles,
-          borderWidth: 2,
-          tension: 0.25,
-          pointRadius: 4,
-          borderColor: "#ff4b4b",
-          backgroundColor: "rgba(255,75,75,0.2)",
+          label:"骨骼肌 (%)", data:muscles, borderWidth:2, tension:0.25,
+          pointRadius:4, borderColor:"#ff4b4b",
+          backgroundColor:"rgba(255,75,75,0.2)"
         });
       }
 
-      // 目標體重虛線（只在「全部」或「體重」模式顯示）
       const target = getTarget();
-      if ((metricMode === "all" || metricMode === "weight") && target != null && dates.length) {
+      if ((metricMode === "all" || metricMode === "weight")
+          && target != null && dates.length) {
         datasets.push({
-          label: "目標體重",
-          data: dates.map(() => target),
-          borderWidth: 1.5,
-          borderDash: [6, 4],
-          pointRadius: 0,
-          borderColor: "#888888",
+          label:"目標體重",
+          data:dates.map(()=>target),
+          borderWidth:1.5,
+          borderDash:[6,4],
+          pointRadius:0,
+          borderColor:"#888888",
         });
       }
 
       chart = new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: dates,
-          datasets,
-        },
-        options: {
-          responsive: false,
-          maintainAspectRatio: false,
-          spanGaps: true,
-        },
+        type:"line",
+        data:{ labels:dates, datasets },
+        options:{ responsive:false, maintainAspectRatio:false, spanGaps:true },
       });
     }
 
@@ -1258,7 +1184,7 @@
         fat: document.getElementById("tabFat"),
         muscle: document.getElementById("tabMuscle"),
       };
-      Object.keys(tabs).forEach((k) => {
+      Object.keys(tabs).forEach(k => {
         if (!tabs[k]) return;
         if (k === mode) tabs[k].classList.add("active");
         else tabs[k].classList.remove("active");
@@ -1269,26 +1195,24 @@
     function shiftChartWindow(direction) {
       const logs = getLogs();
       if (!logs.length) return;
-
-      const dates = [...new Set(logs.map(l => l.date).filter(Boolean))].sort();
+      const dates = [...new Set(logs.map(l=>l.date).filter(Boolean))].sort();
       if (!dates.length) return;
 
       const windowSize = 7;
-      if (chartWindowStart === null) {
+      if (chartWindowStart === null)
         chartWindowStart = Math.max(0, dates.length - windowSize);
-      }
 
       chartWindowStart += direction;
-      chartWindowStart = Math.max(0, Math.min(chartWindowStart, Math.max(0, dates.length - windowSize)));
+      chartWindowStart = Math.max(0,
+        Math.min(chartWindowStart, Math.max(0, dates.length - windowSize)));
       renderChart();
     }
 
-    /* ===== 月份群組的歷史紀錄 ===== */
+    /* 歷史紀錄 */
     function renderRecords() {
       const logs = getLogs();
       const box = document.getElementById("records");
       box.innerHTML = "";
-
       if (!logs.length) {
         const empty = document.createElement("div");
         empty.className = "card";
@@ -1297,55 +1221,43 @@
         return;
       }
 
-      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
-
+      const sorted = logs.slice().sort((a,b)=>b.date.localeCompare(a.date));
       const groups = {};
-      sorted.forEach((log) => {
+      sorted.forEach(log => {
         const dateStr = log.date || "";
-        const monthKey = dateStr.length >= 7 ? dateStr.slice(0, 7) : "未知";
+        const monthKey = dateStr.length>=7 ? dateStr.slice(0,7) : "未知";
         if (!groups[monthKey]) groups[monthKey] = [];
         groups[monthKey].push(log);
       });
 
-      const monthKeys = Object.keys(groups).sort((a, b) => b.localeCompare(a));
-
-      monthKeys.forEach((monthKey, idx) => {
+      const monthKeys = Object.keys(groups).sort((a,b)=>b.localeCompare(a));
+      monthKeys.forEach((monthKey, idx)=> {
         const monthLogs = groups[monthKey];
         const monthCard = document.createElement("div");
         monthCard.className = "card";
 
         const header = document.createElement("div");
         header.className = "month-header";
-
         const title = document.createElement("div");
         title.className = "month-title";
-        if (monthKey === "未知") {
-          title.textContent = "未設定日期";
-        } else {
-          const [y, m] = monthKey.split("-");
+        if (monthKey==="未知") title.textContent = "未設定日期";
+        else {
+          const [y,m] = monthKey.split("-");
           title.textContent = `${y} 年 ${m} 月`;
         }
 
         const toggleBtn = document.createElement("button");
         toggleBtn.className = "month-toggle";
-
         const body = document.createElement("div");
 
-        if (idx === 0) {
-          body.style.display = "block";
-          toggleBtn.textContent = "收合";
-        } else {
-          body.style.display = "none";
-          toggleBtn.textContent = "展開";
-        }
+        if (idx===0) { body.style.display="block"; toggleBtn.textContent="收合"; }
+        else { body.style.display="none"; toggleBtn.textContent="展開"; }
 
         toggleBtn.onclick = () => {
-          if (body.style.display === "none") {
-            body.style.display = "block";
-            toggleBtn.textContent = "收合";
+          if (body.style.display==="none") {
+            body.style.display="block"; toggleBtn.textContent="收合";
           } else {
-            body.style.display = "none";
-            toggleBtn.textContent = "展開";
+            body.style.display="none"; toggleBtn.textContent="展開";
           }
         };
 
@@ -1353,7 +1265,7 @@
         header.appendChild(toggleBtn);
         monthCard.appendChild(header);
 
-        monthLogs.forEach((l) => {
+        monthLogs.forEach(l => {
           const all = getLogs();
           const idxInAll = all.indexOf(l);
 
@@ -1369,17 +1281,14 @@
 
           const actions = document.createElement("div");
           actions.className = "record-actions";
-
           const eBtn = document.createElement("button");
           eBtn.className = "edit-btn";
           eBtn.textContent = "編輯";
           eBtn.onclick = () => openModal(idxInAll);
-
           const dBtn = document.createElement("button");
           dBtn.className = "delete-btn";
           dBtn.textContent = "刪除";
           dBtn.onclick = () => deleteRecord(idxInAll);
-
           actions.appendChild(eBtn);
           actions.appendChild(dBtn);
 
@@ -1393,7 +1302,7 @@
       });
     }
 
-    /* ===== 編輯紀錄 Modal ===== */
+    /* 編輯紀錄 */
     function openModal(index) {
       editIndex = index;
       const logs = getLogs();
@@ -1404,11 +1313,9 @@
       document.getElementById("editMuscle").value = l.muscle || "";
       document.getElementById("modalOverlay").style.display = "flex";
     }
-
     function closeModal() {
       document.getElementById("modalOverlay").style.display = "none";
     }
-
     function saveEdit() {
       const logs = getLogs();
       const l = logs[editIndex];
@@ -1416,24 +1323,20 @@
       l.weight = document.getElementById("editWeight").value;
       l.fat = document.getElementById("editFat").value;
       l.muscle = document.getElementById("editMuscle").value;
-      if (!l.weight) {
-        alert("體重不可為空！");
-        return;
-      }
+      if (!l.weight) { alert("體重不可為空！"); return; }
       saveLogs(logs);
       closeModal();
       render();
     }
-
     function deleteRecord(index) {
       if (!confirm("確定要刪除這筆紀錄嗎？")) return;
       const logs = getLogs();
-      logs.splice(index, 1);
+      logs.splice(index,1);
       saveLogs(logs);
       render();
     }
 
-    /* ===== 設定側欄：開關 / 匯出匯入 / 目標體重 ===== */
+    /* 設定面板：開關 / 匯出匯入 / 目標 */
     function openSettings() {
       const overlay = document.getElementById("settingsOverlay");
       const area = document.getElementById("exportArea");
@@ -1444,17 +1347,37 @@
       const targetInput = document.getElementById("targetInput");
       const targetHint = document.getElementById("targetHint");
       if (targetInput) targetInput.value = target != null ? target : "";
-      if (targetHint) {
-        targetHint.textContent =
-          target != null ? `目前目標體重：${target} kg` : "尚未設定目標體重。";
+      if (targetHint)
+        targetHint.textContent = target != null
+          ? `目前目標體重：${target} kg`
+          : "尚未設定目標體重。";
+
+      // 收起資料備份區
+      const backupBody = document.getElementById("backupBody");
+      const toggleBtn = document.getElementById("backupToggleBtn");
+      if (backupBody && toggleBtn) {
+        backupBody.style.display = "none";
+        toggleBtn.textContent = "展開";
       }
 
       updateThemeButtonText();
       overlay.style.display = "flex";
     }
-
     function closeSettings() {
       document.getElementById("settingsOverlay").style.display = "none";
+    }
+
+    function toggleBackupSection() {
+      const body = document.getElementById("backupBody");
+      const btn = document.getElementById("backupToggleBtn");
+      if (!body || !btn) return;
+      if (body.style.display === "none" || body.style.display === "") {
+        body.style.display = "block";
+        btn.textContent = "收合";
+      } else {
+        body.style.display = "none";
+        btn.textContent = "展開";
+      }
     }
 
     function saveTargetFromSettings() {
@@ -1468,10 +1391,10 @@
       }
       const targetHint = document.getElementById("targetHint");
       const target = getTarget();
-      if (targetHint) {
-        targetHint.textContent =
-          target != null ? `目前目標體重：${target} kg` : "尚未設定目標體重。";
-      }
+      if (targetHint)
+        targetHint.textContent = target != null
+          ? `目前目標體重：${target} kg`
+          : "尚未設定目標體重。";
       showTargetInfo();
       renderChart();
       alert("目標體重已更新");
@@ -1487,17 +1410,14 @@
     function importFromText() {
       const area = document.getElementById("exportArea");
       const text = area.value.trim();
-      if (!text) {
-        alert("請先在上方貼上匯出內容！");
-        return;
-      }
+      if (!text) { alert("請先在上方貼上匯出內容！"); return; }
       try {
         const data = JSON.parse(text);
         if (!Array.isArray(data)) throw new Error("格式錯誤");
         saveLogs(data);
         alert("匯入成功，已覆蓋目前資料。");
         render();
-      } catch (e) {
+      } catch(e) {
         alert("匯入失敗：格式不是有效的 JSON。");
       }
     }
@@ -1508,23 +1428,16 @@
       render();
     }
 
-    /* ===== Profile / BMI ===== */
+    /* Profile / BMI */
     function openProfile() {
       const profile = getProfile();
       document.getElementById("profileHeight").value =
         profile.height != null ? profile.height : "";
-
-      const genderRadios = document.querySelectorAll(
-        'input[name="profileGender"]'
-      );
-      genderRadios.forEach((r) => {
-        r.checked = r.value === profile.gender;
-      });
-
+      const genderRadios = document.querySelectorAll('input[name="profileGender"]');
+      genderRadios.forEach(r => { r.checked = r.value === profile.gender; });
       updateProfileBMIText();
       document.getElementById("profileOverlay").style.display = "flex";
     }
-
     function closeProfile() {
       document.getElementById("profileOverlay").style.display = "none";
     }
@@ -1532,7 +1445,7 @@
     function computeBMI(weightKg, heightCm) {
       if (!weightKg || !heightCm || heightCm <= 0) return null;
       const hM = heightCm / 100;
-      return weightKg / (hM * hM);
+      return weightKg / (hM*hM);
     }
 
     function updateProfileBMIText() {
@@ -1540,78 +1453,55 @@
       const bmiDiv = document.getElementById("profileBMI");
       const logs = getLogs();
       const pointer = document.getElementById("bmiPointer");
-
       if (!pointer) return;
-
       pointer.style.display = "none";
 
       if (!profile.height || !profile.gender) {
-        bmiDiv.textContent =
-          "請先填寫身高與性別，儲存後會使用最新體重計算 BMI。";
+        bmiDiv.textContent = "請先填寫身高與性別，儲存後會使用最新體重計算 BMI。";
         return;
       }
-
       if (!logs.length) {
         bmiDiv.textContent = "目前尚無體重紀錄，無法計算 BMI。";
         return;
       }
 
-      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
+      const sorted = logs.slice().sort((a,b)=>b.date.localeCompare(a.date));
       const last = sorted[0];
       const weight = parseFloat(last.weight);
       const bmi = computeBMI(weight, parseFloat(profile.height));
-
-      if (!bmi) {
-        bmiDiv.textContent = "資料不足，無法計算 BMI。";
-        return;
-      }
+      if (!bmi) { bmiDiv.textContent = "資料不足，無法計算 BMI。"; return; }
 
       const genderText = profile.gender === "male" ? "男" : "女";
-      bmiDiv.textContent = `性別：${genderText}｜身高：${
-        profile.height
-      } cm\n依照最新體重 ${weight} kg，BMI 約為 ${bmi.toFixed(1)}`;
+      bmiDiv.textContent =
+        `性別：${genderText}｜身高：${profile.height} cm\n` +
+        `依照最新體重 ${weight} kg，BMI 約為 ${bmi.toFixed(1)}`;
 
-      const min = 15;
-      const max = 40;
+      const min = 15, max = 40;
       let ratio = (bmi - min) / (max - min);
       ratio = Math.max(0, Math.min(1, ratio));
-
       pointer.style.left = ratio * 100 + "%";
       pointer.style.display = "block";
     }
 
     function saveProfileData() {
-      const heightVal = parseFloat(
-        document.getElementById("profileHeight").value
-      );
-      const genderInput = document.querySelector(
-        'input[name="profileGender"]:checked'
-      );
-
+      const heightVal = parseFloat(document.getElementById("profileHeight").value);
+      const genderInput = document.querySelector('input[name="profileGender"]:checked');
       if (!heightVal || isNaN(heightVal) || heightVal <= 0) {
-        alert("請輸入正確的身高（cm）");
-        return;
+        alert("請輸入正確的身高（cm）"); return;
       }
-      if (!genderInput) {
-        alert("請選擇性別（男 / 女）");
-        return;
-      }
+      if (!genderInput) { alert("請選擇性別（男 / 女）"); return; }
 
-      const profile = {
-        height: heightVal,
-        gender: genderInput.value,
-      };
-
+      const profile = { height: heightVal, gender: genderInput.value };
       saveProfile(profile);
       updateProfileBMIText();
       alert("已儲存個人資料與 BMI 設定");
       closeProfile();
     }
 
-    /* ===== render() ===== */
+    /* render */
     function render() {
       renderRecords();
-      chartWindowStart = null; // 每次重算時預設顯示最近7天
+      chartWindowStart = null;
       renderChart();
       showLatest();
       showWeeklyStats();
