@@ -12,82 +12,161 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
+    /* ========= 全域顏色變數（米色預設） ========= */
     :root {
       --bg-color: #f7f4ec;
       --text-main: #3b3025;
+      --text-sub: #7a6951;
       --card-bg: #ffffff;
-      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      --border-subtle: #d7d1c7;
-      --input-bg: #fafafa;
+      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      --border-subtle: #d8d0c3;
+      --input-bg: #faf7f1;
       --accent: #f0c96a;
-      --accent-dark: #e7ba4c;
-      --danger: #ef7b7b;
-      --muted: #5a4d38;
+      --accent-dark: #e4b34d;
+      --danger: #e56565;
+      --muted: #8a7b64;
+      --chart-axis: #95856d;
+      --chart-grid: #e1d7c8;
+
+      --chart-weight: #4b7bff;
+      --chart-fat: #f2b933;
+      --chart-muscle: #ff5d5d;
+      --chart-target: #9b9b9b;
+
+      --tooltip-bg: rgba(69, 60, 44, 0.9);
+      --tooltip-text: #ffffff;
     }
 
-    /* 深色主題 */
+    /* ========= 深色主題 ========= */
     body.dark-mode {
-      --bg-color: #111111;
+      --bg-color: #101010;
       --text-main: #f7f9ff;
-      --card-bg: #1b1b1b;
-      --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
-      --border-subtle: #3e3e3e;
-      --input-bg: #262626;
-      --accent: #ffd35c;
-      --accent-dark: #e0b84a;
+      --text-sub: #c2cadb;
+      --card-bg: #181818;
+      --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.7);
+      --border-subtle: #3a3a3a;
+      --input-bg: #232323;
+      --accent: #ffcf5a;
+      --accent-dark: #e3b447;
       --danger: #ff6b81;
-      --muted: #c4cad5;
+      --muted: #a6b0c0;
+      --chart-axis: #d0d6e0;
+      --chart-grid: #303030;
+
+      --chart-weight: #5ba0ff;
+      --chart-fat: #ffd85f;
+      --chart-muscle: #ff7f9a;
+      --chart-target: #aaaaaa;
+
+      --tooltip-bg: rgba(14, 14, 14, 0.93);
+      --tooltip-text: #f7f9ff;
     }
 
-    /* 冰島苔原：綠色為主，黑色點綴 */
+    /* ========= 冰島苔原 ========= */
     body.theme-iceland {
-      --bg-color: #04140d;
-      --text-main: #ecfff7;
-      --card-bg: #0c2216;
+      --bg-color: #08130c;
+      --text-main: #d6ffe5; /* 標題 / 主內容亮綠 */
+      --text-sub: #a5f0c9;
+      --card-bg: #0f2216;
       --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.85);
-      --border-subtle: #1f3a29;
-      --input-bg: #071910;
+      --border-subtle: #214530;
+      --input-bg: #0a1b12;
       --accent: #6ee6ae;
       --accent-dark: #35b275;
       --danger: #ff9a9a;
-      --muted: #bedfd0;
-      --chart-weight-line: #6ee6ae;  /* 亮綠折線 */
-      --chart-weight-point: #ffffff;
+      --muted: #8ed8b5;
+      --chart-axis: #b9f3cf;
+      --chart-grid: #163423;
+
+      --chart-weight: #72ffbd;
+      --chart-fat: #ffe97a;
+      --chart-muscle: #ff8a6a;
+      --chart-target: #96a69a;
+
+      --tooltip-bg: rgba(7, 34, 23, 0.95);
+      --tooltip-text: #eafff4;
     }
 
-    /* 櫻花：粉色為主，棕色點綴 */
+    /* ========= 櫻花 ========= */
     body.theme-sakura {
-      --bg-color: #ffeef4;
-      --text-main: #5a3b32;
+      --bg-color: #ffeef7;
+      --text-main: #5c3a3a;
+      --text-sub: #a66574;
       --card-bg: #ffffff;
-      --card-shadow: 0 4px 14px rgba(180, 120, 140, 0.25);
-      --border-subtle: #f3c9d8;
+      --card-shadow: 0 4px 16px rgba(180, 120, 140, 0.25);
+      --border-subtle: #f1c5d7;
       --input-bg: #fff7fb;
-      --accent: #f58fb3;
-      --accent-dark: #e06b94;
-      --danger: #e85b72;
-      --muted: #8c5b63;
+      --accent: #f78eb4;
+      --accent-dark: #e06c96;
+      --danger: #e35a73;
+      --muted: #966573;
+      --chart-axis: #b37a8c;
+      --chart-grid: #f0cedf;
+
+      --chart-weight: #ff7aa2;
+      --chart-fat: #ffc76a;
+      --chart-muscle: #ff5b6c;
+      --chart-target: #b8a3b0;
+
+      --tooltip-bg: rgba(102, 67, 84, 0.93);
+      --tooltip-text: #fff6fb;
     }
 
-    /* 都市霓虹：亮藍為主，黑色點綴（修正版） */
+    /* ========= 都市霓虹 ========= */
     body.theme-neon {
-      --bg-color: #020512;
-      --text-main: #e9f3ff;
-      --card-bg: #050910;
-      --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.9);
-      --border-subtle: #243f63;
-      --input-bg: #07121f;
-      --accent: #23b3ff;
+      --bg-color: #040815;
+      --text-main: #e9f4ff;
+      --text-sub: #9ab7dd;
+      --card-bg: #050c18;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
+      --border-subtle: #20395b;
+      --input-bg: #071425;
+      --accent: #21b3ff;
       --accent-dark: #0f8edb;
       --danger: #ff6f8c;
-      --muted: #a9c3e6;
+      --muted: #89a6cc;
+      --chart-axis: #d1e4ff;
+      --chart-grid: #243554;
+
+      --chart-weight: #3cc7ff;
+      --chart-fat: #ffd95c;
+      --chart-muscle: #ff6fb1;
+      --chart-target: #a1aec2;
+
+      --tooltip-bg: rgba(7, 24, 48, 0.96);
+      --tooltip-text: #e9f4ff;
     }
 
+    /* ========= 愛馬仕橘 ========= */
+    body.theme-hermes {
+      --bg-color: #fff6ee;
+      --text-main: #4c2814;
+      --text-sub: #9b6543;
+      --card-bg: #ffffff;
+      --card-shadow: 0 4px 16px rgba(190, 124, 63, 0.22);
+      --border-subtle: #f0d0b2;
+      --input-bg: #fff3e4;
+      --accent: #ff8c3a;       /* 愛馬仕橘調 */
+      --accent-dark: #e56f1b;
+      --danger: #e85b5b;
+      --muted: #9b6a47;
+      --chart-axis: #a36b43;
+      --chart-grid: #f3d6bd;
+
+      --chart-weight: #ff8c3a;
+      --chart-fat: #ffcf5e;
+      --chart-muscle: #ff6d6d;
+      --chart-target: #c99a7a;
+
+      --tooltip-bg: rgba(103, 54, 24, 0.94);
+      --tooltip-text: #fff7f0;
+    }
+
+    /* ========= 全域版面 ========= */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
         Arial, sans-serif;
       margin: 0;
-      padding: 0;
       background: var(--bg-color);
       color: var(--text-main);
       overflow-x: hidden;
@@ -95,7 +174,7 @@
 
     #main {
       opacity: 0;
-      transition: opacity 1.2s ease;
+      transition: opacity 1s ease;
       max-width: 520px;
       margin: auto;
       padding: 16px 16px 24px;
@@ -105,7 +184,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin: 8px 0 16px;
+      margin: 4px 0 14px;
     }
 
     h1 {
@@ -133,6 +212,7 @@
       cursor: pointer;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
       padding: 0;
+      color: var(--text-main);
     }
 
     .card {
@@ -161,16 +241,20 @@
       box-sizing: border-box;
     }
 
+    input::placeholder {
+      color: var(--muted);
+    }
+
     input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(248, 206, 126, 0.35);
+      box-shadow: 0 0 0 3px rgba(248, 206, 126, 0.3);
     }
 
     button {
       padding: 10px 12px;
       font-size: 16px;
       font-weight: 600;
-      border-radius: 12px;
+      border-radius: 14px;
       border: none;
       background: var(--accent);
       color: #111111;
@@ -183,18 +267,11 @@
       background: var(--accent-dark);
     }
 
-    .btn-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
     .btn-secondary {
       background: var(--card-bg);
-      color: var(--muted);
+      color: var(--text-sub);
       border: 1px solid var(--border-subtle);
     }
-
     .btn-secondary:active {
       background: var(--input-bg);
     }
@@ -202,7 +279,14 @@
     .btn-danger-ghost {
       background: var(--card-bg);
       color: var(--danger);
-      border: 1px solid rgba(239,123,123,0.5);
+      border: 1px solid rgba(229, 101, 101, 0.7);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
     }
 
     #latest {
@@ -213,23 +297,16 @@
       display: inline-block;
       max-width: 100%;
     }
-
     #latest.auto-scale {
       transform: scale(var(--scale));
     }
 
-    #weeklyStats {
+    #weeklyStats,
+    #targetInfo {
       font-size: 13px;
       margin-top: 6px;
-      color: var(--muted);
+      color: var(--text-sub);
       line-height: 1.5;
-      white-space: pre-line;
-    }
-
-    #targetInfo {
-      font-size: 12px;
-      margin-top: 6px;
-      color: var(--muted);
       white-space: pre-line;
     }
 
@@ -243,22 +320,22 @@
 
     .metric-tabs {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       margin-bottom: 8px;
       flex-wrap: wrap;
     }
 
     .metric-tab {
       flex: 0 0 auto;
-      padding: 4px 10px;
-      font-size: 12px;
+      padding: 6px 14px;
+      font-size: 13px;
       border-radius: 999px;
       border: 1px solid var(--border-subtle);
       background: var(--card-bg);
-      color: var(--muted);
+      color: var(--text-sub);
       cursor: pointer;
+      line-height: 1.2;
     }
-
     .metric-tab.active {
       background: var(--accent);
       color: #111111;
@@ -270,27 +347,19 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       font-size: 12px;
-      color: var(--muted);
+      color: var(--text-sub);
     }
 
     .chart-nav-btn {
-      padding: 4px 8px;
+      padding: 4px 10px;
       font-size: 12px;
       border-radius: 999px;
       border: 1px solid var(--border-subtle);
       background: var(--card-bg);
-      color: var(--muted);
+      color: var(--text-sub);
       cursor: pointer;
-    }
-
-    .chart-nav-btn:active {
-      background: var(--input-bg);
-    }
-
-    #chartRangeLabel {
-      font-size: 11px;
     }
 
     #chartScroll {
@@ -299,28 +368,65 @@
       overflow-y: hidden;
       padding-bottom: 4px;
     }
-
     #chartScroll::-webkit-scrollbar {
       height: 6px;
     }
-
     #chartScroll::-webkit-scrollbar-thumb {
       background: #d8d2c8;
       border-radius: 10px;
     }
-
     body.dark-mode #chartScroll::-webkit-scrollbar-thumb,
     body.theme-iceland #chartScroll::-webkit-scrollbar-thumb,
     body.theme-neon #chartScroll::-webkit-scrollbar-thumb {
       background: var(--border-subtle);
     }
-
-    body.theme-sakura #chartScroll::-webkit-scrollbar-thumb {
-      background: #f1b5cb;
+    body.theme-sakura #chartScroll::-webkit-scrollbar-thumb,
+    body.theme-hermes #chartScroll::-webkit-scrollbar-thumb {
+      background: #f0c6d3;
     }
 
     #weightChart {
       display: block;
+    }
+
+    /* 自訂 legend（實心提示格） */
+    .metric-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 4px;
+      font-size: 12px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      color: var(--text-main);
+      background: var(--input-bg);
+    }
+
+    .legend-color-box {
+      width: 18px;
+      height: 10px;
+      border-radius: 999px;
+      background: #ccc;
+    }
+
+    .legend-weight .legend-color-box {
+      background: var(--chart-weight);
+    }
+    .legend-fat .legend-color-box {
+      background: var(--chart-fat);
+    }
+    .legend-muscle .legend-color-box {
+      background: var(--chart-muscle);
+    }
+    .legend-target .legend-color-box {
+      background: var(--chart-target);
     }
 
     #records {
@@ -355,19 +461,17 @@
 
     .edit-btn,
     .delete-btn {
-      padding: 3px 6px;
+      padding: 4px 8px;
       font-size: 11px;
       border-radius: 999px;
       border: none;
       cursor: pointer;
-      min-width: 40px;
+      min-width: 44px;
     }
-
     .edit-btn {
       background: var(--accent);
       color: #111111;
     }
-
     .delete-btn {
       background: var(--danger);
       color: #ffffff;
@@ -383,6 +487,7 @@
     .month-title {
       font-size: 15px;
       font-weight: 600;
+      color: var(--text-main);
     }
 
     .month-toggle {
@@ -391,12 +496,13 @@
       border-radius: 999px;
       border: 1px solid var(--border-subtle);
       background: var(--card-bg);
-      color: var(--muted);
+      color: var(--text-sub);
       cursor: pointer;
     }
 
-    /* 編輯紀錄 Modal */
-    #modalOverlay {
+    /* ========= Modal 基礎 ========= */
+    #modalOverlay,
+    #profileOverlay {
       position: fixed;
       inset: 0;
       background: rgba(0, 0, 0, 0.45);
@@ -407,7 +513,8 @@
       backdrop-filter: blur(3px);
     }
 
-    #modal {
+    #modal,
+    #profileModal {
       width: 90%;
       max-width: 360px;
       background: var(--card-bg);
@@ -417,7 +524,8 @@
       border: 1px solid rgba(0, 0, 0, 0.08);
     }
 
-    #modal h2 {
+    #modal h2,
+    #profileModal h2 {
       margin: 0 0 10px;
       text-align: center;
       font-size: 18px;
@@ -429,6 +537,7 @@
       flex-direction: column;
       gap: 4px;
       font-size: 14px;
+      color: var(--text-main);
     }
 
     .modal-btns {
@@ -440,12 +549,11 @@
     .btn-cancel {
       flex: 1;
       background: var(--card-bg);
-      color: var(--muted);
+      color: var(--text-sub);
       border-radius: 12px;
       padding: 10px;
       border: 1px solid var(--border-subtle);
     }
-
     .btn-save {
       flex: 1;
       background: var(--accent);
@@ -453,34 +561,6 @@
       border-radius: 12px;
       padding: 10px;
       border: none;
-    }
-
-    /* Profile Modal */
-    #profileOverlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 10001;
-      backdrop-filter: blur(3px);
-    }
-
-    #profileModal {
-      width: 90%;
-      max-width: 360px;
-      background: var(--card-bg);
-      border-radius: 20px;
-      padding: 18px 18px 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-      border: 1px solid rgba(0, 0, 0, 0.08);
-    }
-
-    #profileModal h2 {
-      margin: 0 0 10px;
-      text-align: center;
-      font-size: 18px;
     }
 
     .gender-row {
@@ -500,22 +580,19 @@
     #profileBMI {
       margin-top: 4px;
       font-size: 13px;
-      color: var(--muted);
+      color: var(--text-sub);
       line-height: 1.5;
       white-space: pre-line;
     }
 
     .bmi-bar-container {
       margin-top: 6px;
-      margin-bottom: 2px;
     }
-
     .bmi-bar-wrapper {
       position: relative;
       width: 100%;
       height: 26px;
     }
-
     .bmi-bar {
       position: absolute;
       left: 0;
@@ -525,12 +602,11 @@
       border-radius: 999px;
       overflow: hidden;
       display: flex;
-      border: 1px solid rgba(0,0,0,0.08);
+      border: 1px solid rgba(0, 0, 0, 0.08);
     }
-
     .bmi-seg { flex: 1; }
-    .bmi-low  { background: #6ca8ff; }
-    .bmi-mid  { background: #fdfdfd; }
+    .bmi-low { background: #6ca8ff; }
+    .bmi-mid { background: #fdfdfd; }
     .bmi-high { background: #ff7b7b; }
 
     .bmi-pointer {
@@ -545,11 +621,17 @@
       display: none;
     }
 
-    /* 設定側欄 */
+    body.dark-mode .bmi-pointer,
+    body.theme-iceland .bmi-pointer,
+    body.theme-neon .bmi-pointer {
+      border-top-color: #f5f5f5;
+    }
+
+    /* ========= 設定側欄 ========= */
     #settingsOverlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.35);
+      background: rgba(0, 0, 0, 0.32);
       display: none;
       justify-content: flex-end;
       align-items: stretch;
@@ -558,11 +640,11 @@
     }
 
     #settingsPanel {
-      width: 85%;
-      max-width: 360px;
+      width: 86%;
+      max-width: 380px;
       background: var(--card-bg);
       border-left: 1px solid var(--border-subtle);
-      box-shadow: -4px 0 18px rgba(0,0,0,0.25);
+      box-shadow: -4px 0 18px rgba(0, 0, 0, 0.25);
       padding: 16px 14px 20px;
       display: flex;
       flex-direction: column;
@@ -585,7 +667,7 @@
       background: transparent;
       font-size: 18px;
       cursor: pointer;
-      color: var(--muted);
+      color: var(--text-sub);
       padding: 4px;
     }
 
@@ -597,22 +679,7 @@
     .settings-section-title {
       font-weight: 600;
       margin-bottom: 6px;
-    }
-
-    .settings-toggle {
-      padding: 8px 10px;
-      font-size: 13px;
-      border-radius: 999px;
-      border: 1px solid var(--border-subtle);
-      background: var(--card-bg);
-      color: var(--muted);
-      cursor: pointer;
-    }
-
-    .settings-toggle.active {
-      background: var(--accent);
-      color: #111111;
-      border-color: var(--accent-dark);
+      color: var(--text-main);
     }
 
     .theme-choice-row {
@@ -621,17 +688,36 @@
       flex-wrap: wrap;
     }
 
+    .settings-toggle {
+      padding: 7px 14px;
+      font-size: 13px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--card-bg);
+      color: var(--text-sub);
+      cursor: pointer;
+      min-width: 70px;
+      text-align: center;
+    }
+    .settings-toggle.active {
+      background: var(--accent);
+      color: #111111;
+      border-color: var(--accent-dark);
+    }
+
     .settings-row {
       display: flex;
       gap: 6px;
       align-items: center;
     }
 
-    .settings-row input { flex: 1; }
+    .settings-row input {
+      flex: 1;
+    }
 
     .settings-hint {
       font-size: 11px;
-      color: var(--muted);
+      color: var(--text-sub);
       margin-top: 4px;
     }
 
@@ -650,7 +736,7 @@
 
     .export-tip {
       font-size: 10px;
-      color: var(--muted);
+      color: var(--text-sub);
       margin-top: 6px;
       line-height: 1.4;
     }
@@ -667,11 +753,11 @@
       padding: 4px 10px;
       font-size: 11px;
       background: var(--card-bg);
-      color: var(--muted);
+      color: var(--text-sub);
       cursor: pointer;
     }
 
-    /* Splash */
+    /* ========= 開場動畫 ========= */
     #splash {
       position: fixed;
       inset: 0;
@@ -764,6 +850,20 @@
         <button class="chart-nav-btn" onclick="shiftChartWindow(-1)">←</button>
         <span id="chartRangeLabel"></span>
         <button class="chart-nav-btn" onclick="shiftChartWindow(1)">→</button>
+      </div>
+      <div class="metric-legend">
+        <div class="legend-item legend-weight">
+          <span class="legend-color-box"></span><span>體重 (kg)</span>
+        </div>
+        <div class="legend-item legend-fat">
+          <span class="legend-color-box"></span><span>體脂 (%)</span>
+        </div>
+        <div class="legend-item legend-muscle">
+          <span class="legend-color-box"></span><span>骨骼肌 (%)</span>
+        </div>
+        <div class="legend-item legend-target">
+          <span class="legend-color-box"></span><span>目標體重</span>
+        </div>
       </div>
       <div id="chartScroll">
         <canvas id="weightChart"></canvas>
@@ -868,6 +968,9 @@
           <button id="themeNeonBtn" class="settings-toggle" type="button" onclick="applyTheme('neon')">
             都市霓虹
           </button>
+          <button id="themeHermesBtn" class="settings-toggle" type="button" onclick="applyTheme('hermes')">
+            愛馬仕橘
+          </button>
         </div>
       </div>
 
@@ -909,7 +1012,7 @@
 
   <script>
     const STORAGE_KEY = "weight_logs";
-    const THEME_KEY = "weight_theme"; // light | dark | iceland | sakura | neon
+    const THEME_KEY = "weight_theme"; // light | dark | iceland | sakura | neon | hermes
     const PROFILE_KEY = "weight_profile";
     const TARGET_KEY = "weight_target";
 
@@ -944,22 +1047,20 @@
       else localStorage.setItem(TARGET_KEY, String(val));
     }
 
-    /* 主題切換 */
+    /* ========= 主題切換 ========= */
     function applyTheme(mode) {
       const body = document.body;
-      body.classList.remove("dark-mode", "theme-iceland", "theme-sakura", "theme-neon");
+      body.className = ""; // 清除全部
+      if (mode === "dark") body.classList.add("dark-mode");
+      else if (mode === "iceland") body.classList.add("theme-iceland");
+      else if (mode === "sakura") body.classList.add("theme-sakura");
+      else if (mode === "neon") body.classList.add("theme-neon");
+      else if (mode === "hermes") body.classList.add("theme-hermes");
 
-      if (mode === "dark") {
-        body.classList.add("dark-mode");
-      } else if (mode === "iceland") {
-        body.classList.add("theme-iceland");
-      } else if (mode === "sakura") {
-        body.classList.add("theme-sakura");
-      } else if (mode === "neon") {
-        body.classList.add("theme-neon");
-      }
       localStorage.setItem(THEME_KEY, mode);
       updateThemeButtons(mode);
+      // 主題變更後重新畫圖，更新軸線/legend顏色
+      renderChart();
     }
 
     function initTheme() {
@@ -975,8 +1076,9 @@
         iceland: document.getElementById("themeIcelandBtn"),
         sakura: document.getElementById("themeSakuraBtn"),
         neon: document.getElementById("themeNeonBtn"),
+        hermes: document.getElementById("themeHermesBtn"),
       };
-      Object.keys(map).forEach(key => {
+      Object.keys(map).forEach((key) => {
         const btn = map[key];
         if (!btn) return;
         btn.classList.toggle("active", key === current);
@@ -993,8 +1095,10 @@
       setTimeout(() => {
         main.style.opacity = 1;
         splash.style.opacity = 0;
-        setTimeout(() => { splash.style.display = "none"; }, 900);
-      }, 1200);
+        setTimeout(() => {
+          splash.style.display = "none";
+        }, 900);
+      }, 1100);
 
       document.getElementById("profileBtn").addEventListener("click", openProfile);
       document.getElementById("settingsBtn").addEventListener("click", openSettings);
@@ -1015,7 +1119,7 @@
       render();
     });
 
-    /* Date & Add */
+    /* ========= 日期 & 新增 ========= */
     function setDefaultDate() {
       const d = document.getElementById("dateInput");
       if (!d.value) d.value = new Date().toISOString().slice(0, 10);
@@ -1047,7 +1151,7 @@
       render();
     }
 
-    /* 最新紀錄 / 週統計 / 目標 */
+    /* ========= 最新紀錄 & 統計 ========= */
     function autoScaleLatest() {
       const el = document.getElementById("latest");
       if (!el.textContent) return;
@@ -1078,9 +1182,12 @@
     function showWeeklyStats() {
       const logs = getLogs();
       const box = document.getElementById("weeklyStats");
-      if (!logs.length) { box.textContent = ""; return; }
+      if (!logs.length) {
+        box.textContent = "";
+        return;
+      }
 
-      const dates = logs.map(l => l.date).filter(Boolean).sort();
+      const dates = logs.map((l) => l.date).filter(Boolean).sort();
       const latestDateStr = dates[dates.length - 1];
       const latestDate = new Date(latestDateStr);
 
@@ -1088,8 +1195,13 @@
         return Math.floor((a - b) / (1000 * 60 * 60 * 24));
       }
 
-      const curW = [], prevW = [], curF = [], prevF = [], curM = [], prevM = [];
-      logs.forEach(l => {
+      const curW = [],
+        prevW = [],
+        curF = [],
+        prevF = [],
+        curM = [],
+        prevM = [];
+      logs.forEach((l) => {
         if (!l.date) return;
         const d = new Date(l.date);
         const diff = dayDiff(latestDate, d);
@@ -1112,9 +1224,12 @@
         return arr.reduce((a, b) => a + b, 0) / arr.length;
       }
 
-      const curWA = avg(curW), prevWA = avg(prevW);
-      const curFA = avg(curF), prevFA = avg(prevF);
-      const curMA = avg(curM), prevMA = avg(prevM);
+      const curWA = avg(curW),
+        prevWA = avg(prevW);
+      const curFA = avg(curF),
+        prevFA = avg(prevF);
+      const curMA = avg(curM),
+        prevMA = avg(prevM);
 
       let lines = [];
       if (curWA !== null) {
@@ -1151,17 +1266,23 @@
       const info = document.getElementById("targetInfo");
       const target = getTarget();
       if (!info) return;
-      if (target == null) { info.textContent = ""; return; }
+      if (target == null) {
+        info.textContent = "";
+        return;
+      }
 
       const logs = getLogs();
       if (!logs.length) {
         info.textContent = `目標體重：${target} kg`;
         return;
       }
-      const sorted = logs.slice().sort((a,b)=>b.date.localeCompare(a.date));
+      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
       const last = sorted[0];
       const w = parseFloat(last.weight);
-      if (isNaN(w)) { info.textContent = `目標體重：${target} kg`; return; }
+      if (isNaN(w)) {
+        info.textContent = `目標體重：${target} kg`;
+        return;
+      }
 
       const diff = w - target;
       let diffText;
@@ -1172,18 +1293,21 @@
       info.textContent = `目標體重：${target} kg（${diffText}）`;
     }
 
-    /* 圖表 */
+    /* ========= 圖表 ========= */
     function renderChart() {
       const logs = getLogs();
       const rangeLabel = document.getElementById("chartRangeLabel");
       if (!logs.length) {
-        if (chart) { chart.destroy(); chart = null; }
+        if (chart) {
+          chart.destroy();
+          chart = null;
+        }
         rangeLabel.textContent = "";
         return;
       }
 
       const byDate = {};
-      logs.forEach(l => {
+      logs.forEach((l) => {
         if (!l.date) return;
         if (!byDate[l.date]) byDate[l.date] = { w: [], f: [], m: [] };
         const w = parseFloat(l.weight);
@@ -1200,7 +1324,10 @@
 
       const allDates = Object.keys(byDate).sort();
       if (!allDates.length) {
-        if (chart) { chart.destroy(); chart = null; }
+        if (chart) {
+          chart.destroy();
+          chart = null;
+        }
         rangeLabel.textContent = "";
         return;
       }
@@ -1209,121 +1336,128 @@
       if (chartWindowStart === null)
         chartWindowStart = Math.max(0, allDates.length - windowSize);
 
-      chartWindowStart = Math.max(0,
-        Math.min(chartWindowStart, Math.max(0, allDates.length - windowSize)));
+      chartWindowStart = Math.max(
+        0,
+        Math.min(chartWindowStart, Math.max(0, allDates.length - windowSize))
+      );
       const end = chartWindowStart + windowSize;
       const dates = allDates.slice(chartWindowStart, end);
 
       const weights = dates.map(
-        d => byDate[d].w.reduce((a,b)=>a+b,0)/byDate[d].w.length
+        (d) => byDate[d].w.reduce((a, b) => a + b, 0) / byDate[d].w.length
       );
-      const fats = dates.map(d =>
+      const fats = dates.map((d) =>
         byDate[d].f.length
-          ? byDate[d].f.reduce((a,b)=>a+b,0)/byDate[d].f.length
+          ? byDate[d].f.reduce((a, b) => a + b, 0) / byDate[d].f.length
           : null
       );
-      const muscles = dates.map(d =>
+      const muscles = dates.map((d) =>
         byDate[d].m.length
-          ? byDate[d].m.reduce((a,b)=>a+b,0)/byDate[d].m.length
+          ? byDate[d].m.reduce((a, b) => a + b, 0) / byDate[d].m.length
           : null
       );
 
       if (dates.length)
-        rangeLabel.textContent = `${dates[0]} ~ ${dates[dates.length-1]}`;
+        rangeLabel.textContent = `${dates[0]} ~ ${dates[dates.length - 1]}`;
       else rangeLabel.textContent = "";
 
       const canvas = document.getElementById("weightChart");
-      canvas.width = dates.length * 70;
+      canvas.width = Math.max(dates.length * 70, 280);
       canvas.height = 240;
-
       const ctx = canvas.getContext("2d");
       if (chart) chart.destroy();
 
-      const weightLineColor =
-  (cs.getPropertyValue("--chart-weight-line") || "#4b7bff").trim();
-const weightPointColor =
-  (cs.getPropertyValue("--chart-weight-point") || "#ffffff").trim();
+      const cs = getComputedStyle(document.body);
+      const weightColor = (cs.getPropertyValue("--chart-weight") || "#4b7bff").trim();
+      const fatColor = (cs.getPropertyValue("--chart-fat") || "#f2b933").trim();
+      const muscleColor = (cs.getPropertyValue("--chart-muscle") || "#ff5d5d").trim();
+      const targetColor = (cs.getPropertyValue("--chart-target") || "#9b9b9b").trim();
+      const axisColor = (cs.getPropertyValue("--chart-axis") || "#666").trim();
+      const gridColor = (cs.getPropertyValue("--chart-grid") || "#ddd").trim();
+      const legendColor = (cs.getPropertyValue("--text-main") || "#333").trim();
+      const tooltipBg = (cs.getPropertyValue("--tooltip-bg") || "rgba(0,0,0,0.8)").trim();
+      const tooltipText = (cs.getPropertyValue("--tooltip-text") || "#fff").trim();
 
-const datasets = [];
       const datasets = [];
       if (metricMode === "all" || metricMode === "weight") {
         datasets.push({
-          label:"體重 (kg)",
-          data:weights,
-          borderWidth:2,
-          tension:0.25,
-          pointRadius:4,
-          borderColor: weightLineColor,
-    backgroundColor: "rgba(75,123,255,0.18)",
-
-    // 圓點（體重符號）確保永遠看得清楚
-    pointBackgroundColor: weightPointColor, // 圓點主色（白色）
-    pointBorderColor: weightLineColor,      // 外框（亮綠）
-  });
-}
+          label: "體重 (kg)",
+          data: weights,
+          borderWidth: 2,
+          tension: 0.25,
+          pointRadius: 4,
+          pointHoverRadius: 5,
+          borderColor: weightColor,
+          backgroundColor: weightColor, // legend 實心
+        });
+      }
       if (metricMode === "all" || metricMode === "fat") {
         datasets.push({
-          label:"體脂 (%)",
-          data:fats,
-          borderWidth:2,
-          tension:0.25,
-          pointRadius:4,
-          borderColor:"#f3c23a",
-          backgroundColor:"rgba(243,194,58,0.2)"
+          label: "體脂 (%)",
+          data: fats,
+          borderWidth: 2,
+          tension: 0.25,
+          pointRadius: 4,
+          pointHoverRadius: 5,
+          borderColor: fatColor,
+          backgroundColor: fatColor,
         });
       }
       if (metricMode === "all" || metricMode === "muscle") {
         datasets.push({
-          label:"骨骼肌 (%)",
-          data:muscles,
-          borderWidth:2,
-          tension:0.25,
-          pointRadius:4,
-          borderColor:"#ff4b4b",
-          backgroundColor:"rgba(255,75,75,0.2)"
+          label: "骨骼肌 (%)",
+          data: muscles,
+          borderWidth: 2,
+          tension: 0.25,
+          pointRadius: 4,
+          pointHoverRadius: 5,
+          borderColor: muscleColor,
+          backgroundColor: muscleColor,
         });
       }
 
       const target = getTarget();
-      if ((metricMode === "all" || metricMode === "weight")
-          && target != null && dates.length) {
+      if ((metricMode === "all" || metricMode === "weight") && target != null && dates.length) {
         datasets.push({
-          label:"目標體重",
-          data:dates.map(()=>target),
-          borderWidth:1.5,
-          borderDash:[6,4],
-          pointRadius:0,
-          borderColor:"#9b9b9b",
+          label: "目標體重",
+          data: dates.map(() => target),
+          borderWidth: 1.5,
+          borderDash: [6, 4],
+          pointRadius: 0,
+          borderColor: targetColor,
+          backgroundColor: targetColor,
         });
       }
 
-      const cs = getComputedStyle(document.body);
-      const axisColor = cs.getPropertyValue("--muted") || "#666666";
-      const gridColor = cs.getPropertyValue("--border-subtle") || "#cccccc";
-      const legendColor = cs.getPropertyValue("--text-main") || "#000000";
-
       chart = new Chart(ctx, {
-        type:"line",
-        data:{ labels:dates, datasets },
-        options:{
-          responsive:false,
-          maintainAspectRatio:false,
-          spanGaps:true,
-          scales:{
-            x:{
-              ticks:{ color: axisColor.trim() },
-              grid:{ color: gridColor.trim() }
+        type: "line",
+        data: { labels: dates, datasets },
+        options: {
+          responsive: false,
+          maintainAspectRatio: false,
+          spanGaps: true,
+          scales: {
+            x: {
+              ticks: { color: axisColor },
+              grid: { color: gridColor },
             },
-            y:{
-              ticks:{ color: axisColor.trim() },
-              grid:{ color: gridColor.trim() }
-            }
+            y: {
+              ticks: { color: axisColor },
+              grid: { color: gridColor },
+            },
           },
-          plugins:{
-            legend:{
-              labels:{ color: legendColor.trim() }
-            }
-          }
+          plugins: {
+            legend: {
+              display: false, // 我們自己畫 legend
+              labels: { color: legendColor, boxWidth: 24, padding: 12 },
+            },
+            tooltip: {
+              backgroundColor: tooltipBg,
+              titleColor: tooltipText,
+              bodyColor: tooltipText,
+              cornerRadius: 8,
+            },
+          },
         },
       });
     }
@@ -1336,10 +1470,9 @@ const datasets = [];
         fat: document.getElementById("tabFat"),
         muscle: document.getElementById("tabMuscle"),
       };
-      Object.keys(tabs).forEach(k => {
+      Object.keys(tabs).forEach((k) => {
         if (!tabs[k]) return;
-        if (k === mode) tabs[k].classList.add("active");
-        else tabs[k].classList.remove("active");
+        tabs[k].classList.toggle("active", k === mode);
       });
       renderChart();
     }
@@ -1347,7 +1480,7 @@ const datasets = [];
     function shiftChartWindow(direction) {
       const logs = getLogs();
       if (!logs.length) return;
-      const dates = [...new Set(logs.map(l=>l.date).filter(Boolean))].sort();
+      const dates = [...new Set(logs.map((l) => l.date).filter(Boolean))].sort();
       if (!dates.length) return;
 
       const windowSize = 7;
@@ -1355,12 +1488,14 @@ const datasets = [];
         chartWindowStart = Math.max(0, dates.length - windowSize);
 
       chartWindowStart += direction;
-      chartWindowStart = Math.max(0,
-        Math.min(chartWindowStart, Math.max(0, dates.length - windowSize)));
+      chartWindowStart = Math.max(
+        0,
+        Math.min(chartWindowStart, Math.max(0, dates.length - windowSize))
+      );
       renderChart();
     }
 
-    /* 歷史紀錄 */
+    /* ========= 歷史紀錄 ========= */
     function renderRecords() {
       const logs = getLogs();
       const box = document.getElementById("records");
@@ -1373,17 +1508,17 @@ const datasets = [];
         return;
       }
 
-      const sorted = logs.slice().sort((a,b)=>b.date.localeCompare(a.date));
+      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
       const groups = {};
-      sorted.forEach(log => {
+      sorted.forEach((log) => {
         const dateStr = log.date || "";
-        const monthKey = dateStr.length>=7 ? dateStr.slice(0,7) : "未知";
+        const monthKey = dateStr.length >= 7 ? dateStr.slice(0, 7) : "未知";
         if (!groups[monthKey]) groups[monthKey] = [];
         groups[monthKey].push(log);
       });
 
-      const monthKeys = Object.keys(groups).sort((a,b)=>b.localeCompare(a));
-      monthKeys.forEach((monthKey, idx)=> {
+      const monthKeys = Object.keys(groups).sort((a, b) => b.localeCompare(a));
+      monthKeys.forEach((monthKey, idx) => {
         const monthLogs = groups[monthKey];
         const monthCard = document.createElement("div");
         monthCard.className = "card";
@@ -1392,9 +1527,9 @@ const datasets = [];
         header.className = "month-header";
         const title = document.createElement("div");
         title.className = "month-title";
-        if (monthKey==="未知") title.textContent = "未設定日期";
+        if (monthKey === "未知") title.textContent = "未設定日期";
         else {
-          const [y,m] = monthKey.split("-");
+          const [y, m] = monthKey.split("-");
           title.textContent = `${y} 年 ${m} 月`;
         }
 
@@ -1402,14 +1537,21 @@ const datasets = [];
         toggleBtn.className = "month-toggle";
         const body = document.createElement("div");
 
-        if (idx===0) { body.style.display="block"; toggleBtn.textContent="收合"; }
-        else { body.style.display="none"; toggleBtn.textContent="展開"; }
+        if (idx === 0) {
+          body.style.display = "block";
+          toggleBtn.textContent = "收合";
+        } else {
+          body.style.display = "none";
+          toggleBtn.textContent = "展開";
+        }
 
         toggleBtn.onclick = () => {
-          if (body.style.display==="none") {
-            body.style.display="block"; toggleBtn.textContent="收合";
+          if (body.style.display === "none") {
+            body.style.display = "block";
+            toggleBtn.textContent = "收合";
           } else {
-            body.style.display="none"; toggleBtn.textContent="展開";
+            body.style.display = "none";
+            toggleBtn.textContent = "展開";
           }
         };
 
@@ -1417,7 +1559,7 @@ const datasets = [];
         header.appendChild(toggleBtn);
         monthCard.appendChild(header);
 
-        monthLogs.forEach(l => {
+        monthLogs.forEach((l) => {
           const all = getLogs();
           const idxInAll = all.indexOf(l);
 
@@ -1454,7 +1596,7 @@ const datasets = [];
       });
     }
 
-    /* 編輯紀錄 */
+    /* ========= 編輯紀錄 ========= */
     function openModal(index) {
       editIndex = index;
       const logs = getLogs();
@@ -1475,7 +1617,10 @@ const datasets = [];
       l.weight = document.getElementById("editWeight").value;
       l.fat = document.getElementById("editFat").value;
       l.muscle = document.getElementById("editMuscle").value;
-      if (!l.weight) { alert("體重不可為空！"); return; }
+      if (!l.weight) {
+        alert("體重不可為空！");
+        return;
+      }
       saveLogs(logs);
       closeModal();
       render();
@@ -1483,12 +1628,12 @@ const datasets = [];
     function deleteRecord(index) {
       if (!confirm("確定要刪除這筆紀錄嗎？")) return;
       const logs = getLogs();
-      logs.splice(index,1);
+      logs.splice(index, 1);
       saveLogs(logs);
       render();
     }
 
-    /* 設定面板 */
+    /* ========= 設定面板 ========= */
     function openSettings() {
       const overlay = document.getElementById("settingsOverlay");
       const area = document.getElementById("exportArea");
@@ -1500,9 +1645,8 @@ const datasets = [];
       const targetHint = document.getElementById("targetHint");
       if (targetInput) targetInput.value = target != null ? target : "";
       if (targetHint)
-        targetHint.textContent = target != null
-          ? `目前目標體重：${target} kg`
-          : "尚未設定目標體重。";
+        targetHint.textContent =
+          target != null ? `目前目標體重：${target} kg` : "尚未設定目標體重。";
 
       const backupBody = document.getElementById("backupBody");
       const toggleBtn = document.getElementById("backupToggleBtn");
@@ -1543,9 +1687,8 @@ const datasets = [];
       const targetHint = document.getElementById("targetHint");
       const target = getTarget();
       if (targetHint)
-        targetHint.textContent = target != null
-          ? `目前目標體重：${target} kg`
-          : "尚未設定目標體重。";
+        targetHint.textContent =
+          target != null ? `目前目標體重：${target} kg` : "尚未設定目標體重。";
       showTargetInfo();
       renderChart();
       alert("目標體重已更新");
@@ -1561,14 +1704,17 @@ const datasets = [];
     function importFromText() {
       const area = document.getElementById("exportArea");
       const text = area.value.trim();
-      if (!text) { alert("請先在上方貼上匯出內容！"); return; }
+      if (!text) {
+        alert("請先在上方貼上匯出內容！");
+        return;
+      }
       try {
         const data = JSON.parse(text);
         if (!Array.isArray(data)) throw new Error("格式錯誤");
         saveLogs(data);
         alert("匯入成功，已覆蓋目前資料。");
         render();
-      } catch(e) {
+      } catch (e) {
         alert("匯入失敗：格式不是有效的 JSON。");
       }
     }
@@ -1579,13 +1725,17 @@ const datasets = [];
       render();
     }
 
-    /* Profile / BMI */
+    /* ========= Profile / BMI ========= */
     function openProfile() {
       const profile = getProfile();
       document.getElementById("profileHeight").value =
         profile.height != null ? profile.height : "";
-      const genderRadios = document.querySelectorAll('input[name="profileGender"]');
-      genderRadios.forEach(r => { r.checked = r.value === profile.gender; });
+      const genderRadios = document.querySelectorAll(
+        'input[name="profileGender"]'
+      );
+      genderRadios.forEach((r) => {
+        r.checked = r.value === profile.gender;
+      });
       updateProfileBMIText();
       document.getElementById("profileOverlay").style.display = "flex";
     }
@@ -1596,7 +1746,7 @@ const datasets = [];
     function computeBMI(weightKg, heightCm) {
       if (!weightKg || !heightCm || heightCm <= 0) return null;
       const hM = heightCm / 100;
-      return weightKg / (hM*hM);
+      return weightKg / (hM * hM);
     }
 
     function updateProfileBMIText() {
@@ -1608,7 +1758,8 @@ const datasets = [];
       pointer.style.display = "none";
 
       if (!profile.height || !profile.gender) {
-        bmiDiv.textContent = "請先填寫身高與性別，儲存後會使用最新體重計算 BMI。";
+        bmiDiv.textContent =
+          "請先填寫身高與性別，儲存後會使用最新體重計算 BMI。";
         return;
       }
       if (!logs.length) {
@@ -1616,18 +1767,22 @@ const datasets = [];
         return;
       }
 
-      const sorted = logs.slice().sort((a,b)=>b.date.localeCompare(a.date));
+      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
       const last = sorted[0];
       const weight = parseFloat(last.weight);
       const bmi = computeBMI(weight, parseFloat(profile.height));
-      if (!bmi) { bmiDiv.textContent = "資料不足，無法計算 BMI。"; return; }
+      if (!bmi) {
+        bmiDiv.textContent = "資料不足，無法計算 BMI。";
+        return;
+      }
 
       const genderText = profile.gender === "male" ? "男" : "女";
       bmiDiv.textContent =
         `性別：${genderText}｜身高：${profile.height} cm\n` +
         `依照最新體重 ${weight} kg，BMI 約為 ${bmi.toFixed(1)}`;
 
-      const min = 15, max = 40;
+      const min = 15,
+        max = 40;
       let ratio = (bmi - min) / (max - min);
       ratio = Math.max(0, Math.min(1, ratio));
       pointer.style.left = ratio * 100 + "%";
@@ -1635,12 +1790,20 @@ const datasets = [];
     }
 
     function saveProfileData() {
-      const heightVal = parseFloat(document.getElementById("profileHeight").value);
-      const genderInput = document.querySelector('input[name="profileGender"]:checked');
+      const heightVal = parseFloat(
+        document.getElementById("profileHeight").value
+      );
+      const genderInput = document.querySelector(
+        'input[name="profileGender"]:checked'
+      );
       if (!heightVal || isNaN(heightVal) || heightVal <= 0) {
-        alert("請輸入正確的身高（cm）"); return;
+        alert("請輸入正確的身高（cm）");
+        return;
       }
-      if (!genderInput) { alert("請選擇性別（男 / 女）"); return; }
+      if (!genderInput) {
+        alert("請選擇性別（男 / 女）");
+        return;
+      }
 
       const profile = { height: heightVal, gender: genderInput.value };
       saveProfile(profile);
@@ -1649,7 +1812,7 @@ const datasets = [];
       closeProfile();
     }
 
-    /* render */
+    /* ========= render ========= */
     function render() {
       renderRecords();
       chartWindowStart = null;
