@@ -462,6 +462,25 @@
       font-size: 11px;
       color: var(--muted);
     }
+
+    .subtle-text {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    .compact-row {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .compact-row.single {
+      grid-template-columns: 1fr;
+    }
   </style>
 </head>
 
@@ -541,6 +560,30 @@
           匯入：在上方貼上 JSON，再按「匯入貼上的資料」。<br />
           ※ 每台裝置資料是獨立的，匯入會覆蓋目前資料。
         </div>
+      </div>
+    </div>
+
+    <!-- 紀錄整理 -->
+    <div class="card">
+      <h2 style="margin-top: 0">歷史紀錄整理</h2>
+      <div class="compact-row">
+        <input
+          id="keepLatestCount"
+          type="number"
+          min="1"
+          placeholder="僅保留最新 N 筆，例如 200"
+        />
+        <button class="btn-secondary" onclick="keepLatest()">刪掉更舊的</button>
+      </div>
+      <div class="compact-row">
+        <input id="trimBeforeDate" type="date" />
+        <button class="btn-secondary" onclick="deleteBeforeDate()">
+          刪除指定日期前的紀錄
+        </button>
+      </div>
+      <div class="subtle-text">
+        若歷史紀錄太多，可以只留最新幾筆或刪除指定日期前的資料，讓載入更快。建議先用
+        「匯出」備份再操作。
       </div>
     </div>
 
@@ -634,6 +677,16 @@
     }
     function saveProfile(profile) {
       localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+    }
+
+    function sortLogsByDate(logs, order = "asc") {
+      return logs.slice().sort((a, b) => {
+        const aDate = a.date || "";
+        const bDate = b.date || "";
+        return order === "desc"
+          ? bDate.localeCompare(aDate)
+          : aDate.localeCompare(bDate);
+      });
     }
 
     window.addEventListener("load", () => {
@@ -1005,6 +1058,76 @@
       if (!confirm("確定要清除全部紀錄嗎？這個動作無法復原。")) return;
       saveLogs([]);
       render();
+    }
+
+    function keepLatest() {
+      const input = document.getElementById("keepLatestCount");
+      const limit = parseInt(input.value, 10);
+      if (!limit || limit <= 0) {
+        alert("請輸入想保留的筆數（需大於 0）。");
+        return;
+      }
+
+      const logs = getLogs();
+      if (!logs.length) {
+        alert("目前沒有紀錄可整理。");
+        return;
+      }
+
+      if (limit >= logs.length) {
+        alert(`目前共有 ${logs.length} 筆，未超過設定，不需刪除。`);
+        return;
+      }
+
+      if (
+        !confirm(
+          `僅保留最新 ${limit} 筆，會刪除最舊的 ${logs.length - limit} 筆，確定嗎？`
+        )
+      ) {
+        return;
+      }
+
+      const newestFirst = sortLogsByDate(logs, "desc");
+      const kept = newestFirst.slice(0, limit);
+      const reordered = sortLogsByDate(kept, "asc");
+      saveLogs(reordered);
+      render();
+      alert(`已保留最新 ${reordered.length} 筆，刪除 ${logs.length - limit} 筆舊資料。`);
+    }
+
+    function deleteBeforeDate() {
+      const dateStr = document.getElementById("trimBeforeDate").value;
+      if (!dateStr) {
+        alert("請先選擇日期。");
+        return;
+      }
+
+      const logs = getLogs();
+      if (!logs.length) {
+        alert("目前沒有紀錄可整理。");
+        return;
+      }
+
+      const kept = logs.filter((l) => !l.date || l.date >= dateStr);
+      const removed = logs.length - kept.length;
+
+      if (!removed) {
+        alert("沒有早於所選日期的紀錄，無需刪除。");
+        return;
+      }
+
+      if (
+        !confirm(
+          `將刪除 ${removed} 筆在 ${dateStr} 之前的紀錄，確定嗎？`
+        )
+      ) {
+        return;
+      }
+
+      const reordered = sortLogsByDate(kept, "asc");
+      saveLogs(reordered);
+      render();
+      alert(`已刪除 ${removed} 筆舊資料，剩餘 ${reordered.length} 筆。`);
     }
 
     /* ===== Profile / BMI ===== */
