@@ -51,6 +51,8 @@
       --accent-dark: #35b275;
       --danger: #ff9a9a;
       --muted: #bedfd0;
+      --chart-weight-line: #6ee6ae;  /* 亮綠折線 */
+      --chart-weight-point: #ffffff;
     }
 
     /* 櫻花：粉色為主，棕色點綴 */
@@ -1237,6 +1239,12 @@
       const ctx = canvas.getContext("2d");
       if (chart) chart.destroy();
 
+      const weightLineColor =
+  (cs.getPropertyValue("--chart-weight-line") || "#4b7bff").trim();
+const weightPointColor =
+  (cs.getPropertyValue("--chart-weight-point") || "#ffffff").trim();
+
+const datasets = [];
       const datasets = [];
       if (metricMode === "all" || metricMode === "weight") {
         datasets.push({
@@ -1245,10 +1253,14 @@
           borderWidth:2,
           tension:0.25,
           pointRadius:4,
-          borderColor:"#4b7bff",
-          backgroundColor:"rgba(75,123,255,0.18)"
-        });
-      }
+          borderColor: weightLineColor,
+    backgroundColor: "rgba(75,123,255,0.18)",
+
+    // 圓點（體重符號）確保永遠看得清楚
+    pointBackgroundColor: weightPointColor, // 圓點主色（白色）
+    pointBorderColor: weightLineColor,      // 外框（亮綠）
+  });
+}
       if (metricMode === "all" || metricMode === "fat") {
         datasets.push({
           label:"體脂 (%)",
