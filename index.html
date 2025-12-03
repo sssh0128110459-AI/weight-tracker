@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
@@ -65,7 +65,7 @@
     /* ========= 冰島苔原 ========= */
     body.theme-iceland {
       --bg-color: #08130c;
-      --text-main: #d6ffe5; /* 標題 / 主內容亮綠 */
+      --text-main: #d6ffe5;
       --text-sub: #a5f0c9;
       --card-bg: #0f2216;
       --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.85);
@@ -137,100 +137,61 @@
       --tooltip-text: #e9f4ff;
     }
 
-    /* ========= 愛馬仕橘 ========= */
-    /* ===============================
-   愛馬仕橘主題（皮革感精品橘）
-   =============================== */
-body.theme-hermes {
-  /* 全域色彩變數 */
-  --bg-color: #f6e1cc;            /* 奶茶色背景 */
-  --text-main: #4b2614;           /* 深棕標題 */
-  --text-sub: #9a6440;            /* 次要文字：暖棕 */
-  --card-bg: #fff5e9;             /* 奶油皮革色卡片 */
-  --card-shadow: 0 6px 18px rgba(157, 92, 42, 0.35);
+    /* ========= 愛馬仕橘：皮革感 ========= */
+    body.theme-hermes {
+      --bg-color: #f6e1cc;
+      --text-main: #4b2614;
+      --text-sub: #9a6440;
+      --card-bg: #fff5e9;
+      --card-shadow: 0 6px 18px rgba(157, 92, 42, 0.35);
+      --border-subtle: #e8b993;
+      --input-bg: #ffeeda;
+      --accent: #ff7f2a;
+      --accent-dark: #e06610;
+      --danger: #e2584f;
+      --muted: #a16c47;
+      --chart-axis: #a2683b;
+      --chart-grid: #f0cda7;
+      --chart-weight: #ff7f2a;
+      --chart-fat: #ffc857;
+      --chart-muscle: #ff6b6b;
+      --chart-target: #c48c66;
+      --tooltip-bg: rgba(104, 55, 26, 0.96);
+      --tooltip-text: #fff7ef;
+    }
 
-  --border-subtle: #e8b993;       /* 淡皮革棕色邊框 */
-  --input-bg: #ffeeda;            /* 帶奶色的輸入框背景 */
+    body.theme-hermes .card {
+      background: radial-gradient(
+        circle at top left,
+        #fffaf3 0%,
+        #fff0de 45%,
+        #ffe3c2 100%
+      );
+      box-shadow:
+        0 8px 18px rgba(140, 80, 36, 0.45),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+    }
 
-  --accent: #ff7f2a;              /* 精品焦糖橘 */
-  --accent-dark: #e06610;         /* 深焦糖橘 */
-  --danger: #e2584f;              /* 暖紅（刪除鍵） */
-  --muted: #a16c47;               /* 文字弱化色 */
+    body.theme-hermes button:not(.btn-secondary):not(.btn-danger-ghost) {
+      background: linear-gradient(135deg, #ff9036, #ff7f2a);
+      color: #2b1306;
+      border: none;
+    }
+    body.theme-hermes button:not(.btn-secondary):not(.btn-danger-ghost):active {
+      background: linear-gradient(135deg, #f5741a, #e06610);
+    }
 
-  /* 圖表用色 */
-  --chart-axis: #a2683b;          /* 座標軸（深暖棕） */
-  --chart-grid: #f0cda7;          /* 網格線（淡皮革） */
+    body.theme-hermes .btn-secondary {
+      background: #f2d3b5;
+      color: #4b2a15;
+      border: 1px solid #d6a67a;
+    }
 
-  --chart-weight: #ff7f2a;        /* 體重線 → 精品焦糖橘 */
-  --chart-fat: #ffc857;           /* 體脂線 → 時尚金黃 */
-  --chart-muscle: #ff6b6b;        /* 骨骼肌線 → 溫暖珊瑚紅 */
-  --chart-target: #c48c66;        /* 目標體重 → 深皮革棕 */
-
-  /* Tooltip：濃厚皮革棕＋奶油白字 */
-  --tooltip-bg: rgba(104, 55, 26, 0.96);
-  --tooltip-text: #fff7ef;
-}
-
-/* ===============================
-   卡片皮革感效果
-   =============================== */
-body.theme-hermes .card {
-  background: radial-gradient(
-    circle at top left,
-    #fffaf3 0%,
-    #fff0de 45%,
-    #ffe3c2 100%
-  );
-  box-shadow:
-    0 8px 18px rgba(140, 80, 36, 0.45),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.4);
-}
-
-/* ===============================
-   橘色主按鈕：亮焦糖橘漸層
-   =============================== */
-body.theme-hermes button:not(.btn-secondary):not(.btn-danger-ghost) {
-  background: linear-gradient(135deg, #ff9036, #ff7f2a);
-  color: #2b1306; /* 深棕字 → 精品感強 */
-  border: none;
-}
-body.theme-hermes button:not(.btn-secondary):not(.btn-danger-ghost):active {
-  background: linear-gradient(135deg, #f5741a, #e06610);
-}
-
-/* ===============================
-   資料備份／展開按鈕：皮革淺棕
-   =============================== */
-body.theme-hermes .btn-secondary {
-  background: #f2d3b5;
-  color: #4b2a15;
-  border: 1px solid #d6a67a;
-}
-
-/* ===============================
-   刪除鍵：暖紅皮革風
-   =============================== */
-body.theme-hermes .btn-danger-ghost {
-  background: #ffe4de;
-  color: #a62820;
-  border: 1px solid #e07b73;
-}
-
-/* ===============================
-   Legend（圖例） → 實心精品色塊
-   =============================== */
-body.theme-hermes .legend-box.weight {
-  background: #ff7f2a;
-}
-body.theme-hermes .legend-box.fat {
-  background: #ffc857;
-}
-body.theme-hermes .legend-box.muscle {
-  background: #ff6b6b;
-}
-body.theme-hermes .legend-box.target {
-  background: #c48c66;
-}
+    body.theme-hermes .btn-danger-ghost {
+      background: #ffe4de;
+      color: #a62820;
+      border: 1px solid #e07b73;
+    }
 
     /* ========= 全域版面 ========= */
     body {
@@ -415,51 +376,30 @@ body.theme-hermes .legend-box.target {
     .chart-nav {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       gap: 8px;
       margin-bottom: 6px;
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-sub);
     }
 
-    .chart-nav-btn {
-      padding: 4px 10px;
-      font-size: 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border-subtle);
-      background: var(--card-bg);
-      color: var(--text-sub);
-      cursor: pointer;
+    #chartRangeLabel {
+      font-size: 11px;
+    }
+    .chart-nav-hint {
+      font-size: 11px;
+      opacity: 0.8;
     }
 
     #chartScroll {
       width: 100%;
-      overflow-x: auto;
-      overflow-y: hidden;
-      padding-bottom: 4px;
-    }
-    #chartScroll::-webkit-scrollbar {
-      height: 6px;
-    }
-    #chartScroll::-webkit-scrollbar-thumb {
-      background: #d8d2c8;
-      border-radius: 10px;
-    }
-    body.dark-mode #chartScroll::-webkit-scrollbar-thumb,
-    body.theme-iceland #chartScroll::-webkit-scrollbar-thumb,
-    body.theme-neon #chartScroll::-webkit-scrollbar-thumb {
-      background: var(--border-subtle);
-    }
-    body.theme-sakura #chartScroll::-webkit-scrollbar-thumb,
-    body.theme-hermes #chartScroll::-webkit-scrollbar-thumb {
-      background: #f0c6d3;
+      overflow: hidden; /* X 軸固定，只有內容變化 */
     }
 
     #weightChart {
       display: block;
     }
 
-    /* 自訂 legend（實心提示格） */
     .metric-legend {
       display: flex;
       flex-wrap: wrap;
@@ -572,7 +512,8 @@ body.theme-hermes .legend-box.target {
 
     /* ========= Modal 基礎 ========= */
     #modalOverlay,
-    #profileOverlay {
+    #profileOverlay,
+    #trendOverlay {
       position: fixed;
       inset: 0;
       background: rgba(0, 0, 0, 0.45);
@@ -584,7 +525,8 @@ body.theme-hermes .legend-box.target {
     }
 
     #modal,
-    #profileModal {
+    #profileModal,
+    #trendModal {
       width: 90%;
       max-width: 360px;
       background: var(--card-bg);
@@ -595,7 +537,8 @@ body.theme-hermes .legend-box.target {
     }
 
     #modal h2,
-    #profileModal h2 {
+    #profileModal h2,
+    #trendModal h2 {
       margin: 0 0 10px;
       text-align: center;
       font-size: 18px;
@@ -667,34 +610,93 @@ body.theme-hermes .legend-box.target {
       position: absolute;
       left: 0;
       right: 0;
-      top: 5px;
+      top: 10px;
       height: 12px;
       border-radius: 999px;
       overflow: hidden;
       display: flex;
       border: 1px solid rgba(0, 0, 0, 0.08);
     }
-    .bmi-seg { flex: 1; }
-    .bmi-low { background: #6ca8ff; }
-    .bmi-mid { background: #fdfdfd; }
-    .bmi-high { background: #ff7b7b; }
+    .bmi-seg {
+      flex: 1;
+    }
+    .bmi-low {
+      background: #6ca8ff;
+    }
+    .bmi-mid {
+      background: #fdfdfd;
+    }
+    .bmi-high {
+      background: #ff7b7b;
+    }
 
     .bmi-pointer {
       position: absolute;
-      bottom: 0;
+      top: 10px;
       width: 0;
       height: 0;
       border-left: 6px solid transparent;
       border-right: 6px solid transparent;
-      border-top: 8px solid #3b3025;
-      transform: translateX(-50%);
+      border-bottom: 8px solid #3b3025; /* 尖端朝上指向 bar */
+      transform: translateX(-50%) translateY(-100%);
       display: none;
     }
-
     body.dark-mode .bmi-pointer,
     body.theme-iceland .bmi-pointer,
     body.theme-neon .bmi-pointer {
-      border-top-color: #f5f5f5;
+      border-bottom-color: #f5f5f5;
+    }
+
+    .bmi-label-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .bmi-label {
+      flex: 1;
+      text-align: center;
+    }
+
+    .bmi-label.active {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .bmi-extra-note {
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--text-sub);
+      line-height: 1.4;
+    }
+
+    /* 體重變化動畫文本 */
+    #trendContent {
+      font-size: 14px;
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+    .trend-line {
+      opacity: 0;
+      transform: translateY(6px);
+      animation: trendLineIn 0.35s ease forwards;
+      animation-delay: var(--delay);
+    }
+    #trendContent strong {
+      color: var(--accent-dark);
+    }
+
+    @keyframes trendLineIn {
+      0% {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* ========= 設定側欄 ========= */
@@ -885,7 +887,7 @@ body.theme-hermes .legend-box.target {
     <div class="top-bar">
       <h1>Weight Record</h1>
       <div class="top-right">
-        <button class="icon-btn" id="profileBtn" title="個人資料">👤</button>
+        <button class="icon-btn" id="profileBtn" title="個人資料 / BMI">👤</button>
         <button class="icon-btn" id="settingsBtn" title="設定">⚙️</button>
       </div>
     </div>
@@ -916,11 +918,12 @@ body.theme-hermes .legend-box.target {
         <button class="metric-tab" id="tabFat" onclick="setMetricMode('fat')">體脂</button>
         <button class="metric-tab" id="tabMuscle" onclick="setMetricMode('muscle')">骨骼肌</button>
       </div>
+
       <div class="chart-nav">
-        <button class="chart-nav-btn" onclick="shiftChartWindow(-1)">←</button>
         <span id="chartRangeLabel"></span>
-        <button class="chart-nav-btn" onclick="shiftChartWindow(1)">→</button>
+        <span class="chart-nav-hint">在圖表上左右滑動，可查看更早或更晚的 7 天紀錄</span>
       </div>
+
       <div class="metric-legend">
         <div class="legend-item legend-weight">
           <span class="legend-color-box"></span><span>體重 (kg)</span>
@@ -935,6 +938,7 @@ body.theme-hermes .legend-box.target {
           <span class="legend-color-box"></span><span>目標體重</span>
         </div>
       </div>
+
       <div id="chartScroll">
         <canvas id="weightChart"></canvas>
       </div>
@@ -1001,12 +1005,31 @@ body.theme-hermes .legend-box.target {
           </div>
           <div id="bmiPointer" class="bmi-pointer"></div>
         </div>
+        <div class="bmi-label-row">
+          <span class="bmi-label bmi-label-low">過輕</span>
+          <span class="bmi-label bmi-label-mid">正常</span>
+          <span class="bmi-label bmi-label-high">過胖</span>
+        </div>
         <div id="profileBMI"></div>
+        <div class="bmi-extra-note">
+          一般建議：18.5～24 為正常範圍，數值僅供參考，請搭配體脂與骨骼肌一起看。
+        </div>
       </div>
 
       <div class="modal-btns">
         <button class="btn-cancel" onclick="closeProfile()">取消</button>
         <button class="btn-save" onclick="saveProfileData()">儲存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 體重變化 Modal -->
+  <div id="trendOverlay">
+    <div id="trendModal">
+      <h2>體重變化</h2>
+      <div id="trendContent"></div>
+      <div class="modal-btns">
+        <button class="btn-save" onclick="closeTrend()">關閉</button>
       </div>
     </div>
   </div>
@@ -1054,6 +1077,17 @@ body.theme-hermes .legend-box.target {
         <div id="targetHint" class="settings-hint"></div>
       </div>
 
+      <!-- 體重變化小動畫 -->
+      <div class="settings-section">
+        <div class="settings-section-title">體重變化</div>
+        <div class="settings-row">
+          <button class="btn-secondary" style="flex:1" onclick="openTrend()">查看體重變化</button>
+        </div>
+        <div class="settings-hint">
+          以小動畫方式快速回顧：起始紀錄日、期間最高 / 最低體重與體脂，以及目前狀態。
+        </div>
+      </div>
+
       <!-- 資料備份（可展開區） -->
       <div class="settings-section">
         <div class="settings-section-header">
@@ -1082,16 +1116,41 @@ body.theme-hermes .legend-box.target {
 
   <script>
     const STORAGE_KEY = "weight_logs";
-    const THEME_KEY = "weight_theme"; // light | dark | iceland | sakura | neon | hermes
+    const THEME_KEY = "weight_theme";
     const PROFILE_KEY = "weight_profile";
     const TARGET_KEY = "weight_target";
 
     let editIndex = null;
     let chart = null;
     let metricMode = "all"; // all | weight | fat | muscle
-    let chartWindowStart = null;
+    let windowEndDate = null; // Date 物件，用來決定 7 天視窗結尾
+
     let touchStartX = null;
 
+    /* ========= 工具：日期 ========= */
+    function parseDateString(str) {
+      if (!str) return null;
+      const parts = str.split("-");
+      if (parts.length !== 3) return null;
+      const y = parseInt(parts[0], 10);
+      const m = parseInt(parts[1], 10) - 1;
+      const d = parseInt(parts[2], 10);
+      return new Date(y, m, d);
+    }
+
+    function formatDate(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
+
+    function getTodayDate() {
+      const now = new Date();
+      return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    }
+
+    /* ========= LocalStorage ========= */
     function getLogs() {
       return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     }
@@ -1120,7 +1179,7 @@ body.theme-hermes .legend-box.target {
     /* ========= 主題切換 ========= */
     function applyTheme(mode) {
       const body = document.body;
-      body.className = ""; // 清除全部
+      body.className = "";
       if (mode === "dark") body.classList.add("dark-mode");
       else if (mode === "iceland") body.classList.add("theme-iceland");
       else if (mode === "sakura") body.classList.add("theme-sakura");
@@ -1129,7 +1188,6 @@ body.theme-hermes .legend-box.target {
 
       localStorage.setItem(THEME_KEY, mode);
       updateThemeButtons(mode);
-      // 主題變更後重新畫圖，更新軸線/legend顏色
       renderChart();
     }
 
@@ -1155,9 +1213,10 @@ body.theme-hermes .legend-box.target {
       });
     }
 
+    /* ========= 初始 ========= */
     window.addEventListener("load", () => {
       initTheme();
-      setDefaultDate();
+      setTodayDateInput();
 
       const splash = document.getElementById("splash");
       const main = document.getElementById("main");
@@ -1181,8 +1240,13 @@ body.theme-hermes .legend-box.target {
       wrapper.addEventListener("touchend", (e) => {
         if (touchStartX == null || !e.changedTouches.length) return;
         const dx = e.changedTouches[0].clientX - touchStartX;
-        if (dx > 50) shiftChartWindow(-1);
-        else if (dx < -50) shiftChartWindow(1);
+        if (dx < -50) {
+          // 手指往左滑 → 看更早的 7 天
+          shiftChartWindow(-1);
+        } else if (dx > 50) {
+          // 手指往右滑 → 看更接近今天的 7 天
+          shiftChartWindow(1);
+        }
         touchStartX = null;
       });
 
@@ -1190,9 +1254,10 @@ body.theme-hermes .legend-box.target {
     });
 
     /* ========= 日期 & 新增 ========= */
-    function setDefaultDate() {
+    function setTodayDateInput() {
       const d = document.getElementById("dateInput");
-      if (!d.value) d.value = new Date().toISOString().slice(0, 10);
+      const today = getTodayDate();
+      d.value = formatDate(today); // 每次載入都直接今天
     }
 
     function addRecord() {
@@ -1201,7 +1266,7 @@ body.theme-hermes .legend-box.target {
       const fatInput = document.getElementById("fatInput");
       const muscleInput = document.getElementById("muscleInput");
 
-      const date = dateInput.value || new Date().toISOString().slice(0, 10);
+      const date = dateInput.value || formatDate(getTodayDate());
       const weight = weightInput.value;
       const fat = fatInput.value;
       const muscle = muscleInput.value;
@@ -1218,6 +1283,9 @@ body.theme-hermes .legend-box.target {
       weightInput.value = "";
       fatInput.value = "";
       muscleInput.value = "";
+
+      // 保持日期是今天即可，不用改
+      windowEndDate = null; // 重新回到最新視窗
       render();
     }
 
@@ -1240,7 +1308,7 @@ body.theme-hermes .legend-box.target {
         autoScaleLatest();
         return;
       }
-      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
+      const sorted = logs.slice().filter(l => l.date).sort((a, b) => b.date.localeCompare(a.date));
       const last = sorted[0];
       let text = `${last.date}：${last.weight} kg`;
       if (last.fat) text += `，體脂 ${last.fat}%`;
@@ -1259,21 +1327,17 @@ body.theme-hermes .legend-box.target {
 
       const dates = logs.map((l) => l.date).filter(Boolean).sort();
       const latestDateStr = dates[dates.length - 1];
-      const latestDate = new Date(latestDateStr);
+      const latestDate = parseDateString(latestDateStr);
 
       function dayDiff(a, b) {
-        return Math.floor((a - b) / (1000 * 60 * 60 * 24));
+        const ms = a.getTime() - b.getTime();
+        return Math.floor(ms / (1000 * 60 * 60 * 24));
       }
 
-      const curW = [],
-        prevW = [],
-        curF = [],
-        prevF = [],
-        curM = [],
-        prevM = [];
+      const curW = [], prevW = [], curF = [], prevF = [], curM = [], prevM = [];
       logs.forEach((l) => {
         if (!l.date) return;
-        const d = new Date(l.date);
+        const d = parseDateString(l.date);
         const diff = dayDiff(latestDate, d);
         const w = parseFloat(l.weight);
         const f = l.fat ? parseFloat(l.fat) : NaN;
@@ -1294,12 +1358,9 @@ body.theme-hermes .legend-box.target {
         return arr.reduce((a, b) => a + b, 0) / arr.length;
       }
 
-      const curWA = avg(curW),
-        prevWA = avg(prevW);
-      const curFA = avg(curF),
-        prevFA = avg(prevF);
-      const curMA = avg(curM),
-        prevMA = avg(prevM);
+      const curWA = avg(curW), prevWA = avg(prevW);
+      const curFA = avg(curF), prevFA = avg(prevF);
+      const curMA = avg(curM), prevMA = avg(prevM);
 
       let lines = [];
       if (curWA !== null) {
@@ -1346,7 +1407,7 @@ body.theme-hermes .legend-box.target {
         info.textContent = `目標體重：${target} kg`;
         return;
       }
-      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
+      const sorted = logs.slice().filter(l => l.date).sort((a, b) => b.date.localeCompare(a.date));
       const last = sorted[0];
       const w = parseFloat(last.weight);
       if (isNaN(w)) {
@@ -1363,19 +1424,65 @@ body.theme-hermes .legend-box.target {
       info.textContent = `目標體重：${target} kg（${diffText}）`;
     }
 
-    /* ========= 圖表 ========= */
+    /* ========= 圖表：7 日視窗 + 滑動 ========= */
     function renderChart() {
       const logs = getLogs();
       const rangeLabel = document.getElementById("chartRangeLabel");
+      const canvas = document.getElementById("weightChart");
+      const scroll = document.getElementById("chartScroll");
+
       if (!logs.length) {
         if (chart) {
           chart.destroy();
           chart = null;
         }
-        rangeLabel.textContent = "";
+        if (rangeLabel) rangeLabel.textContent = "";
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         return;
       }
 
+      const dateStrings = logs.map(l => l.date).filter(Boolean).sort();
+      if (!dateStrings.length) {
+        if (chart) {
+          chart.destroy();
+          chart = null;
+        }
+        if (rangeLabel) rangeLabel.textContent = "";
+        return;
+      }
+
+      const minDate = parseDateString(dateStrings[0]);
+      const maxDate = parseDateString(dateStrings[dateStrings.length - 1]);
+      const today = getTodayDate();
+      const latestEndDefault = today > maxDate ? today : maxDate;
+
+      // 最早的視窗結尾 = 最早日期 + 6 天（若區間太短，則不往前）
+      let earliestEnd = new Date(minDate.getTime());
+      earliestEnd.setDate(earliestEnd.getDate() + 6);
+      if (earliestEnd > latestEndDefault) earliestEnd = latestEndDefault;
+
+      if (!windowEndDate) {
+        windowEndDate = new Date(latestEndDefault.getTime());
+      }
+
+      // clamp
+      if (windowEndDate < earliestEnd) windowEndDate = new Date(earliestEnd.getTime());
+      if (windowEndDate > latestEndDefault) windowEndDate = new Date(latestEndDefault.getTime());
+
+      // 產生 7 天日期標籤（windowEndDate 往前推 6 天）
+      const labels = [];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(windowEndDate.getTime());
+        d.setDate(d.getDate() - i);
+        labels.push(formatDate(d));
+      }
+
+      if (labels.length && rangeLabel) {
+        rangeLabel.textContent = `${labels[0]} ~ ${labels[labels.length - 1]}`;
+      }
+
+      // 整理每天的平均值
       const byDate = {};
       logs.forEach((l) => {
         if (!l.date) return;
@@ -1392,48 +1499,26 @@ body.theme-hermes .legend-box.target {
         }
       });
 
-      const allDates = Object.keys(byDate).sort();
-      if (!allDates.length) {
-        if (chart) {
-          chart.destroy();
-          chart = null;
-        }
-        rangeLabel.textContent = "";
-        return;
-      }
-
-      const windowSize = 7;
-      if (chartWindowStart === null)
-        chartWindowStart = Math.max(0, allDates.length - windowSize);
-
-      chartWindowStart = Math.max(
-        0,
-        Math.min(chartWindowStart, Math.max(0, allDates.length - windowSize))
+      const weights = labels.map(d =>
+        byDate[d] && byDate[d].w.length
+          ? byDate[d].w.reduce((a, b) => a + b, 0) / byDate[d].w.length
+          : null
       );
-      const end = chartWindowStart + windowSize;
-      const dates = allDates.slice(chartWindowStart, end);
-
-      const weights = dates.map(
-        (d) => byDate[d].w.reduce((a, b) => a + b, 0) / byDate[d].w.length
-      );
-      const fats = dates.map((d) =>
-        byDate[d].f.length
+      const fats = labels.map(d =>
+        byDate[d] && byDate[d].f.length
           ? byDate[d].f.reduce((a, b) => a + b, 0) / byDate[d].f.length
           : null
       );
-      const muscles = dates.map((d) =>
-        byDate[d].m.length
+      const muscles = labels.map(d =>
+        byDate[d] && byDate[d].m.length
           ? byDate[d].m.reduce((a, b) => a + b, 0) / byDate[d].m.length
           : null
       );
 
-      if (dates.length)
-        rangeLabel.textContent = `${dates[0]} ~ ${dates[dates.length - 1]}`;
-      else rangeLabel.textContent = "";
-
-      const canvas = document.getElementById("weightChart");
-      canvas.width = Math.max(dates.length * 70, 280);
+      const width = scroll.clientWidth || 320;
+      canvas.width = width;
       canvas.height = 240;
+
       const ctx = canvas.getContext("2d");
       if (chart) chart.destroy();
 
@@ -1458,7 +1543,8 @@ body.theme-hermes .legend-box.target {
           pointRadius: 4,
           pointHoverRadius: 5,
           borderColor: weightColor,
-          backgroundColor: weightColor, // legend 實心
+          backgroundColor: weightColor,
+          spanGaps: true,
         });
       }
       if (metricMode === "all" || metricMode === "fat") {
@@ -1471,6 +1557,7 @@ body.theme-hermes .legend-box.target {
           pointHoverRadius: 5,
           borderColor: fatColor,
           backgroundColor: fatColor,
+          spanGaps: true,
         });
       }
       if (metricMode === "all" || metricMode === "muscle") {
@@ -1483,32 +1570,34 @@ body.theme-hermes .legend-box.target {
           pointHoverRadius: 5,
           borderColor: muscleColor,
           backgroundColor: muscleColor,
+          spanGaps: true,
         });
       }
 
       const target = getTarget();
-      if ((metricMode === "all" || metricMode === "weight") && target != null && dates.length) {
+      if ((metricMode === "all" || metricMode === "weight") && target != null && labels.length) {
         datasets.push({
           label: "目標體重",
-          data: dates.map(() => target),
+          data: labels.map(() => target),
           borderWidth: 1.5,
           borderDash: [6, 4],
           pointRadius: 0,
           borderColor: targetColor,
           backgroundColor: targetColor,
+          spanGaps: true,
         });
       }
 
       chart = new Chart(ctx, {
         type: "line",
-        data: { labels: dates, datasets },
+        data: { labels, datasets },
         options: {
           responsive: false,
           maintainAspectRatio: false,
           spanGaps: true,
           scales: {
             x: {
-              ticks: { color: axisColor },
+              ticks: { color: axisColor, maxRotation: 0 },
               grid: { color: gridColor },
             },
             y: {
@@ -1518,7 +1607,7 @@ body.theme-hermes .legend-box.target {
           },
           plugins: {
             legend: {
-              display: false, // 我們自己畫 legend
+              display: false,
               labels: { color: legendColor, boxWidth: 24, padding: 12 },
             },
             tooltip: {
@@ -1547,21 +1636,29 @@ body.theme-hermes .legend-box.target {
       renderChart();
     }
 
-    function shiftChartWindow(direction) {
+    function shiftChartWindow(pageDelta) {
       const logs = getLogs();
       if (!logs.length) return;
-      const dates = [...new Set(logs.map((l) => l.date).filter(Boolean))].sort();
-      if (!dates.length) return;
+      const dateStrings = logs.map(l => l.date).filter(Boolean).sort();
+      if (!dateStrings.length) return;
 
-      const windowSize = 7;
-      if (chartWindowStart === null)
-        chartWindowStart = Math.max(0, dates.length - windowSize);
+      const minDate = parseDateString(dateStrings[0]);
+      const maxDate = parseDateString(dateStrings[dateStrings.length - 1]);
+      const today = getTodayDate();
+      const latestEndDefault = today > maxDate ? today : maxDate;
 
-      chartWindowStart += direction;
-      chartWindowStart = Math.max(
-        0,
-        Math.min(chartWindowStart, Math.max(0, dates.length - windowSize))
-      );
+      let earliestEnd = new Date(minDate.getTime());
+      earliestEnd.setDate(earliestEnd.getDate() + 6);
+      if (earliestEnd > latestEndDefault) earliestEnd = latestEndDefault;
+
+      if (!windowEndDate) windowEndDate = new Date(latestEndDefault.getTime());
+
+      // 向前或向後移動整整 7 天
+      windowEndDate.setDate(windowEndDate.getDate() + pageDelta * 7);
+
+      if (windowEndDate < earliestEnd) windowEndDate = new Date(earliestEnd.getTime());
+      if (windowEndDate > latestEndDefault) windowEndDate = new Date(latestEndDefault.getTime());
+
       renderChart();
     }
 
@@ -1693,6 +1790,7 @@ body.theme-hermes .legend-box.target {
       }
       saveLogs(logs);
       closeModal();
+      windowEndDate = null; // 回到最新視窗
       render();
     }
     function deleteRecord(index) {
@@ -1700,6 +1798,7 @@ body.theme-hermes .legend-box.target {
       const logs = getLogs();
       logs.splice(index, 1);
       saveLogs(logs);
+      windowEndDate = null;
       render();
     }
 
@@ -1783,6 +1882,7 @@ body.theme-hermes .legend-box.target {
         if (!Array.isArray(data)) throw new Error("格式錯誤");
         saveLogs(data);
         alert("匯入成功，已覆蓋目前資料。");
+        windowEndDate = null;
         render();
       } catch (e) {
         alert("匯入失敗：格式不是有效的 JSON。");
@@ -1792,7 +1892,71 @@ body.theme-hermes .legend-box.target {
     function clearAll() {
       if (!confirm("確定要清除全部紀錄嗎？")) return;
       saveLogs([]);
+      windowEndDate = null;
       render();
+    }
+
+    /* ========= 體重變化 Modal ========= */
+    function openTrend() {
+      const logs = getLogs();
+      const box = document.getElementById("trendContent");
+      if (!logs.length) {
+        box.innerHTML =
+          '<div class="trend-line" style="--delay:0s;">目前尚無任何紀錄，先回到主畫面新增一筆吧！</div>';
+      } else {
+        const sorted = logs
+          .filter((l) => l.date)
+          .slice()
+          .sort((a, b) => a.date.localeCompare(b.date));
+        const start = sorted[0];
+        const current = sorted[sorted.length - 1];
+
+        let maxW = null, minW = null, maxF = null, minF = null;
+        sorted.forEach((l) => {
+          const w = parseFloat(l.weight);
+          if (!isNaN(w)) {
+            if (!maxW || w > parseFloat(maxW.weight)) maxW = l;
+            if (!minW || w < parseFloat(minW.weight)) minW = l;
+          }
+          if (l.fat != null && l.fat !== "") {
+            const f = parseFloat(l.fat);
+            if (!isNaN(f)) {
+              if (!maxF || f > parseFloat(maxF.fat)) maxF = l;
+              if (!minF || f < parseFloat(minF.fat)) minF = l;
+            }
+          }
+        });
+
+        let html = "";
+        html += `<div class="trend-line" style="--delay:0s;">你從 <strong>${start.date}</strong> 開始紀錄體重。</div>`;
+        if (maxW) {
+          html += `<div class="trend-line" style="--delay:0.12s;">期間的 <strong>最高體重</strong>：${maxW.date} ｜ ${maxW.weight} kg</div>`;
+        }
+        if (minW) {
+          html += `<div class="trend-line" style="--delay:0.24s;">期間的 <strong>最低體重</strong>：${minW.date} ｜ ${minW.weight} kg</div>`;
+        }
+        html += `<div class="trend-line" style="--delay:0.36s;">目前體重：${current.date} ｜ ${current.weight} kg</div>`;
+
+        if (maxF || minF || current.fat) {
+          html += `<div class="trend-line" style="--delay:0.52s;">體脂變化：</div>`;
+          if (maxF) {
+            html += `<div class="trend-line" style="--delay:0.64s;">．最高體脂：${maxF.date} ｜ ${maxF.fat}%</div>`;
+          }
+          if (minF) {
+            html += `<div class="trend-line" style="--delay:0.76s;">．最低體脂：${minF.date} ｜ ${minF.fat}%</div>`;
+          }
+          if (current.fat) {
+            html += `<div class="trend-line" style="--delay:0.88s;">．目前體脂：${current.date} ｜ ${current.fat}%</div>`;
+          }
+        }
+
+        box.innerHTML = html;
+      }
+      document.getElementById("trendOverlay").style.display = "flex";
+    }
+
+    function closeTrend() {
+      document.getElementById("trendOverlay").style.display = "none";
     }
 
     /* ========= Profile / BMI ========= */
@@ -1824,8 +1988,10 @@ body.theme-hermes .legend-box.target {
       const bmiDiv = document.getElementById("profileBMI");
       const logs = getLogs();
       const pointer = document.getElementById("bmiPointer");
+      const labels = document.querySelectorAll(".bmi-label");
       if (!pointer) return;
       pointer.style.display = "none";
+      labels.forEach((el) => el.classList.remove("active"));
 
       if (!profile.height || !profile.gender) {
         bmiDiv.textContent =
@@ -1837,7 +2003,7 @@ body.theme-hermes .legend-box.target {
         return;
       }
 
-      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
+      const sorted = logs.slice().filter(l => l.date).sort((a, b) => b.date.localeCompare(a.date));
       const last = sorted[0];
       const weight = parseFloat(last.weight);
       const bmi = computeBMI(weight, parseFloat(profile.height));
@@ -1851,12 +2017,28 @@ body.theme-hermes .legend-box.target {
         `性別：${genderText}｜身高：${profile.height} cm\n` +
         `依照最新體重 ${weight} kg，BMI 約為 ${bmi.toFixed(1)}`;
 
-      const min = 15,
-        max = 40;
+      // 區間：過輕 <18.5, 正常 18.5–24, 過胖 >=24
+      let zone = null;
+      if (bmi < 18.5) zone = "low";
+      else if (bmi < 24) zone = "mid";
+      else zone = "high";
+
+      const min = 15, max = 40;
       let ratio = (bmi - min) / (max - min);
       ratio = Math.max(0, Math.min(1, ratio));
       pointer.style.left = ratio * 100 + "%";
       pointer.style.display = "block";
+
+      const classMap = {
+        low: ".bmi-label-low",
+        mid: ".bmi-label-mid",
+        high: ".bmi-label-high",
+      };
+      const selector = classMap[zone];
+      if (selector) {
+        const el = document.querySelector(selector);
+        if (el) el.classList.add("active");
+      }
     }
 
     function saveProfileData() {
@@ -1885,7 +2067,7 @@ body.theme-hermes .legend-box.target {
     /* ========= render ========= */
     function render() {
       renderRecords();
-      chartWindowStart = null;
+      // 每次重新 render，若 windowEndDate 被清空，會在 renderChart 裡重新回到「最新 7 天」
       renderChart();
       showLatest();
       showWeeklyStats();
