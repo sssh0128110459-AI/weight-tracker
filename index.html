@@ -393,7 +393,7 @@
 
     #chartScroll {
       width: 100%;
-      overflow: hidden; /* X 軸固定，只有內容變化 */
+      overflow: hidden;
     }
 
     #weightChart {
@@ -460,7 +460,10 @@
       font-size: 13px;
       font-weight: 500;
       color: var(--text-main);
+      flex: 1;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .record-actions {
@@ -469,22 +472,15 @@
       flex-shrink: 0;
     }
 
-    .edit-btn,
-    .delete-btn {
-      padding: 4px 8px;
+    .edit-btn {
+      padding: 4px 10px;
       font-size: 11px;
       border-radius: 999px;
       border: none;
       cursor: pointer;
-      min-width: 44px;
-    }
-    .edit-btn {
+      min-width: 52px;
       background: var(--accent);
       color: #111111;
-    }
-    .delete-btn {
-      background: var(--danger);
-      color: #ffffff;
     }
 
     .month-header {
@@ -557,6 +553,7 @@
       display: flex;
       gap: 10px;
       margin-top: 10px;
+      flex-wrap: wrap;
     }
 
     .btn-cancel {
@@ -637,7 +634,7 @@
       height: 0;
       border-left: 6px solid transparent;
       border-right: 6px solid transparent;
-      border-bottom: 8px solid #3b3025; /* 尖端朝上指向 bar */
+      border-bottom: 8px solid #3b3025;
       transform: translateX(-50%) translateY(-100%);
       display: none;
     }
@@ -971,6 +968,7 @@
       </div>
 
       <div class="modal-btns">
+        <button class="btn-danger-ghost" style="flex:1 0 100%;" onclick="deleteFromModal()">刪除這筆紀錄</button>
         <button class="btn-cancel" onclick="closeModal()">取消</button>
         <button class="btn-save" onclick="saveEdit()">儲存</button>
       </div>
@@ -1257,7 +1255,7 @@
     function setTodayDateInput() {
       const d = document.getElementById("dateInput");
       const today = getTodayDate();
-      d.value = formatDate(today); // 每次載入都直接今天
+      d.value = formatDate(today);
     }
 
     function addRecord() {
@@ -1284,8 +1282,7 @@
       fatInput.value = "";
       muscleInput.value = "";
 
-      // 保持日期是今天即可，不用改
-      windowEndDate = null; // 重新回到最新視窗
+      windowEndDate = null;
       render();
     }
 
@@ -1457,7 +1454,6 @@
       const today = getTodayDate();
       const latestEndDefault = today > maxDate ? today : maxDate;
 
-      // 最早的視窗結尾 = 最早日期 + 6 天（若區間太短，則不往前）
       let earliestEnd = new Date(minDate.getTime());
       earliestEnd.setDate(earliestEnd.getDate() + 6);
       if (earliestEnd > latestEndDefault) earliestEnd = latestEndDefault;
@@ -1466,11 +1462,9 @@
         windowEndDate = new Date(latestEndDefault.getTime());
       }
 
-      // clamp
       if (windowEndDate < earliestEnd) windowEndDate = new Date(earliestEnd.getTime());
       if (windowEndDate > latestEndDefault) windowEndDate = new Date(latestEndDefault.getTime());
 
-      // 產生 7 天日期標籤（windowEndDate 往前推 6 天）
       const labels = [];
       for (let i = 6; i >= 0; i--) {
         const d = new Date(windowEndDate.getTime());
@@ -1482,7 +1476,6 @@
         rangeLabel.textContent = `${labels[0]} ~ ${labels[labels.length - 1]}`;
       }
 
-      // 整理每天的平均值
       const byDate = {};
       logs.forEach((l) => {
         if (!l.date) return;
@@ -1653,7 +1646,6 @@
 
       if (!windowEndDate) windowEndDate = new Date(latestEndDefault.getTime());
 
-      // 向前或向後移動整整 7 天
       windowEndDate.setDate(windowEndDate.getDate() + pageDelta * 7);
 
       if (windowEndDate < earliestEnd) windowEndDate = new Date(earliestEnd.getTime());
@@ -1675,18 +1667,19 @@
         return;
       }
 
-      const sorted = logs.slice().sort((a, b) => b.date.localeCompare(a.date));
       const groups = {};
-      sorted.forEach((log) => {
+      logs.forEach((log, index) => {
         const dateStr = log.date || "";
         const monthKey = dateStr.length >= 7 ? dateStr.slice(0, 7) : "未知";
         if (!groups[monthKey]) groups[monthKey] = [];
-        groups[monthKey].push(log);
+        groups[monthKey].push({ log, index });
       });
 
       const monthKeys = Object.keys(groups).sort((a, b) => b.localeCompare(a));
       monthKeys.forEach((monthKey, idx) => {
-        const monthLogs = groups[monthKey];
+        const monthLogs = groups[monthKey].slice().sort((a, b) =>
+          b.log.date.localeCompare(a.log.date)
+        );
         const monthCard = document.createElement("div");
         monthCard.className = "card";
 
@@ -1726,9 +1719,9 @@
         header.appendChild(toggleBtn);
         monthCard.appendChild(header);
 
-        monthLogs.forEach((l) => {
-          const all = getLogs();
-          const idxInAll = all.indexOf(l);
+        monthLogs.forEach((item) => {
+          const l = item.log;
+          const idxInAll = item.index;
 
           const div = document.createElement("div");
           div.className = "record";
@@ -1746,12 +1739,7 @@
           eBtn.className = "edit-btn";
           eBtn.textContent = "編輯";
           eBtn.onclick = () => openModal(idxInAll);
-          const dBtn = document.createElement("button");
-          dBtn.className = "delete-btn";
-          dBtn.textContent = "刪除";
-          dBtn.onclick = () => deleteRecord(idxInAll);
           actions.appendChild(eBtn);
-          actions.appendChild(dBtn);
 
           div.appendChild(t);
           div.appendChild(actions);
@@ -1768,6 +1756,7 @@
       editIndex = index;
       const logs = getLogs();
       const l = logs[index];
+      if (!l) return;
       document.getElementById("editDate").value = l.date;
       document.getElementById("editWeight").value = l.weight;
       document.getElementById("editFat").value = l.fat || "";
@@ -1780,6 +1769,7 @@
     function saveEdit() {
       const logs = getLogs();
       const l = logs[editIndex];
+      if (!l) return;
       l.date = document.getElementById("editDate").value;
       l.weight = document.getElementById("editWeight").value;
       l.fat = document.getElementById("editFat").value;
@@ -1790,14 +1780,18 @@
       }
       saveLogs(logs);
       closeModal();
-      windowEndDate = null; // 回到最新視窗
+      windowEndDate = null;
       render();
     }
-    function deleteRecord(index) {
+    function deleteFromModal() {
+      if (editIndex == null) return;
       if (!confirm("確定要刪除這筆紀錄嗎？")) return;
       const logs = getLogs();
-      logs.splice(index, 1);
-      saveLogs(logs);
+      if (editIndex >= 0 && editIndex < logs.length) {
+        logs.splice(editIndex, 1);
+        saveLogs(logs);
+      }
+      closeModal();
       windowEndDate = null;
       render();
     }
@@ -2023,9 +2017,19 @@
       else if (bmi < 24) zone = "mid";
       else zone = "high";
 
-      const min = 15, max = 40;
-      let ratio = (bmi - min) / (max - min);
+      // 讓 18.5 與 24 剛好對齊三個色塊的邊界
+      const min = 15;
+      const upper = 40;
+      let ratio;
+      if (bmi <= 18.5) {
+        ratio = (bmi - min) / (18.5 - min) * (1 / 3);
+      } else if (bmi <= 24) {
+        ratio = (1 / 3) + (bmi - 18.5) / (24 - 18.5) * (1 / 3);
+      } else {
+        ratio = (2 / 3) + (bmi - 24) / (upper - 24) * (1 / 3);
+      }
       ratio = Math.max(0, Math.min(1, ratio));
+
       pointer.style.left = ratio * 100 + "%";
       pointer.style.display = "block";
 
@@ -2067,7 +2071,6 @@
     /* ========= render ========= */
     function render() {
       renderRecords();
-      // 每次重新 render，若 windowEndDate 被清空，會在 renderChart 裡重新回到「最新 7 天」
       renderChart();
       showLatest();
       showWeeklyStats();
